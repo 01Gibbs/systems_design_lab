@@ -35,14 +35,17 @@ This project provides a **disciplined, maintainable baseline application** with 
 ### Setup
 
 ```bash
-# Clone and enter directory
-cd systems_design_lab
-
 # Install Python dependencies
 make be-install
 
-# Start services (PostgreSQL)
+# Start services (PostgreSQL + Backend)
 make up
+
+# In another terminal, check health
+curl http://localhost:8000/api/health
+
+# List available simulator scenarios
+curl http://localhost:8000/api/sim/scenarios
 
 # Run all guardrails (formatting, linting, type checking, tests, architecture checks)
 make guardrails

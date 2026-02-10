@@ -44,46 +44,46 @@ logs: ## Tail logs from all services
 
 be-install: ## Install backend dependencies
 	@echo "$(BLUE)Installing backend dependencies...$(NC)"
-	pip install -r requirements-dev.txt
+	cd backend && pip install -r requirements-dev.txt
 	@echo "$(GREEN)✓ Backend dependencies installed$(NC)"
 
 be-format: ## Format backend code with black
 	@echo "$(BLUE)Formatting backend code...$(NC)"
-	black backend/ guardrails/
+	cd backend && black src/
 	@echo "$(GREEN)✓ Code formatted$(NC)"
 
 be-format-check: ## Check backend code formatting
 	@echo "$(BLUE)Checking code formatting...$(NC)"
-	black --check backend/ guardrails/
+	cd backend && black --check src/
 
 be-lint: ## Lint backend code with ruff
 	@echo "$(BLUE)Linting backend code...$(NC)"
-	ruff check backend/ guardrails/
+	cd backend && ruff check src/
 	@echo "$(GREEN)✓ Linting passed$(NC)"
 
 be-typecheck: ## Type check backend code with mypy
 	@echo "$(BLUE)Type checking backend code...$(NC)"
-	mypy backend/ guardrails/
+	cd backend && mypy
 	@echo "$(GREEN)✓ Type checking passed$(NC)"
 
 be-test: ## Run all backend tests
 	@echo "$(BLUE)Running all backend tests...$(NC)"
-	pytest backend/tests/
+	cd backend && PYTHONPATH=src pytest
 	@echo "$(GREEN)✓ All tests passed$(NC)"
 
 be-test-unit: ## Run backend unit tests only
 	@echo "$(BLUE)Running unit tests...$(NC)"
-	pytest backend/tests/unit/ -m unit
+	cd backend && PYTHONPATH=src pytest -m "not integration" tests/unit
 	@echo "$(GREEN)✓ Unit tests passed$(NC)"
 
 be-test-integration: ## Run backend integration tests only
 	@echo "$(BLUE)Running integration tests...$(NC)"
-	pytest backend/tests/integration/ -m integration
+	cd backend && PYTHONPATH=src pytest -m integration tests/integration
 	@echo "$(GREEN)✓ Integration tests passed$(NC)"
 
 be-coverage: ## Run backend tests with coverage enforcement
 	@echo "$(BLUE)Running tests with coverage...$(NC)"
-	pytest backend/tests/ --cov=backend --cov-report=term-missing --cov-fail-under=80
+	cd backend && PYTHONPATH=src pytest --cov=app --cov-report=term-missing --cov-fail-under=85
 	@echo "$(GREEN)✓ Coverage threshold met$(NC)"
 
 ##@ Frontend Development
@@ -127,15 +127,15 @@ guardrails: be-format-check be-lint be-typecheck be-test arch-check contracts-ch
 
 arch-check: ## Check Clean Architecture boundaries
 	@echo "$(BLUE)Checking architecture boundaries...$(NC)"
-	python -m guardrails.runner arch-check
+	cd backend && PYTHONPATH=src python -m app.guardrails.arch_check
 
 contracts-check: ## Check for contract drift
 	@echo "$(BLUE)Checking contract drift...$(NC)"
-	python -m guardrails.runner contracts-check
+	cd backend && PYTHONPATH=src python -m app.guardrails.contracts_check
 
 contracts-accept: ## Accept current contract as new snapshot
 	@echo "$(YELLOW)Accepting contract changes...$(NC)"
-	python -m guardrails.runner contracts-accept
+	cd backend && PYTHONPATH=src python -m app.guardrails.contracts_accept
 	@echo "$(GREEN)✓ Contract snapshot updated$(NC)"
 
 ##@ Quick Shortcuts
