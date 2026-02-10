@@ -9,18 +9,20 @@ RUN apt-get update && apt-get install -y \
   && rm -rf /var/lib/apt/lists/*
 
 # Copy requirements
-COPY requirements.txt requirements-dev.txt ./
+COPY requirements.txt requirements-dev.txt* ./
 
 # Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy application code
-COPY backend/ ./backend/
-COPY guardrails/ ./guardrails/
+COPY src/ ./src/
+
+# Set PYTHONPATH
+ENV PYTHONPATH=/app/src
 
 # Create non-root user
 RUN useradd -m -u 1000 appuser && chown -R appuser:appuser /app
 USER appuser
 
 # Run application
-CMD ["uvicorn", "backend.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "app.api.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]

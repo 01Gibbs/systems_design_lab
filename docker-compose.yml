@@ -5,36 +5,36 @@ services:
     image: postgres:16-alpine
     container_name: sysdesign_postgres
     environment:
-      POSTGRES_USER: sysdesign
-      POSTGRES_PASSWORD: sysdesign_dev
-      POSTGRES_DB: sysdesign_lab
+      POSTGRES_USER: lab
+      POSTGRES_PASSWORD: lab
+      POSTGRES_DB: lab
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U sysdesign"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+      test: ["CMD-SHELL", "pg_isready -U lab -d lab"]
+      interval: 2s
+      timeout: 2s
+      retries: 30
 
   backend:
     build:
-      context: .
-      dockerfile: backend/Dockerfile
+      context: ./backend
+      dockerfile: Dockerfile
     container_name: sysdesign_backend
     depends_on:
       postgres:
         condition: service_healthy
     environment:
-      DATABASE_URL: postgresql+asyncpg://sysdesign:sysdesign_dev@postgres:5432/sysdesign_lab
-      LOG_LEVEL: INFO
+      DATABASE_URL: postgresql+psycopg://lab:lab@postgres:5432/lab
+      APP_ENV: local
+      PYTHONPATH: /app/src
     ports:
       - "8000:8000"
     volumes:
-      - ./backend:/app/backend
-      - ./guardrails:/app/guardrails
-    command: uvicorn backend.main:app --host 0.0.0.0 --port 8000 --reload
+      - ./backend/src:/app/src
+    command: uvicorn app.api.main:app --host 0.0.0.0 --port 8000 --reload
 
 volumes:
   postgres_data:
