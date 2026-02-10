@@ -1,6 +1,7 @@
-.PHONY: help up down reset logs \
+.PHONY: help up down reset logs status \
         be-install be-format be-format-check be-lint be-typecheck be-test be-test-unit be-test-integration be-coverage \
-        fe-install fe-format fe-format-check fe-lint fe-typecheck fe-test-e2e \
+        be-docker-test be-docker-format be-docker-lint be-docker-typecheck be-docker-all \
+        fe-install fe-format fe-format-check be-lint fe-typecheck fe-test-e2e \
         guardrails arch-check contracts-check contracts-accept
 
 # Default target
@@ -40,7 +41,10 @@ reset: ## Stop services and remove volumes
 logs: ## Tail logs from all services
 	docker-compose logs -f
 
-##@ Backend Development
+status: ## Check system status and health
+	@bash scripts/status.sh
+
+##@ Backend Development (Host-based)
 
 be-install: ## Install backend dependencies
 	@echo "$(BLUE)Installing backend dependencies...$(NC)"
@@ -83,7 +87,30 @@ be-test-integration: ## Run backend integration tests only
 
 be-coverage: ## Run backend tests with coverage enforcement
 	@echo "$(BLUE)Running tests with coverage...$(NC)"
-	cd backend && PYTHONPATH=src pytest --cov=app --cov-report=term-missing --cov-fail-under=85
+	cd Backend Development (Docker-based)
+
+be-docker-test: ## Run tests in Docker container
+	@./scripts/dev-container.sh test
+
+be-docker-format: ## Format code in Docker container
+	@./scripts/dev-container.sh format
+
+be-docker-format-check: ## Check formatting in Docker container
+	@./scripts/dev-container.sh format-check
+
+be-docker-lint: ## Lint in Docker container
+	@./scripts/dev-container.sh lint
+
+be-docker-typecheck: ## Type check in Docker container
+	@./scripts/dev-container.sh typecheck
+
+be-docker-shell: ## Open shell in Docker container
+	@./scripts/dev-container.sh shell
+
+be-docker-all: ## Run all checks in Docker container
+	@./scripts/dev-container.sh all
+
+##@ backend && PYTHONPATH=src pytest --cov=app --cov-report=term-missing --cov-fail-under=85
 	@echo "$(GREEN)✓ Coverage threshold met$(NC)"
 
 ##@ Frontend Development

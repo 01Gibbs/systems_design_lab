@@ -29,24 +29,28 @@ This is a **production-grade local systems design lab** — NOT a demo app or on
 ```
 /
 ├── backend/
-│   ├── api/              # Routers only, no business logic
-│   ├── application/      # Use-cases, command/query handlers
-│   ├── domain/           # Entities, value objects (NO framework imports)
-│   ├── infrastructure/   # DB, cache, adapters
-│   ├── contracts/        # Request/response models (Pydantic)
-│   ├── simulator/        # Issue simulator framework + scenarios
-│   └── tests/
-│       ├── unit/
-│       ├── integration/
-│       └── contract/
-├── frontend/
+│   ├── src/app/          # Namespaced application code
+│   │   ├── api/          # Routers only, no business logic
+│   │   ├── application/  # Use-cases, command/query handlers
+│   │   │   ├── ports/    # Port interfaces (Clock, SimulatorStore, etc.)
+│   │   │   └── simulator/
+│   │   │       └── scenarios/  # Effect-based simulator scenarios
+│   │   ├── contracts/    # Request/response models (Pydantic)
+│   │   ├── domain/       # Entities, value objects (NO framework imports)
+│   │   ├── guardrails/   # Boundary + contract enforcement
+│   │   └── infrastructure/  # Adapters (DB, cache, time, simulator store)
+│   ├── tests/
+│   │   ├── unit/         # Fast tests, no external dependencies
+│   │   └── integration/  # Real DB tests (testcontainers)
+│   ├── Dockerfile
+│   └── pyproject.toml
+├── frontend/             # (Not yet implemented)
 │   ├── src/
 │   │   ├── api/          # Typed API client (contract-derived)
 │   │   ├── components/
 │   │   └── pages/
 │   │       └── SimulatorControlPanel.tsx
 │   └── e2e/              # Playwright tests
-├── guardrails/           # Boundary + contract enforcement
 ├── docker-compose.yml
 ├── Makefile              # Single developer entry point
 └── openapi.json          # Checked-in OpenAPI snapshot
@@ -261,11 +265,12 @@ Before completing any task, verify:
 
 ## Adding New Simulator Scenarios
 
-1. Create new class in `backend/simulator/scenarios/`
-2. Implement `Scenario` interface (name, description, schema, targets, inject)
-3. Register in scenario registry
-4. Add tests validating injection + safety limits
+1. Create new class in `backend/src/app/application/simulator/scenarios/`
+2. Implement effect-based scenario interface (meta, is_applicable, apply)
+3. Register in scenario registry (`backend/src/app/application/simulator/registry.py`)
+4. Add tests validating injection + safety limits in `backend/tests/unit/`
 5. Document in scenario catalogue
 6. Update frontend control panel if new parameter types needed
 
-**Template:** See `backend/simulator/scenarios/template_scenario.py`
+**Template:** See existing scenarios like `fixed_latency.py` for reference
+**Pattern:** Scenarios return effect dicts, middleware applies them (no side effects in scenario code)
