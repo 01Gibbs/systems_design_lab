@@ -27,29 +27,50 @@ This project provides a **disciplined, maintainable baseline application** with 
 
 ### Prerequisites
 
-- Python 3.11+
-- Docker & Docker Compose
-- Make
+- Docker & Docker Compose (required)
+- Python 3.11+ (optional, for host-based development)
+- Make (required)
 - Node.js 18+ (for frontend, when added)
 
-### Setup
+### Setup Option A: Docker-Only (Recommended)
 
 ```bash
-# Install Python dependencies
-make be-install
-
 # Start services (PostgreSQL + Backend)
 make up
 
-# In another terminal, check health
+# Wait a few seconds, then check health
+sleep 5
 curl http://localhost:8000/api/health
 
-# List available simulator scenarios
-curl http://localhost:8000/api/sim/scenarios
+# Run all tests in Docker
+make be-docker-test
 
-# Run all guardrails (formatting, linting, type checking, tests, architecture checks)
+# Run all guardrails checks in Docker
+make be-docker-all
+```
+
+### Setup Option B: Hybrid (Host Python + Docker DB)
+
+```bash
+# Fix Python version (if using asdf)
+cd backend && asdf local python 3.11.4 && cd ..
+
+# Install dependencies on host
+make be-install
+
+# Start services
+make up
+
+# Check health
+curl http://localhost:8000/api/health
+
+# Run guardrails on host
 make guardrails
 ```
+
+### Troubleshooting
+
+See [QUICK_START.md](QUICK_START.md) and [DEVELOPMENT_SETUP.md](DEVELOPMENT_SETUP.md) for detailed setup instructions and troubleshooting.
 
 ## Makefile Commands
 
@@ -62,7 +83,7 @@ The Makefile is your single entry point for all development tasks:
 - `make reset` - Stop and remove volumes
 - `make logs` - Tail service logs
 
-### Backend Development
+### Backend Development (Host-based)
 
 - `make be-install` - Install dependencies
 - `make be-format` - Format code with black
@@ -72,6 +93,15 @@ The Makefile is your single entry point for all development tasks:
 - `make be-test-unit` - Unit tests only
 - `make be-test-integration` - Integration tests only
 - `make be-coverage` - Enforce coverage threshold
+
+### Backend Development (Docker-based)
+
+- `make be-docker-test` - Run tests in container
+- `make be-docker-format` - Format code in container
+- `make be-docker-lint` - Lint in container
+- `make be-docker-typecheck` - Type check in container
+- `make be-docker-all` - Run all checks in container
+- `make be-docker-shell` - Open shell in container
 
 ### Guardrails & Enforcement
 
@@ -92,12 +122,15 @@ The Makefile is your single entry point for all development tasks:
 ### Clean Architecture (Strict)
 
 ```
-backend/
+backend/src/app/
 ├── domain/           # Pure business logic (NO framework imports)
 ├── application/      # Use cases, command/query handlers
+│   ├── ports/        # Port interfaces (Clock, SimulatorStore)
+│   └── simulator/    # Simulator service + scenarios
 ├── api/              # FastAPI routers (no business logic)
-├── infrastructure/   # DB, cache, external adapters
+├── infrastructure/   # Adapters (DB, cache, time, simulator store)
 ├── contracts/        # Request/response models (Pydantic)
+├── guardrails/       # Boundary + contract enforcement
 └── simulator/        # Issue simulator framework
 ```
 
@@ -142,13 +175,15 @@ The simulator is a first-class, extensible system for injecting 50+ real-world f
 
 ### Adding New Scenarios
 
-1. Copy `backend/simulator/scenarios/template_scenario.py`
-2. Implement all abstract methods
-3. Register scenario at app startup
-4. Add tests validating behavior
+1. Create new scenario class in `backend/src/app/application/simulator/scenarios/`
+2. Implement effect-based interface: `meta`, `is_applicable()`, `apply()`
+3. Register in `backend/src/app/application/simulator/registry.py`
+4. Add tests in `backend/tests/unit/`
 5. Document in scenario catalogue
 
-See [template_scenario.py](backend/simulator/scenarios/template_scenario.py) for details.
+**Pattern:** Scenarios return effect dicts (e.g., `{"http_delay_ms": 100}`), middleware applies them.
+
+See existing scenarios like `fixed_latency.py` for reference.
 
 ## Testing Strategy
 
@@ -211,9 +246,11 @@ Future additions: Prometheus, Grafana, Loki.
 
 **Next Steps**:
 
-1. Implement 5 starter scenarios (latency, errors, slow DB, contention, algorithmic)
-2. Add frontend with simulator control panel
-3. Expand to 50 scenarios across all categories
+1. ✅ **Complete**: 5 starter scenarios (latency, errors, slow DB, contention, algorithmic)
+2. 🚧 **In Progress**: Add frontend with simulator control panel (Vite + TypeScript + Playwright)
+3. ⏳ **Pending**: Expand to 50 scenarios across all categories
+4. ⏳ **Pending**: Integration tests with real Postgres (testcontainers)
+5. ⏳ **Pending**: Contract validation + OpenAPI snapshot workflow
 
 ## License
 
