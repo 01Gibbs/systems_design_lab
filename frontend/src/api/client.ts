@@ -15,7 +15,37 @@ export type ActiveScenario = components['schemas']['ActiveScenario'];
 export type ScenariosResponse = components['schemas']['ScenariosResponse'];
 export type StatusResponse = components['schemas']['StatusResponse'];
 
-const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+// Support Jest and Node environments where import.meta.env is not available
+function getViteEnvUrl(): string | undefined {
+  // Only call this in browser context
+  // Use new Function to hide import.meta from Jest/Node parser
+  try {
+    const fn = new Function('return typeof import !== "undefined" && import.meta && import.meta.env ? import.meta.env.VITE_API_URL : undefined');
+    return fn();
+  } catch {
+    return undefined;
+  }
+}
+
+function getBaseUrl(): string {
+  // 1. Node/Jest env - check process.env first
+  if (
+    typeof process !== 'undefined' &&
+    process.env &&
+    typeof process.env.VITE_API_URL === 'string'
+  ) {
+    return process.env.VITE_API_URL;
+  }
+  // 2. Vite env (browser) - use dynamic function to avoid Jest parse errors
+  if (typeof window !== 'undefined') {
+    const viteUrl = getViteEnvUrl();
+    if (viteUrl) return viteUrl;
+  }
+  // 3. Default fallback
+  return 'http://localhost:8000';
+}
+
+const BASE_URL = getBaseUrl();
 
 type ApiResult<T> = { ok: true; data: T } | { ok: false; status: number; error: unknown };
 
