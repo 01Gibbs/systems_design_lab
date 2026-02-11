@@ -1,10 +1,10 @@
-"""Test SimulatorService for scenario management logic (app-layer types)"""
+"""Test SimulatorService for scenario management logic"""
 import pytest
 from datetime import datetime, timedelta
 from app.application.simulator.service import SimulatorService
 from app.application.simulator.models import ActiveScenarioState
-from app.application.simulator.app_models import (
-    EnableScenarioRequestApp, DisableScenarioRequestApp
+from app.contracts.simulator import (
+    EnableScenarioRequest, DisableScenarioRequest
 )
 
 class DummyClock:
@@ -70,10 +70,10 @@ def test_status_lists_active():
 
 def test_enable_and_disable():
     svc, store, _ = make_service()
-    req = EnableScenarioRequestApp(name="foo", parameters={"y": 2}, duration_seconds=5)
+    req = EnableScenarioRequest(name="foo", parameters={"y": 2}, duration_seconds=5)
     out = svc.enable(req)
     assert any(a.name == "foo" and a.parameters["y"] == 2 for a in out.active)
-    req2 = DisableScenarioRequestApp(name="foo")
+    req2 = DisableScenarioRequest(name="foo")
     out2 = svc.disable(req2)
     assert all(a.name != "foo" for a in out2.active)
     assert store._removed[-1] == "foo"
