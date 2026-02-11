@@ -72,6 +72,32 @@ make guardrails
 
 See [QUICK_START.md](QUICK_START.md) and [DEVELOPMENT_SETUP.md](DEVELOPMENT_SETUP.md) for detailed setup instructions and troubleshooting.
 
+**Common issues:**
+
+- Backend not responding: `docker logs sysdesign_backend`
+- Python not found: Use Docker workflow (`make be-docker-test`)
+- Frontend can't reach backend: Check CORS and proxy settings
+
+### Frontend Development
+
+```bash
+# Install frontend dependencies
+make fe-install
+
+# Start frontend dev server (http://localhost:5173)
+cd frontend && npm run dev
+
+# Run E2E tests
+make fe-test-e2e
+
+# Or use Docker
+docker-compose up frontend
+```
+
+## License
+
+MIT
+
 ## Makefile Commands
 
 The Makefile is your single entry point for all development tasks:
@@ -252,6 +278,16 @@ Future additions: Prometheus, Grafana, Loki.
 4. ⏳ **Pending**: Integration tests with real Postgres (testcontainers)
 5. ⏳ **Pending**: Contract validation + OpenAPI snapshot workflow
 
-## License
+## Project Status
 
-MIT
+**Current Phase**: Frontend Development
+
+- ✅ Backend foundation complete (Clean Architecture + Ports & Adapters)
+- ✅ 5 simulator scenarios implemented
+- ✅ Frontend initialized (Vite + React + TypeScript)
+- ✅ SimulatorControlPanel with full functionality
+- ✅ Playwright E2E tests
+- ⏳ Integration tests pending
+- ⏳ Additional scenarios (45 more) pending
+
+See [PROJECT_STATUS.md](PROJECT_STATUS.md) for detailed progress.
