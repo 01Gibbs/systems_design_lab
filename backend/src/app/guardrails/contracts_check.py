@@ -50,7 +50,7 @@ class ContractChecker:
 
         return True
 
-    def _generate_current_schema(self) -> dict | None:
+    def _generate_current_schema(self) -> dict[str, object] | None:
         """Generate OpenAPI schema from FastAPI app"""
         try:
             from app.api.main import app
@@ -60,13 +60,13 @@ class ContractChecker:
             print(f"Error generating schema: {e}")
             return None
 
-    def _schemas_equal(self, schema1: dict, schema2: dict) -> bool:
+    def _schemas_equal(self, schema1: dict[str, object], schema2: dict[str, object]) -> bool:
         """Compare two schemas for equality"""
         json1 = json.dumps(schema1, sort_keys=True)
         json2 = json.dumps(schema2, sort_keys=True)
         return json1 == json2
 
-    def _print_diff(self, old: dict, new: dict) -> None:
+    def _print_diff(self, old: dict[str, object], new: dict[str, object]) -> None:
         """Print high-level diff"""
         old_paths = self._extract_paths(old)
         new_paths = self._extract_paths(new)
@@ -84,7 +84,7 @@ class ContractChecker:
         if old_version != new_version:
             print(f"  Version: {old_version} → {new_version}")
 
-    def _extract_paths(self, schema: dict) -> set[str]:
+    def _extract_paths(self, schema: dict[str, object]) -> set[str]:
         """Extract all paths from schema"""
         paths = schema.get("paths", {})
         return {f"{method.upper()} {path}" for path, methods in paths.items() for method in methods}

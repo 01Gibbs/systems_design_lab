@@ -22,7 +22,7 @@ class Scenario(Protocol):
         """Check if scenario applies to this target"""
         ...
 
-    def apply(self, *, ctx: dict, parameters: dict) -> dict:
+    def apply(self, *, ctx: dict[str, object], parameters: dict[str, object]) -> dict[str, object]:
         """
         Returns a dict of effects for middleware/adapters to apply.
         NO direct side effects here.
@@ -40,6 +40,9 @@ class ScenarioRegistry:
     """Registry of all available scenarios"""
 
     scenarios: dict[str, Scenario]
+
+    def __init__(self, scenarios: dict[str, Scenario]):
+        self.scenarios = scenarios
 
     def get(self, name: str) -> Scenario:
         """Get a scenario by name"""

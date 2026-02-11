@@ -17,7 +17,7 @@ class SimulatorInjectionMiddleware(BaseHTTPMiddleware):
     This is where effect dicts from scenarios get executed.
     """
 
-    async def dispatch(self, request: Request, call_next):
+    async def dispatch(self, request: Request, call_next: callable) -> Response:
         # Get active scenarios
         sim_service: SimulatorService = request.app.state.simulator_service
         status = sim_service.status()
@@ -40,7 +40,7 @@ class SimulatorInjectionMiddleware(BaseHTTPMiddleware):
 
         return response
 
-    def _collect_effects(self, request: Request, active_scenarios) -> dict:
+    def _collect_effects(self, request: Request, active_scenarios: list) -> dict[str, object]:
         """Collect all effects from active scenarios"""
         sim_service: SimulatorService = request.app.state.simulator_service
         registry = sim_service._registry
@@ -65,7 +65,7 @@ class SimulatorInjectionMiddleware(BaseHTTPMiddleware):
 
         return combined_effects
 
-    async def _apply_pre_request_effects(self, effects: dict, request: Request) -> None:
+    async def _apply_pre_request_effects(self, effects: dict[str, object], request: Request) -> None:
         """Apply effects before request processing"""
         # HTTP delay
         if "http_delay_ms" in effects:
@@ -79,7 +79,7 @@ class SimulatorInjectionMiddleware(BaseHTTPMiddleware):
             ):
                 await asyncio.sleep(delay_ms / 1000.0)
 
-    async def _apply_post_response_effects(self, effects: dict, response: Response) -> Response:
+    async def _apply_post_response_effects(self, effects: dict[str, object], response: Response) -> Response:
         """Apply effects after request processing"""
         # Force error
         if effects.get("http_force_error"):

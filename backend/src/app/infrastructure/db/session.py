@@ -4,10 +4,11 @@ from __future__ import annotations
 
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
+from typing import AsyncGenerator
 
 # Database URL will be injected from environment
 engine = None
-async_session_maker = None
+async_session_maker: sessionmaker[AsyncSession] | None = None
 
 
 def init_db(database_url: str) -> None:
@@ -18,7 +19,7 @@ def init_db(database_url: str) -> None:
     async_session_maker = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
 
 
-async def get_db() -> AsyncSession:
+async def get_db() -> AsyncGenerator[AsyncSession, None]:
     """Dependency for getting DB session"""
     if async_session_maker is None:
         raise RuntimeError("Database not initialized. Call init_db() first.")

@@ -11,7 +11,7 @@ from starlette.middleware.base import BaseHTTPMiddleware
 class RequestIdMiddleware(BaseHTTPMiddleware):
     """Adds request_id to all requests for correlation"""
 
-    async def dispatch(self, request: Request, call_next):
+    async def dispatch(self, request: Request, call_next: callable) -> object:
         request_id = request.headers.get("X-Request-ID", str(uuid.uuid4()))
         request.state.request_id = request_id
 
