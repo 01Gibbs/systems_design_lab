@@ -12,8 +12,8 @@ from app.contracts.simulator import (
     ActiveScenario,
     DisableScenarioRequest,
     EnableScenarioRequest,
-    ScenariosResponse,
     ScenarioDescriptor,
+    ScenariosResponse,
     StatusResponse,
 )
 
@@ -38,7 +38,7 @@ class SimulatorService:
                 ScenarioDescriptor(
                     name=s.meta.name,
                     description=s.meta.description,
-                    targets=s.meta.targets,
+                    targets=[t for t in s.meta.targets],  # type: ignore
                     parameter_schema=s.meta.parameter_schema,
                     safety_limits=s.meta.safety_limits,
                 )

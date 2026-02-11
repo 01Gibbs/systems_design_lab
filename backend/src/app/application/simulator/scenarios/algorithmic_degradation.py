@@ -30,9 +30,11 @@ class AlgorithmicDegradation:
         cat = target.get("category")
         return cat in ("algorithm", "cpu")
 
-    def apply(self, *, ctx: dict, parameters: dict) -> dict:
+    def apply(self, *, ctx: dict[str, object], parameters: dict[str, object]) -> dict[str, object]:
         """Returns effect dict - NO side effects here"""
+        use_slow_path = parameters["use_slow_path"]
+        input_size = parameters.get("input_size", 100)
         return {
-            "algorithm_use_slow": bool(parameters["use_slow_path"]),
-            "algorithm_input_size": int(parameters.get("input_size", 100)),
+            "algorithm_use_slow": bool(use_slow_path),
+            "algorithm_input_size": int(input_size) if isinstance(input_size, (int, str)) else 100,
         }

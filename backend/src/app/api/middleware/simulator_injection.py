@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import asyncio
+from collections.abc import Awaitable, Callable, Mapping
+from typing import Any
 
 from fastapi import Request, Response
 from starlette.middleware.base import BaseHTTPMiddleware
@@ -17,7 +19,9 @@ class SimulatorInjectionMiddleware(BaseHTTPMiddleware):
     This is where effect dicts from scenarios get executed.
     """
 
-    async def dispatch(self, request: Request, call_next):
+    async def dispatch(
+        self, request: Request, call_next: Callable[[Request], Awaitable[Response]]
+    ) -> Response:
         # Get active scenarios
         sim_service: SimulatorService = request.app.state.simulator_service
         status = sim_service.status()
@@ -31,7 +35,7 @@ class SimulatorInjectionMiddleware(BaseHTTPMiddleware):
         # Call next middleware/route
         try:
             response = await call_next(request)
-        except Exception as e:
+        except Exception:
             # Could apply error injection here
             raise
 
@@ -40,7 +44,7 @@ class SimulatorInjectionMiddleware(BaseHTTPMiddleware):
 
         return response
 
-    def _collect_effects(self, request: Request, active_scenarios) -> dict:
+    def _collect_effects(self, request: Request, active_scenarios: list[Any]) -> dict[str, object]:
         """Collect all effects from active scenarios"""
         sim_service: SimulatorService = request.app.state.simulator_service
         registry = sim_service._registry
@@ -56,8 +60,8 @@ class SimulatorInjectionMiddleware(BaseHTTPMiddleware):
             try:
                 scenario = registry.get(active.name)
                 if scenario.is_applicable(target=target):
-                    ctx = {"request": request, "target": target}
-                    effects = scenario.apply(ctx=ctx, parameters=active.parameters)
+                    ctx: Mapping[str, Any] = {"request": request, "target": target}
+                    effects = scenario.apply(ctx=ctx, parameters=active.parameters)  # type: ignore
                     combined_effects.update(effects)
             except Exception:
                 # Log but don't fail request
@@ -65,7 +69,9 @@ class SimulatorInjectionMiddleware(BaseHTTPMiddleware):
 
         return combined_effects
 
-    async def _apply_pre_request_effects(self, effects: dict, request: Request) -> None:
+    async def _apply_pre_request_effects(
+        self, effects: dict[str, object], request: Request
+    ) -> None:
         """Apply effects before request processing"""
         # HTTP delay
         if "http_delay_ms" in effects:
@@ -74,12 +80,16 @@ class SimulatorInjectionMiddleware(BaseHTTPMiddleware):
             method = effects.get("http_method", "")
 
             # Check if this request matches
-            if (not path_prefix or request.url.path.startswith(path_prefix)) and (
-                not method or request.method == method
-            ):
-                await asyncio.sleep(delay_ms / 1000.0)
+            if (
+                not path_prefix
+                or (isinstance(path_prefix, str) and request.url.path.startswith(path_prefix))
+            ) and (not method or request.method == method):
+                if isinstance(delay_ms, (int, float)):
+                    await asyncio.sleep(delay_ms / 1000.0)
 
-    async def _apply_post_response_effects(self, effects: dict, response: Response) -> Response:
+    async def _apply_post_response_effects(
+        self, effects: dict[str, object], response: Response
+    ) -> Response:
         """Apply effects after request processing"""
         # Force error
         if effects.get("http_force_error"):

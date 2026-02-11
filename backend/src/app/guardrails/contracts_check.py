@@ -27,7 +27,7 @@ class ContractChecker:
             return False
 
         # Load snapshot
-        with open(self.snapshot_path, "r", encoding="utf-8") as f:
+        with open(self.snapshot_path, encoding="utf-8") as f:
             snapshot = json.load(f)
 
         # Generate current schema
@@ -42,14 +42,15 @@ class ContractChecker:
         # Compare
         if not self._schemas_equal(snapshot, current_schema):
             self.violations.append(
-                "OpenAPI schema has changed. Review changes and run 'make contracts-accept' to update snapshot."
+                "OpenAPI schema has changed. "
+                "Review changes and run 'make contracts-accept' to update snapshot."
             )
             self._print_diff(snapshot, current_schema)
             return False
 
         return True
 
-    def _generate_current_schema(self) -> dict | None:
+    def _generate_current_schema(self) -> dict[str, object] | None:
         """Generate OpenAPI schema from FastAPI app"""
         try:
             from app.api.main import app
@@ -59,13 +60,13 @@ class ContractChecker:
             print(f"Error generating schema: {e}")
             return None
 
-    def _schemas_equal(self, schema1: dict, schema2: dict) -> bool:
+    def _schemas_equal(self, schema1: dict[str, object], schema2: dict[str, object]) -> bool:
         """Compare two schemas for equality"""
         json1 = json.dumps(schema1, sort_keys=True)
         json2 = json.dumps(schema2, sort_keys=True)
         return json1 == json2
 
-    def _print_diff(self, old: dict, new: dict) -> None:
+    def _print_diff(self, old: dict[str, object], new: dict[str, object]) -> None:
         """Print high-level diff"""
         old_paths = self._extract_paths(old)
         new_paths = self._extract_paths(new)
@@ -78,15 +79,35 @@ class ContractChecker:
         if removed:
             print(f"  Removed endpoints: {', '.join(sorted(removed))}")
 
-        old_version = old.get("info", {}).get("version", "unknown")
-        new_version = new.get("info", {}).get("version", "unknown")
+        old_version = None
+        new_version = None
+        if isinstance(old, dict):
+            old_info = old.get("info", {})
+            if isinstance(old_info, dict):
+                old_version = old_info.get("version", "unknown")
+        if isinstance(new, dict):
+            new_info = new.get("info", {})
+            if isinstance(new_info, dict):
+                new_version = new_info.get("version", "unknown")
         if old_version != new_version:
             print(f"  Version: {old_version} → {new_version}")
 
-    def _extract_paths(self, schema: dict) -> set[str]:
+    def _extract_paths(self, schema: dict[str, object]) -> set[str]:
         """Extract all paths from schema"""
         paths = schema.get("paths", {})
-        return {f"{method.upper()} {path}" for path, methods in paths.items() for method in methods}
+        if not isinstance(paths, dict):
+            return set()
+        result = set()
+        for path, methods in paths.items():
+            if not isinstance(methods, dict):
+                continue
+            for method in methods:
+                if not isinstance(method, str):
+                    continue
+                # Defensive: ensure old/new are dicts for .get
+                if hasattr(schema, "get") and callable(getattr(schema, "get", None)):
+                    result.add(f"{method.upper()} {path}")
+        return result
 
     def print_violations(self) -> None:
         """Print violations"""
