@@ -147,8 +147,10 @@ Commands:
 
 **Frontend:**
 
-- Playwright E2E tests that enable simulator scenarios via API
-- Validate UI behaviour under failure modes
+- **Vitest** for unit and integration tests (fast, native ESM, Vite-compatible)
+- **Playwright** for E2E tests (UI, resilience, failure modes)
+- E2E tests must enable simulator scenarios via backend API
+- Validate UI behaviour under those scenarios
 - Avoid brittle timing-based tests
 
 ## Python Tooling (NON-NEGOTIABLE)
@@ -161,10 +163,12 @@ Commands:
 - **testcontainers** or docker-compose (integration tests)
 
 ## TypeScript Tooling
-
+  
 - **prettier** (formatting)
 - **eslint** (linting)
 - **tsc --noEmit** (type checking)
+- **vitest** (unit/integration testing)
+- **playwright** (E2E testing)
 
 ## Makefile Commands (Required Interface)
 
@@ -197,6 +201,7 @@ make fe-install      # Install dependencies
 make fe-format       # Format with prettier
 make fe-lint         # Lint with eslint
 make fe-typecheck    # Type check with tsc
+make fe-test         # Run all Vitest unit/integration tests
 make fe-test-e2e     # Playwright E2E tests
 ```
 
