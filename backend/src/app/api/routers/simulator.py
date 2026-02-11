@@ -17,7 +17,7 @@ router = APIRouter(tags=["simulator"])
 
 def _get_service(request: Request) -> SimulatorService:
     """Get simulator service from app state"""
-    return request.app.state.simulator_service
+    return request.app.state.simulator_service  # type: ignore
 
 
 @router.get("/scenarios", response_model=ScenariosResponse)

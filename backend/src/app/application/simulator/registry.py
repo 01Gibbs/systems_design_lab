@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass
 from typing import Protocol
 
 from app.application.simulator.models import ScenarioMeta
@@ -35,20 +34,21 @@ class Scenario(Protocol):
         ...
 
 
-@dataclass(frozen=True)
 class ScenarioRegistry:
     """Registry of all available scenarios"""
 
-    scenarios: dict[str, Scenario]
-
     def __init__(self, scenarios: dict[str, Scenario]):
-        self.scenarios = scenarios
+        self._scenarios = scenarios
+
+    @property
+    def scenarios(self) -> dict[str, Scenario]:
+        return self._scenarios
 
     def get(self, name: str) -> Scenario:
         """Get a scenario by name"""
-        if name not in self.scenarios:
+        if name not in self._scenarios:
             raise KeyError(f"Unknown scenario '{name}'")
-        return self.scenarios[name]
+        return self._scenarios[name]
 
 
 def build_registry() -> ScenarioRegistry:
@@ -61,7 +61,7 @@ def build_registry() -> ScenarioRegistry:
     from app.application.simulator.scenarios.lock_contention import LockContention
     from app.application.simulator.scenarios.slow_db_query import SlowDbQuery
 
-    items = [
+    items: list[Scenario] = [
         FixedLatency(),
         ErrorBurst(),
         SlowDbQuery(),

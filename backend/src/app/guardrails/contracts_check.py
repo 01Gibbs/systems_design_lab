@@ -79,15 +79,35 @@ class ContractChecker:
         if removed:
             print(f"  Removed endpoints: {', '.join(sorted(removed))}")
 
-        old_version = old.get("info", {}).get("version", "unknown")
-        new_version = new.get("info", {}).get("version", "unknown")
+        old_version = None
+        new_version = None
+        if isinstance(old, dict):
+            old_info = old.get("info", {})
+            if isinstance(old_info, dict):
+                old_version = old_info.get("version", "unknown")
+        if isinstance(new, dict):
+            new_info = new.get("info", {})
+            if isinstance(new_info, dict):
+                new_version = new_info.get("version", "unknown")
         if old_version != new_version:
             print(f"  Version: {old_version} → {new_version}")
 
     def _extract_paths(self, schema: dict[str, object]) -> set[str]:
         """Extract all paths from schema"""
         paths = schema.get("paths", {})
-        return {f"{method.upper()} {path}" for path, methods in paths.items() for method in methods}
+        if not isinstance(paths, dict):
+            return set()
+        result = set()
+        for path, methods in paths.items():
+            if not isinstance(methods, dict):
+                continue
+            for method in methods:
+                if not isinstance(method, str):
+                    continue
+                # Defensive: ensure old/new are dicts for .get
+                if hasattr(schema, "get") and callable(getattr(schema, "get", None)):
+                    result.add(f"{method.upper()} {path}")
+        return result
 
     def print_violations(self) -> None:
         """Print violations"""
