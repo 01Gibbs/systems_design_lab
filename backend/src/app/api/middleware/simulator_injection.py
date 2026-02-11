@@ -65,7 +65,9 @@ class SimulatorInjectionMiddleware(BaseHTTPMiddleware):
 
         return combined_effects
 
-    async def _apply_pre_request_effects(self, effects: dict[str, object], request: Request) -> None:
+    async def _apply_pre_request_effects(
+        self, effects: dict[str, object], request: Request
+    ) -> None:
         """Apply effects before request processing"""
         # HTTP delay
         if "http_delay_ms" in effects:
@@ -79,7 +81,9 @@ class SimulatorInjectionMiddleware(BaseHTTPMiddleware):
             ):
                 await asyncio.sleep(delay_ms / 1000.0)
 
-    async def _apply_post_response_effects(self, effects: dict[str, object], response: Response) -> Response:
+    async def _apply_post_response_effects(
+        self, effects: dict[str, object], response: Response
+    ) -> Response:
         """Apply effects after request processing"""
         # Force error
         if effects.get("http_force_error"):

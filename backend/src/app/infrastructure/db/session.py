@@ -2,13 +2,15 @@
 
 from __future__ import annotations
 
+from collections.abc import AsyncGenerator
+from typing import Any
+
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
-from typing import AsyncGenerator
 
 # Database URL will be injected from environment
-engine = None
-async_session_maker: sessionmaker[AsyncSession] | None = None
+engine: Any = None
+async_session_maker: sessionmaker[Any] | None = None
 
 
 def init_db(database_url: str) -> None:

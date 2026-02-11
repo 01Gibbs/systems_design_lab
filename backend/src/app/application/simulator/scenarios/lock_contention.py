@@ -29,10 +29,14 @@ class LockContention:
     def is_applicable(self, *, target: dict[str, str]) -> bool:
         return target.get("category") == "db"
 
-        def apply(self, *, ctx: dict, parameters: dict[str, object]) -> dict[str, object]:
+    def apply(self, *, ctx: dict[str, object], parameters: dict[str, object]) -> dict[str, object]:
         """Returns effect dict - NO side effects here"""
+        row_id = parameters["row_id"]
+        update_count = parameters["update_count"]
         return {
             "db_lock_contention": True,
-            "db_target_row_id": int(parameters["row_id"]),
-            "db_concurrent_updates": int(parameters["update_count"]),
+            "db_target_row_id": int(row_id) if isinstance(row_id, (int, str)) else 0,
+            "db_concurrent_updates": (
+                int(update_count) if isinstance(update_count, (int, str)) else 0
+            ),
         }

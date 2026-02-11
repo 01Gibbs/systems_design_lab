@@ -30,12 +30,14 @@ class SlowDbQuery:
     def is_applicable(self, *, target: dict[str, str]) -> bool:
         return target.get("category") == "db"
 
-        def apply(self, *, ctx: dict, parameters: dict[str, object]) -> dict[str, object]:
+    def apply(self, *, ctx: dict[str, object], parameters: dict[str, object]) -> dict[str, object]:
         """Returns effect dict - NO side effects here"""
-        p = float(parameters.get("probability", 1.0))
+        prob = parameters.get("probability", 1.0)
+        p = float(prob) if isinstance(prob, (int, float, str)) else 1.0
         if random.random() > p:
             return {}
 
+        seconds = parameters["seconds"]
         return {
-            "db_sleep_seconds": float(parameters["seconds"]),
+            "db_sleep_seconds": float(seconds) if isinstance(seconds, (int, float, str)) else 0.01,
         }

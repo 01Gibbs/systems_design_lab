@@ -32,14 +32,16 @@ class FixedLatency:
     def is_applicable(self, *, target: dict[str, str]) -> bool:
         return target.get("category") == "http"
 
-        def apply(self, *, ctx: dict, parameters: dict[str, object]) -> dict[str, object]:
+    def apply(self, *, ctx: dict[str, object], parameters: dict[str, object]) -> dict[str, object]:
         """Returns effect dict - NO side effects here"""
-        p = float(parameters.get("probability", 1.0))
+        prob = parameters.get("probability", 1.0)
+        p = float(prob) if isinstance(prob, (int, float, str)) else 1.0
         if random.random() > p:
             return {}
 
+        ms = parameters["ms"]
         return {
-            "http_delay_ms": int(parameters["ms"]),
+            "http_delay_ms": int(ms) if isinstance(ms, (int, str)) else 0,
             "http_path_prefix": str(parameters.get("path_prefix", "")),
             "http_method": str(parameters.get("method", "")).upper(),
         }
