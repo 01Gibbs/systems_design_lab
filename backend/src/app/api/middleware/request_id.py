@@ -1,4 +1,5 @@
 """Request ID Middleware - Adds correlation IDs"""
+
 from __future__ import annotations
 
 import uuid

@@ -1,4 +1,5 @@
 """Application-layer models for simulator"""
+
 from __future__ import annotations
 
 from dataclasses import dataclass

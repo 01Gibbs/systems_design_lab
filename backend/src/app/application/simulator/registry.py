@@ -1,4 +1,5 @@
 """Scenario Registry - Central registration and lookup"""
+
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -10,7 +11,7 @@ from app.application.simulator.models import ScenarioMeta
 class Scenario(Protocol):
     """
     Protocol for simulator scenarios.
-    
+
     Scenarios return EFFECTS (dicts) rather than executing side effects.
     This keeps simulator logic isolated and testable.
     """
@@ -25,7 +26,7 @@ class Scenario(Protocol):
         """
         Returns a dict of effects for middleware/adapters to apply.
         NO direct side effects here.
-        
+
         Example return values:
         - {"http_delay_ms": 100} - delay HTTP response
         - {"http_force_error": True} - force 500 error

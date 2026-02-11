@@ -1,4 +1,5 @@
 """In-Memory Simulator Store Implementation"""
+
 from __future__ import annotations
 
 from typing import Optional
@@ -10,7 +11,7 @@ from app.application.simulator.models import ActiveScenarioState
 class InMemorySimulatorStore(SimulatorStore):
     """
     In-memory implementation of SimulatorStore.
-    
+
     Perfect for local development and testing.
     Could be swapped for Redis or database-backed store.
     """

@@ -1,4 +1,5 @@
 """Database Session Management"""
+
 from __future__ import annotations
 
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
@@ -14,9 +15,7 @@ def init_db(database_url: str) -> None:
     global engine, async_session_maker
 
     engine = create_async_engine(database_url, echo=False)
-    async_session_maker = sessionmaker(
-        engine, class_=AsyncSession, expire_on_commit=False
-    )
+    async_session_maker = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
 
 
 async def get_db() -> AsyncSession:

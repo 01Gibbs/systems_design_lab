@@ -1,4 +1,5 @@
 """FastAPI Application - Composition Root with DI"""
+
 from __future__ import annotations
 
 from fastapi import FastAPI
@@ -17,7 +18,7 @@ from app.infrastructure.time.system_clock import SystemClock
 def create_app() -> FastAPI:
     """
     Composition root - wire dependencies here.
-    
+
     This is where we do dependency injection explicitly.
     Infrastructure implementations are created and injected into
     application services.
