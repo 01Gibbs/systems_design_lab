@@ -31,7 +31,7 @@ class SimulatorInjectionMiddleware(BaseHTTPMiddleware):
         # Call next middleware/route
         try:
             response = await call_next(request)
-        except Exception as e:
+        except Exception:
             # Could apply error injection here
             raise
 

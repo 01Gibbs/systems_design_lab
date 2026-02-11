@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from datetime import datetime
-from typing import Any, Optional
+from typing import Any
 
 
 @dataclass(frozen=True)
@@ -14,7 +14,7 @@ class ActiveScenarioState:
     name: str
     parameters: dict[str, Any]
     enabled_at: datetime
-    expires_at: Optional[datetime]
+    expires_at: datetime | None
 
 
 @dataclass(frozen=True)

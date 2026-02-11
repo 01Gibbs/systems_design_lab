@@ -12,8 +12,8 @@ from app.contracts.simulator import (
     ActiveScenario,
     DisableScenarioRequest,
     EnableScenarioRequest,
-    ScenariosResponse,
     ScenarioDescriptor,
+    ScenariosResponse,
     StatusResponse,
 )
 

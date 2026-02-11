@@ -29,7 +29,7 @@ class LockContention:
     def is_applicable(self, *, target: dict[str, str]) -> bool:
         return target.get("category") == "db"
 
-    def apply(self, *, ctx: dict, parameters: dict) -> dict:
+        def apply(self, *, ctx: dict, parameters: dict[str, object]) -> dict[str, object]:
         """Returns effect dict - NO side effects here"""
         return {
             "db_lock_contention": True,

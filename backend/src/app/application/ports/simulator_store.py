@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from typing import Optional
 
 from app.application.simulator.models import ActiveScenarioState
 
@@ -32,6 +31,6 @@ class SimulatorStore(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def get(self, name: str) -> Optional[ActiveScenarioState]:
+    def get(self, name: str) -> ActiveScenarioState | None:
         """Get a specific scenario by name"""
         raise NotImplementedError

@@ -30,7 +30,7 @@ class AlgorithmicDegradation:
         cat = target.get("category")
         return cat in ("algorithm", "cpu")
 
-    def apply(self, *, ctx: dict, parameters: dict) -> dict:
+        def apply(self, *, ctx: dict, parameters: dict[str, object]) -> dict[str, object]:
         """Returns effect dict - NO side effects here"""
         return {
             "algorithm_use_slow": bool(parameters["use_slow_path"]),

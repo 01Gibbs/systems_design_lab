@@ -31,7 +31,7 @@ class ErrorBurst:
     def is_applicable(self, *, target: dict[str, str]) -> bool:
         return target.get("category") == "http"
 
-    def apply(self, *, ctx: dict, parameters: dict) -> dict:
+        def apply(self, *, ctx: dict, parameters: dict[str, object]) -> dict[str, object]:
         """Returns effect dict - NO side effects here"""
         p = float(parameters["probability"])
         if random.random() > p:

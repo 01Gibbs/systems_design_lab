@@ -30,7 +30,7 @@ class SlowDbQuery:
     def is_applicable(self, *, target: dict[str, str]) -> bool:
         return target.get("category") == "db"
 
-    def apply(self, *, ctx: dict, parameters: dict) -> dict:
+        def apply(self, *, ctx: dict, parameters: dict[str, object]) -> dict[str, object]:
         """Returns effect dict - NO side effects here"""
         p = float(parameters.get("probability", 1.0))
         if random.random() > p:

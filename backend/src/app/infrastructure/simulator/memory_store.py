@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-from typing import Optional
-
 from app.application.ports.simulator_store import SimulatorStore
 from app.application.simulator.models import ActiveScenarioState
 
@@ -31,5 +29,5 @@ class InMemorySimulatorStore(SimulatorStore):
     def clear(self) -> None:
         self._store.clear()
 
-    def get(self, name: str) -> Optional[ActiveScenarioState]:
+    def get(self, name: str) -> ActiveScenarioState | None:
         return self._store.get(name)
