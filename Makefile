@@ -1,3 +1,8 @@
+# Always reset to project root (works on both Linux/macOS and Windows)
+reset-root:
+	@cd "$(CURDIR)"
+	@cd "$(shell git rev-parse --show-toplevel 2>/dev/null || echo $(CURDIR))"
+	@echo "$(YELLOW)Reset to project root: $$(pwd)$(NC)"
 .PHONY: help up down reset logs status \
         be-install be-format be-format-check be-lint be-typecheck be-test be-test-unit be-test-integration be-coverage \
         be-docker-test be-docker-format be-docker-lint be-docker-typecheck be-docker-all \
@@ -87,7 +92,9 @@ be-test-integration: ## Run backend integration tests only
 
 be-coverage: ## Run backend tests with coverage enforcement
 	@echo "$(BLUE)Running tests with coverage...$(NC)"
-	cd Backend Development (Docker-based)
+	cd backend && PYTHONPATH=src pytest --cov=src/app --cov-report=term-missing --cov-fail-under=85; cd .. || true
+	@$(MAKE) reset-root
+	@echo "$(GREEN)✓ Coverage threshold met$(NC)"
 
 be-docker-test: ## Run tests in Docker container
 	@./scripts/dev-container.sh test

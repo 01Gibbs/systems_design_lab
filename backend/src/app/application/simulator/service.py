@@ -6,16 +6,16 @@ from datetime import timedelta
 
 from app.application.ports.clock import Clock
 from app.application.ports.simulator_store import SimulatorStore
+from app.application.simulator.app_models import (
+    ActiveScenarioApp,
+    DisableScenarioRequestApp,
+    EnableScenarioRequestApp,
+    ScenarioDescriptorApp,
+    ScenariosResponseApp,
+    StatusResponseApp,
+)
 from app.application.simulator.models import ActiveScenarioState
 from app.application.simulator.registry import ScenarioRegistry
-from app.contracts.simulator import (
-    ActiveScenario,
-    DisableScenarioRequest,
-    EnableScenarioRequest,
-    ScenarioDescriptor,
-    ScenariosResponse,
-    StatusResponse,
-)
 
 
 class SimulatorService:
@@ -30,22 +30,22 @@ class SimulatorService:
         self._clock = clock
         self._registry = registry
 
-    def list_scenarios(self) -> ScenariosResponse:
+    def list_scenarios(self) -> ScenariosResponseApp:
         """List all available scenarios"""
         out = []
         for s in self._registry.scenarios.values():
             out.append(
-                ScenarioDescriptor(
+                ScenarioDescriptorApp(
                     name=s.meta.name,
                     description=s.meta.description,
-                    targets=[t for t in s.meta.targets],  # type: ignore
+                    targets=[t for t in s.meta.targets],
                     parameter_schema=s.meta.parameter_schema,
                     safety_limits=s.meta.safety_limits,
                 )
             )
-        return ScenariosResponse(scenarios=sorted(out, key=lambda x: x.name))
+        return ScenariosResponseApp(scenarios=sorted(out, key=lambda x: x.name))
 
-    def status(self) -> StatusResponse:
+    def status(self) -> StatusResponseApp:
         """Get status of active scenarios"""
         now = self._clock.now()
         active = []
@@ -57,7 +57,7 @@ class SimulatorService:
                 continue
 
             active.append(
-                ActiveScenario(
+                ActiveScenarioApp(
                     name=state.name,
                     parameters=state.parameters,
                     enabled_at=state.enabled_at,
@@ -65,9 +65,9 @@ class SimulatorService:
                 )
             )
 
-        return StatusResponse(active=sorted(active, key=lambda x: x.name))
+        return StatusResponseApp(active=sorted(active, key=lambda x: x.name))
 
-    def enable(self, req: EnableScenarioRequest) -> StatusResponse:
+    def enable(self, req: EnableScenarioRequestApp) -> StatusResponseApp:
         """Enable a scenario with given parameters"""
         # Validate scenario exists
         scenario = self._registry.get(req.name)
@@ -90,12 +90,12 @@ class SimulatorService:
 
         return self.status()
 
-    def disable(self, req: DisableScenarioRequest) -> StatusResponse:
+    def disable(self, req: DisableScenarioRequestApp) -> StatusResponseApp:
         """Disable a scenario"""
         self._store.remove(req.name)
         return self.status()
 
-    def reset(self) -> StatusResponse:
+    def reset(self) -> StatusResponseApp:
         """Disable all scenarios"""
         self._store.clear()
         return self.status()
