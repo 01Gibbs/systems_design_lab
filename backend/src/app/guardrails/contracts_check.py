@@ -27,7 +27,7 @@ class ContractChecker:
             return False
 
         # Load snapshot
-        with open(self.snapshot_path, "r", encoding="utf-8") as f:
+        with open(self.snapshot_path, encoding="utf-8") as f:
             snapshot = json.load(f)
 
         # Generate current schema
@@ -42,7 +42,8 @@ class ContractChecker:
         # Compare
         if not self._schemas_equal(snapshot, current_schema):
             self.violations.append(
-                "OpenAPI schema has changed. Review changes and run 'make contracts-accept' to update snapshot."
+                "OpenAPI schema has changed. "
+                "Review changes and run 'make contracts-accept' to update snapshot."
             )
             self._print_diff(snapshot, current_schema)
             return False

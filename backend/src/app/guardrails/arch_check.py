@@ -67,7 +67,10 @@ class ArchitectureChecker:
                     {
                         "file": str(py_file.relative_to(self.app_path.parent.parent)),
                         "rule": "domain_purity",
-                        "error": f"Domain layer imports forbidden frameworks: {', '.join(sorted(forbidden))}",
+                        "error": (
+                            "Domain layer imports forbidden frameworks: "
+                            f"{', '.join(sorted(forbidden))}"
+                        ),
                     }
                 )
 
@@ -91,14 +94,17 @@ class ArchitectureChecker:
                         {
                             "file": str(py_file.relative_to(self.app_path.parent.parent)),
                             "rule": "layer_boundary",
-                            "error": f"Layer '{layer}' imports from disallowed layers: {', '.join(sorted(disallowed))}",
+                            "error": (
+                                f"Layer '{layer}' imports from disallowed layers: "
+                                f"{', '.join(sorted(disallowed))}"
+                            ),
                         }
                     )
 
     def _extract_imports(self, file_path: Path) -> set[str]:
         """Extract top-level package imports"""
         try:
-            with open(file_path, "r", encoding="utf-8") as f:
+            with open(file_path, encoding="utf-8") as f:
                 tree = ast.parse(f.read(), filename=str(file_path))
         except SyntaxError:
             return set()
@@ -117,7 +123,7 @@ class ArchitectureChecker:
     def _extract_local_layer_imports(self, file_path: Path) -> set[str]:
         """Extract imports from other app layers"""
         try:
-            with open(file_path, "r", encoding="utf-8") as f:
+            with open(file_path, encoding="utf-8") as f:
                 tree = ast.parse(f.read(), filename=str(file_path))
         except SyntaxError:
             return set()
