@@ -1,5 +1,18 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import '@testing-library/jest-dom';
 import ScenarioCard from '../ScenarioCard';
+import { http, HttpResponse } from 'msw';
+import { setupServer } from 'msw/node';
+
+const server = setupServer(
+  http.post('http://localhost:8000/api/sim/enable', () =>
+    HttpResponse.json({ success: true })
+  )
+);
+
+beforeAll(() => server.listen());
+afterEach(() => server.resetHandlers());
+afterAll(() => server.close());
 
 describe('ScenarioCard', () => {
   const scenario = {
@@ -7,7 +20,7 @@ describe('ScenarioCard', () => {
     description: 'Injects latency',
     parameter_schema: {},
     safety_limits: {},
-    targets: ['http'],
+    targets: ['http'] as ('http' | 'db' | 'cpu' | 'algorithm')[],
   };
 
   it('renders scenario name and description', () => {
@@ -16,11 +29,13 @@ describe('ScenarioCard', () => {
     expect(screen.getByText('Injects latency')).toBeInTheDocument();
   });
 
-  it('calls onEnable when enable button is clicked', () => {
+  it('calls onEnable when enable button is clicked', async () => {
     const onEnable = jest.fn();
     render(<ScenarioCard scenario={scenario} onEnable={onEnable} />);
     const enableBtn = screen.getByRole('button', { name: /enable/i });
     fireEvent.click(enableBtn);
-    expect(onEnable).toHaveBeenCalled();
+    await waitFor(() => {
+      expect(onEnable).toHaveBeenCalled();
+    });
   });
 });
