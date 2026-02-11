@@ -30,7 +30,7 @@ describe('ScenarioCard', () => {
   });
 
   it('calls onEnable when enable button is clicked', async () => {
-    const onEnable = jest.fn();
+    const onEnable = vi.fn();
     render(<ScenarioCard scenario={scenario} onEnable={onEnable} />);
     const enableBtn = screen.getByRole('button', { name: /enable/i });
     fireEvent.click(enableBtn);

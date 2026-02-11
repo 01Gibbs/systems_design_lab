@@ -20,6 +20,6 @@ describe('ActiveScenarios', () => {
         onResetAll={() => {}}
       />
     );
-    expect(screen.getByText('fixed_latency')).toBeInTheDocument();
+    expect(screen.getAllByText('fixed_latency')[0]).toBeInTheDocument();
   });
 });

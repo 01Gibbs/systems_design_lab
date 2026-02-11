@@ -1,4 +1,4 @@
-import { defineConfig } from 'vite';
+import { defineConfig } from 'vitest/config';
 import react from '@vitejs/plugin-react';
 import path from 'path';
 
@@ -15,6 +15,19 @@ export default defineConfig({
       '/api': {
         target: process.env.VITE_API_URL || 'http://localhost:8000',
         changeOrigin: true,
+      },
+    },
+  },
+  test: {
+    globals: true,
+    environment: 'jsdom',
+    setupFiles: './src/test/setup.ts',
+    exclude: ['**/node_modules/**', '**/dist/**', '**/e2e/**', '**/*.spec.ts'],
+    include: ['**/*.test.{ts,tsx}'],
+    pool: 'forks',
+    poolOptions: {
+      forks: {
+        singleFork: true,
       },
     },
   },
