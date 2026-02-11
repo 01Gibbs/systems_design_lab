@@ -5,9 +5,7 @@ import { http, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
 
 const server = setupServer(
-  http.post('http://localhost:8000/api/sim/enable', () =>
-    HttpResponse.json({ success: true })
-  )
+  http.post('http://localhost:8000/api/sim/enable', () => HttpResponse.json({ success: true }))
 );
 
 beforeAll(() => server.listen());
