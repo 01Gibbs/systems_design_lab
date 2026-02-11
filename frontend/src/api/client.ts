@@ -7,7 +7,13 @@
  * To regenerate types: npm run contracts:gen
  */
 
-import type { paths, components } from './types';
+import type { components } from './types';
+
+// Type aliases from generated OpenAPI types
+export type Scenario = components['schemas']['ScenarioDescriptor'];
+export type ActiveScenario = components['schemas']['ActiveScenario'];
+export type ScenariosResponse = components['schemas']['ScenariosResponse'];
+export type StatusResponse = components['schemas']['StatusResponse'];
 
 const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
@@ -36,13 +42,6 @@ async function request<T>(path: string, init?: RequestInit): Promise<ApiResult<T
   }
 }
 
-// Type aliases from generated schema
-export type Scenario = components['schemas']['Scenario'];
-export type ActiveScenario = components['schemas']['ActiveScenario'];
-export type ScenariosResponse =
-  paths['/api/sim/scenarios']['get']['responses'][200]['content']['application/json'];
-export type StatusResponse =
-  paths['/api/sim/status']['get']['responses'][200]['content']['application/json'];
 
 /**
  * Central API client - all components MUST use this, not fetch directly
@@ -52,16 +51,16 @@ export const simApi = {
 
   status: () => request<StatusResponse>('/api/sim/status'),
 
-  enable: (scenario: string, parameters: Record<string, unknown>) =>
+  enable: (name: string, parameters: Record<string, unknown>, duration_seconds?: number) =>
     request('/api/sim/enable', {
       method: 'POST',
-      body: JSON.stringify({ scenario, parameters }),
+      body: JSON.stringify({ name, parameters, duration_seconds }),
     }),
 
-  disable: (scenario: string) =>
+  disable: (name: string) =>
     request('/api/sim/disable', {
       method: 'POST',
-      body: JSON.stringify({ scenario }),
+      body: JSON.stringify({ name }),
     }),
 
   reset: () => request('/api/sim/reset', { method: 'POST' }),

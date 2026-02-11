@@ -13,8 +13,7 @@ export default function ScenarioCard({ scenario, onEnable }: ScenarioCardProps) 
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
 
-  const { meta } = scenario;
-  const paramSchema = meta.parameter_schema as {
+  const paramSchema = scenario.parameter_schema as {
     properties?: Record<string, { type: string; minimum?: number; maximum?: number }>;
     required?: string[];
   };
@@ -36,7 +35,7 @@ export default function ScenarioCard({ scenario, onEnable }: ScenarioCardProps) 
 
     // Call typed API client
     const { simApi } = await import('@/api/client');
-    const res = await simApi.enable(meta.name, parameters);
+    const res = await simApi.enable(scenario.name, parameters);
 
     setLoading(false);
 
@@ -69,13 +68,13 @@ export default function ScenarioCard({ scenario, onEnable }: ScenarioCardProps) 
   return (
     <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-6 bg-white dark:bg-gray-800 hover:shadow-lg transition-shadow">
       <div className="flex justify-between items-start mb-3">
-        <h3 className="text-lg font-semibold text-blue-600 dark:text-blue-400">{meta.name}</h3>
+        <h3 className="text-lg font-semibold text-blue-600 dark:text-blue-400">{scenario.name}</h3>
         <span className="text-xs text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">
-          {meta.targets.join(', ')}
+          {scenario.targets.join(', ')}
         </span>
       </div>
 
-      <p className="text-gray-700 dark:text-gray-300 mb-4">{meta.description}</p>
+      <p className="text-gray-700 dark:text-gray-300 mb-4">{scenario.description}</p>
 
       {paramSchema.properties && Object.keys(paramSchema.properties).length > 0 && (
         <div className="space-y-3 mb-4">

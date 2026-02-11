@@ -32,8 +32,8 @@ export default function SimulatorControlPanel({ onStatusChange }: SimulatorContr
     }
 
     setScenarios(scenariosRes.data.scenarios);
-    setActiveScenarios(statusRes.data.active_scenarios);
-    onStatusChange(statusRes.data.active_scenarios.length);
+    setActiveScenarios(statusRes.data.active);
+    onStatusChange(statusRes.data.active.length);
     setLoading(false);
   };
 
@@ -44,8 +44,8 @@ export default function SimulatorControlPanel({ onStatusChange }: SimulatorContr
     const interval = setInterval(async () => {
       const statusRes = await simApi.status();
       if (statusRes.ok) {
-        setActiveScenarios(statusRes.data.active_scenarios);
-        onStatusChange(statusRes.data.active_scenarios.length);
+        setActiveScenarios(statusRes.data.active);
+        onStatusChange(statusRes.data.active.length);
       }
     }, 2000);
 
@@ -117,7 +117,7 @@ export default function SimulatorControlPanel({ onStatusChange }: SimulatorContr
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {scenarios.map((scenario) => (
-            <ScenarioCard key={scenario.meta.name} scenario={scenario} onEnable={handleEnable} />
+            <ScenarioCard key={scenario.name} scenario={scenario} onEnable={handleEnable} />
           ))}
         </div>
       </div>

@@ -1,5 +1,6 @@
 import type { ActiveScenario } from '@/api/client';
 
+
 interface ActiveScenariosProps {
   scenarios: ActiveScenario[];
   onDisable: (name: string) => void;
