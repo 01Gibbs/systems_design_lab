@@ -1,0 +1,18 @@
+# Makefile targets for frontend guardrails
+
+.PHONY: fe-install fe-format fe-lint fe-typecheck fe-test-e2e
+
+fe-install:
+	cd frontend && npm install
+
+fe-format:
+	cd frontend && npm run format
+
+fe-lint:
+	cd frontend && npm run lint
+
+fe-typecheck:
+	cd frontend && npm run typecheck
+
+fe-test-e2e:
+	cd frontend && npm run test:e2e
