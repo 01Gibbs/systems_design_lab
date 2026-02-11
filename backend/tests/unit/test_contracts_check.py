@@ -13,9 +13,8 @@ def test_check_drift_schema_equal(monkeypatch, tmp_path):
     snap = {"openapi": "3.0.0"}
     (tmp_path / 'openapi.json').write_text('{"openapi": "3.0.0"}')
     checker = contracts_check.ContractChecker(tmp_path)
-    monkeypatch.setattr(contracts_check, 'app', types.SimpleNamespace(openapi=lambda: snap))
     monkeypatch.setattr(contracts_check, 'Path', lambda *a, **k: tmp_path)
-    monkeypatch.setattr(sys.modules, 'app.api.main', types.SimpleNamespace(app=types.SimpleNamespace(openapi=lambda: snap)))
+    monkeypatch.setitem(sys.modules, 'app.api.main', types.SimpleNamespace(app=types.SimpleNamespace(openapi=lambda: snap)))
     assert checker.check_drift()
     assert not checker.violations
 
@@ -24,9 +23,8 @@ def test_check_drift_schema_diff(monkeypatch, tmp_path, capsys):
     new = {"openapi": "3.0.0", "paths": {"/bar": {"post": {}}}, "info": {"version": "2.0"}}
     (tmp_path / 'openapi.json').write_text('{"openapi": "3.0.0", "paths": {"/foo": {"get": {}}}, "info": {"version": "1.0"}}')
     checker = contracts_check.ContractChecker(tmp_path)
-    monkeypatch.setattr(contracts_check, 'app', types.SimpleNamespace(openapi=lambda: new))
     monkeypatch.setattr(contracts_check, 'Path', lambda *a, **k: tmp_path)
-    monkeypatch.setattr(sys.modules, 'app.api.main', types.SimpleNamespace(app=types.SimpleNamespace(openapi=lambda: new)))
+    monkeypatch.setitem(sys.modules, 'app.api.main', types.SimpleNamespace(app=types.SimpleNamespace(openapi=lambda: new)))
     assert not checker.check_drift()
     out = capsys.readouterr().out
     assert 'Added endpoints' in out or 'Removed endpoints' in out or 'Version' in out

@@ -29,9 +29,12 @@ def test_init_db_sets_globals(monkeypatch):
     assert db_session.async_session_maker == 'maker'
 
 def test_get_db_raises_if_not_initialized():
+    import asyncio
     db_session.async_session_maker = None
-    with pytest.raises(RuntimeError):
-        _ = [s async for s in db_session.get_db()]
+    async def run():
+        with pytest.raises(RuntimeError):
+            _ = [s async for s in db_session.get_db()]
+    asyncio.run(run())
 
 def test_get_db_yields_session(monkeypatch):
     maker = DummySessionMaker()
