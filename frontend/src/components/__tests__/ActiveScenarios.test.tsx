@@ -13,13 +13,7 @@ describe('ActiveScenarios', () => {
   ];
 
   it('renders active scenario names', () => {
-    render(
-      <ActiveScenarios
-        scenarios={scenarios}
-        onDisable={() => {}}
-        onResetAll={() => {}}
-      />
-    );
+    render(<ActiveScenarios scenarios={scenarios} onDisable={() => {}} onResetAll={() => {}} />);
     expect(screen.getAllByText('fixed_latency')[0]).toBeInTheDocument();
   });
 });

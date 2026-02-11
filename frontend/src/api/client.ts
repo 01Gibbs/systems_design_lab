@@ -20,7 +20,9 @@ function getViteEnvUrl(): string | undefined {
   // Only call this in browser context
   // Use new Function to hide import.meta from Jest/Node parser
   try {
-    const fn = new Function('return typeof import !== "undefined" && import.meta && import.meta.env ? import.meta.env.VITE_API_URL : undefined');
+    const fn = new Function(
+      'return typeof import !== "undefined" && import.meta && import.meta.env ? import.meta.env.VITE_API_URL : undefined'
+    );
     return fn();
   } catch {
     return undefined;
@@ -71,7 +73,6 @@ async function request<T>(path: string, init?: RequestInit): Promise<ApiResult<T
     return { ok: false, status: 0, error: e };
   }
 }
-
 
 /**
  * Central API client - all components MUST use this, not fetch directly

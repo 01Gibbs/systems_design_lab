@@ -5,25 +5,20 @@ import { http, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
 
 const server = setupServer(
-  http.get(
-    'http://localhost:8000/api/sim/scenarios',
-    () =>
-      HttpResponse.json({
-        scenarios: [
-          {
-            name: 'fixed_latency',
-            description: 'Injects latency',
-            parameter_schema: {},
-            safety_limits: {},
-            targets: ['http'] as ('http' | 'db' | 'cpu' | 'algorithm')[],
-          },
-        ],
-      })
+  http.get('http://localhost:8000/api/sim/scenarios', () =>
+    HttpResponse.json({
+      scenarios: [
+        {
+          name: 'fixed_latency',
+          description: 'Injects latency',
+          parameter_schema: {},
+          safety_limits: {},
+          targets: ['http'] as ('http' | 'db' | 'cpu' | 'algorithm')[],
+        },
+      ],
+    })
   ),
-  http.get(
-    'http://localhost:8000/api/sim/status',
-    () => HttpResponse.json({ active: [] })
-  )
+  http.get('http://localhost:8000/api/sim/status', () => HttpResponse.json({ active: [] }))
 );
 
 beforeAll(() => server.listen());
