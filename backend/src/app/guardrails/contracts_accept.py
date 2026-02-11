@@ -1,4 +1,5 @@
 """Contract Acceptor - Regenerates OpenAPI snapshot"""
+
 from __future__ import annotations
 
 import json

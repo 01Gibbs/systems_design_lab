@@ -1,4 +1,5 @@
 """Simulator Service - Orchestrates scenario management"""
+
 from __future__ import annotations
 
 from datetime import timedelta
@@ -20,13 +21,11 @@ from app.contracts.simulator import (
 class SimulatorService:
     """
     Application service for simulator operations.
-    
+
     Orchestrates between registry, store, and clock (all injected).
     """
 
-    def __init__(
-        self, *, store: SimulatorStore, clock: Clock, registry: ScenarioRegistry
-    ) -> None:
+    def __init__(self, *, store: SimulatorStore, clock: Clock, registry: ScenarioRegistry) -> None:
         self._store = store
         self._clock = clock
         self._registry = registry

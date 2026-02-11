@@ -1,4 +1,5 @@
 """Clock Port - Interface for time operations"""
+
 from __future__ import annotations
 
 from abc import ABC, abstractmethod

@@ -1,4 +1,5 @@
 """Architecture Checker - Enforces Clean Architecture boundaries"""
+
 from __future__ import annotations
 
 import ast
@@ -26,7 +27,7 @@ class ArchitectureChecker:
     # Layer import rules: layer -> allowed imports
     LAYER_RULES = {
         "domain": set(),  # Domain imports NOTHING from other layers
-        "application": {"domain"},  # Application may import domain only  
+        "application": {"domain"},  # Application may import domain only
         "api": {"application", "contracts", "infrastructure"},  # API composes
         "infrastructure": {"application", "domain"},  # Infrastructure implements ports
         "contracts": set(),  # Contracts are standalone

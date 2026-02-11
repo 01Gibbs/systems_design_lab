@@ -1,4 +1,5 @@
 """Contract Checker - Prevents OpenAPI drift"""
+
 from __future__ import annotations
 
 import json
@@ -85,11 +86,7 @@ class ContractChecker:
     def _extract_paths(self, schema: dict) -> set[str]:
         """Extract all paths from schema"""
         paths = schema.get("paths", {})
-        return {
-            f"{method.upper()} {path}"
-            for path, methods in paths.items()
-            for method in methods
-        }
+        return {f"{method.upper()} {path}" for path, methods in paths.items() for method in methods}
 
     def print_violations(self) -> None:
         """Print violations"""

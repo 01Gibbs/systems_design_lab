@@ -1,4 +1,5 @@
 """SimulatorStore Port - Interface for active scenario persistence"""
+
 from __future__ import annotations
 
 from abc import ABC, abstractmethod

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Wait for database to be ready"""
+
 import sys
 import time
 
