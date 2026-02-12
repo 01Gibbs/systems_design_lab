@@ -8,8 +8,8 @@ reset-root:
         be-docker-test be-docker-format be-docker-lint be-docker-typecheck be-docker-all \
         fe-install fe-format fe-format-check be-lint fe-typecheck fe-test-e2e \
         guardrails arch-check contracts-check contracts-accept
-##@ Automated Cleanup
 
+##@ Automated Cleanup
 autoclean: contracts-bootstrap guardrails
 	@echo "$(YELLOW)Running workspace cleanup...$(NC)"
 	# Remove Python __pycache__ folders
