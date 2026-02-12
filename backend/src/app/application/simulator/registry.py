@@ -56,9 +56,15 @@ def build_registry() -> ScenarioRegistry:
     from app.application.simulator.scenarios.algorithmic_degradation import (
         AlgorithmicDegradation,
     )
+    from app.application.simulator.scenarios.cache_stampede import CacheStampede
+    from app.application.simulator.scenarios.circuit_breaker import CircuitBreaker
+    from app.application.simulator.scenarios.connection_pool_exhaustion import (
+        ConnectionPoolExhaustion,
+    )
     from app.application.simulator.scenarios.error_burst import ErrorBurst
     from app.application.simulator.scenarios.fixed_latency import FixedLatency
     from app.application.simulator.scenarios.lock_contention import LockContention
+    from app.application.simulator.scenarios.retry_storm import RetryStorm
     from app.application.simulator.scenarios.slow_db_query import SlowDbQuery
 
     items: list[Scenario] = [
@@ -67,5 +73,9 @@ def build_registry() -> ScenarioRegistry:
         SlowDbQuery(),
         LockContention(),
         AlgorithmicDegradation(),
+        CircuitBreaker(),
+        RetryStorm(),
+        ConnectionPoolExhaustion(),
+        CacheStampede(),
     ]
     return ScenarioRegistry({s.meta.name: s for s in items})
