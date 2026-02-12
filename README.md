@@ -220,7 +220,25 @@ See existing scenarios like `fixed_latency.py` for reference.
 - Contract tests: OpenAPI schema validation
 - E2E tests: Playwright (frontend, when added)
 
-**Coverage threshold: 80%** (enforced by `make be-coverage`)
+**Coverage threshold: 85%** (enforced by `make be-coverage`)
+
+## CI/CD & Quality Gates
+
+**All commits are protected by:**
+
+- **Pre-commit hooks**: Run `make guardrails` and `make be-coverage` locally before commit
+- **GitHub Actions CI**: Enforces guardrails + coverage on all PRs and pushes
+- **Contract drift detection**: Fails if OpenAPI schema changes without explicit acceptance
+- **Architecture boundaries**: Automated checks prevent layer violations
+
+**Setup pre-commit hooks:**
+
+```bash
+pip install pre-commit
+pre-commit install
+```
+
+See [CI_AND_PRECOMMIT.md](docs/CI_AND_PRECOMMIT.md) for full details.
 
 ## Tooling
 
@@ -243,8 +261,9 @@ See existing scenarios like `fixed_latency.py` for reference.
 
 1. Make changes to code
 2. Run `make format` to format
-3. Run `make guardrails` to validate
+3. Run `make guardrails` to validate (runs automatically on commit via pre-commit)
 4. Commit only if guardrails pass
+5. CI validates all checks on push/PR
 
 **All CI checks are runnable locally.**
 
@@ -268,26 +287,17 @@ Future additions: Prometheus, Grafana, Loki.
 
 ## Project Status
 
-**Current Phase**: Foundation and framework setup
-
-**Next Steps**:
-
-1. ✅ **Complete**: 5 starter scenarios (latency, errors, slow DB, contention, algorithmic)
-2. 🚧 **In Progress**: Add frontend with simulator control panel (Vite + TypeScript + Playwright)
-3. ⏳ **Pending**: Expand to 50 scenarios across all categories
-4. ⏳ **Pending**: Integration tests with real Postgres (testcontainers)
-5. ⏳ **Pending**: Contract validation + OpenAPI snapshot workflow
-
-## Project Status
-
-**Current Phase**: Frontend Development
+**Current Phase**: Scenario Expansion
 
 - ✅ Backend foundation complete (Clean Architecture + Ports & Adapters)
+- ✅ CI/CD enforcement (GitHub Actions + pre-commit hooks)
+- ✅ Contract management with drift detection
 - ✅ 5 simulator scenarios implemented
-- ✅ Frontend initialized (Vite + React + TypeScript)
+- ✅ Frontend complete (Vite + React + TypeScript + Tailwind)
 - ✅ SimulatorControlPanel with full functionality
-- ✅ Playwright E2E tests
+- ✅ Playwright E2E tests (3 test suites)
+- ✅ 41 backend unit tests (92.64% coverage)
 - ⏳ Integration tests pending
 - ⏳ Additional scenarios (45 more) pending
 
-See [PROJECT_STATUS.md](PROJECT_STATUS.md) for detailed progress.
+See [PROJECT_STATUS.md](docs/PROJECT_STATUS.md) for detailed progress.

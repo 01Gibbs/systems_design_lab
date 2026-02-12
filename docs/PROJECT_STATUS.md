@@ -1,6 +1,6 @@
 # Project Status
 
-**Last Updated:** February 10, 2026
+**Last Updated:** February 12, 2026
 
 ## 🎯 Project Goal
 
@@ -36,12 +36,17 @@ Production-grade local systems design lab for simulating 50+ real-world system i
 - ✅ Health checks and service dependencies
 - ✅ Volume management for data persistence
 
-### Guardrails
+### Guardrails & Automation
 
 - ✅ Architecture boundary checker ([arch_check.py](backend/src/app/guardrails/arch_check.py))
 - ✅ Contract drift checker ([contracts_check.py](backend/src/app/guardrails/contracts_check.py))
 - ✅ Contract acceptance tool ([contracts_accept.py](backend/src/app/guardrails/contracts_accept.py))
+- ✅ Contract snapshot at project root (`openapi.json`)
 - ✅ Makefile with all enforcement commands
+- ✅ GitHub Actions CI workflow enforcing guardrails + coverage
+- ✅ Pre-commit hooks for local enforcement
+- ✅ Automated workspace cleanup (`make autoclean`)
+- ✅ See [CI_AND_PRECOMMIT.md](docs/CI_AND_PRECOMMIT.md) for full CI/CD setup
 
 ### Testing
 
@@ -63,32 +68,29 @@ Production-grade local systems design lab for simulating 50+ real-world system i
 
 ---
 
-## 🚧 Phase 2: Frontend (NEXT - Branch: `feature/frontend-simulator-ui`)
+## ✅ Phase 2: Frontend (COMPLETE)
 
-### Goals
+### Frontend Implementation
 
-- [ ] Vite + TypeScript + React project setup
-- [ ] Typed API client generated from OpenAPI contracts
-- [ ] SimulatorControlPanel component
-  - [ ] List available scenarios
-  - [ ] Enable/disable scenarios with parameters
-  - [ ] View active scenarios
-  - [ ] Reset all scenarios
-- [ ] Active scenario indicator (banner/header)
-- [ ] Error boundaries and loading states
-- [ ] Playwright E2E tests
-  - [ ] Enable scenario via API
-  - [ ] Validate UI behavior under failure
-- [ ] CI/CD integration for frontend checks
-
-### Acceptance Criteria
-
-- Frontend can list all 5 scenarios from backend
-- Can enable `fixed-latency` and observe delayed responses
-- Can enable `error-burst` and observe intermittent failures
-- UI remains functional when backend is slow/failing
-- E2E tests validate resilience to simulator scenarios
-- `make fe-install`, `make fe-format`, `make fe-lint`, `make fe-typecheck`, `make fe-test-e2e` all work
+- ✅ Vite + TypeScript + React project setup
+- ✅ Typed API client ([api/client.ts](frontend/src/api/client.ts), [api/types.ts](frontend/src/api/types.ts))
+- ✅ SimulatorControlPanel component ([pages/SimulatorControlPanel.tsx](frontend/src/pages/SimulatorControlPanel.tsx))
+  - ✅ List available scenarios with descriptions
+  - ✅ Enable/disable scenarios with parameter validation
+  - ✅ View active scenarios with expiry times
+  - ✅ Reset all scenarios
+- ✅ Active scenario indicator ([components/GlobalBanner.tsx](frontend/src/components/GlobalBanner.tsx))
+- ✅ Component library: ScenarioCard, ActiveScenarios
+- ✅ Form validation with Zod schemas
+- ✅ Error boundaries and loading states
+- ✅ Tailwind CSS styling
+- ✅ Vitest for unit/integration tests
+- ✅ Playwright E2E tests ([tests/e2e/](frontend/tests/e2e/))
+  - ✅ Enable scenario via API
+  - ✅ Validate UI behavior under failure
+  - ✅ Error handling and resilience tests
+- ✅ Frontend Makefile commands: `fe-install`, `fe-format`, `fe-lint`, `fe-typecheck`, `fe-test-e2e`
+- ✅ See [FRONTEND_IMPLEMENTATION.md](docs/FRONTEND_IMPLEMENTATION.md) for architecture details
 
 ---
 
@@ -157,31 +159,43 @@ backend/tests/
 | -------------------- | -------- | -------------- |
 | Backend Architecture | 5/5      | ✅ Complete    |
 | Simulator Scenarios  | 5/50     | 🔄 10%         |
-| Frontend             | 0/1      | ⏳ Not Started |
-| Unit Tests           | 2/∞      | 🔄 Baseline    |
+| Frontend             | 1/1      | ✅ Complete    |
+| CI/CD Enforcement    | 1/1      | ✅ Complete    |
+| Backend Unit Tests   | 41       | ✅ 92.64% cov  |
+| Frontend Tests       | 14       | ✅ Passing     |
+| E2E Tests            | 3        | ✅ Passing     |
 | Integration Tests    | 0/∞      | ⏳ Not Started |
-| E2E Tests            | 0/∞      | ⏳ Not Started |
 | Observability        | 0/4      | ⏳ Not Started |
 
 ---
 
 ## 🔧 Technical Debt
 
-1. **OpenAPI Snapshot**: `openapi.json` exists but may not be current - needs validation
-2. **Template Scenario**: No template file exists - use existing scenarios as reference
+1. **Scenario Expansion**: Only 5/50 scenarios implemented - 45 more to add
+2. **Template Scenario**: No template file - use existing scenarios as reference
 3. **Redis Adapter**: InMemorySimulatorStore works but Redis adapter pending for production
-4. **Coverage**: Only 2 basic unit tests - need comprehensive test coverage
+4. **Integration Tests**: Need testcontainers + real Postgres integration tests
+5. **Pre-commit Stage Names**: Deprecated warnings (run `pre-commit migrate-config` if not done)
 
 ---
 
 ## 🚀 Recommended Next Steps
 
-1. **Create branch**: `git checkout -b feature/frontend-simulator-ui`
-2. **Initialize frontend**: Vite + TypeScript + React
-3. **Generate API client**: From `openapi.json`
-4. **Build SimulatorControlPanel**: Core UI component
-5. **Add E2E tests**: Validate scenarios work end-to-end
-6. **Merge & validate**: Ensure `make guardrails` passes
+1. **Scenario Expansion** (High Impact): Add 10-15 new scenarios
+   - Circuit breakers, cascading failures
+   - Retry storms, rate limiting
+   - Connection pool exhaustion, deadlocks
+   - Cache stampede, stale data
+
+2. **Integration Testing** (Infrastructure):
+   - Add testcontainers setup
+   - Real Postgres integration tests
+   - Increase test coverage for edge cases
+
+3. **Observability** (Future):
+   - Prometheus metrics export
+   - Grafana dashboards
+   - OpenTelemetry instrumentation
 
 ---
 
