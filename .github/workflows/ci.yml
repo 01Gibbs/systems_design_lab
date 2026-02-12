@@ -20,6 +20,8 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
+      - name: Install backend dev dependencies
+        run: pip install -r backend/requirements-dev.txt
       - name: Install backend dependencies
         run: make be-install
       - name: Install frontend dependencies
