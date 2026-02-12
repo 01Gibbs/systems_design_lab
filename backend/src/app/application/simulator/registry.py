@@ -53,12 +53,23 @@ class ScenarioRegistry:
 
 def build_registry() -> ScenarioRegistry:
     """Build the registry with all available scenarios"""
-    from app.application.simulator.scenarios.algorithmic_degradation import (
-        AlgorithmicDegradation,
+
+    from app.application.simulator.scenarios.algorithmic_degradation import AlgorithmicDegradation
+    from app.application.simulator.scenarios.cache_stampede import CacheStampede
+    from app.application.simulator.scenarios.circuit_breaker import CircuitBreaker
+    from app.application.simulator.scenarios.clock_skew import ClockSkew
+    from app.application.simulator.scenarios.connection_pool_exhaustion import (
+        ConnectionPoolExhaustion,
     )
+    from app.application.simulator.scenarios.cpu_spike import CpuSpike
+    from app.application.simulator.scenarios.disk_full import DiskFull
     from app.application.simulator.scenarios.error_burst import ErrorBurst
     from app.application.simulator.scenarios.fixed_latency import FixedLatency
     from app.application.simulator.scenarios.lock_contention import LockContention
+    from app.application.simulator.scenarios.memory_leak import MemoryLeak
+    from app.application.simulator.scenarios.network_partition import NetworkPartition
+    from app.application.simulator.scenarios.resource_starvation import ResourceStarvation
+    from app.application.simulator.scenarios.retry_storm import RetryStorm
     from app.application.simulator.scenarios.slow_db_query import SlowDbQuery
 
     items: list[Scenario] = [
@@ -67,5 +78,15 @@ def build_registry() -> ScenarioRegistry:
         SlowDbQuery(),
         LockContention(),
         AlgorithmicDegradation(),
+        CircuitBreaker(),
+        RetryStorm(),
+        ConnectionPoolExhaustion(),
+        CacheStampede(),
+        CpuSpike(),
+        MemoryLeak(),
+        DiskFull(),
+        NetworkPartition(),
+        ClockSkew(),
+        ResourceStarvation(),
     ]
     return ScenarioRegistry({s.meta.name: s for s in items})
