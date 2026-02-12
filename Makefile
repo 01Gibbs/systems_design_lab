@@ -194,6 +194,9 @@ contracts-check: ## Check for contract drift
 contracts-accept: ## Accept current contract as new snapshot
 	@echo "$(YELLOW)Accepting contract changes...$(NC)"
 	cd backend && PYTHONPATH=src python -m app.guardrails.contracts_accept
+	@echo "$(GREEN)✓ OpenAPI snapshot updated: backend/openapi.json$(NC)"
+	cp backend/openapi.json openapi.json
+	@echo "$(GREEN)✓ Contract snapshot copied to project root: openapi.json$(NC)"
 	@echo "$(GREEN)✓ Contract snapshot updated$(NC)"
 
 ##@ Quick Shortcuts
