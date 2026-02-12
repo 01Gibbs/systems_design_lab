@@ -3,11 +3,27 @@ reset-root:
 	@cd "$(CURDIR)"
 	@cd "$(shell git rev-parse --show-toplevel 2>/dev/null || echo $(CURDIR))"
 	@echo "$(YELLOW)Reset to project root: $$(pwd)$(NC)"
-.PHONY: help up down reset logs status \
+ .PHONY: help up down reset logs status \
         be-install be-format be-format-check be-lint be-typecheck be-test be-test-unit be-test-integration be-coverage \
         be-docker-test be-docker-format be-docker-lint be-docker-typecheck be-docker-all \
         fe-install fe-format fe-format-check be-lint fe-typecheck fe-test-e2e \
         guardrails arch-check contracts-check contracts-accept
+##@ Automated Cleanup
+
+autoclean: guardrails
+	@echo "$(YELLOW)Running workspace cleanup...$(NC)"
+	# Remove Python __pycache__ folders
+	find . -type d -name "__pycache__" -exec rm -rf {} +
+	# Remove backend and frontend test artefacts
+	rm -rf frontend/playwright-report frontend/test-results
+	# Remove backend openapi.json if root-level exists
+	if [ -f openapi.json ] && [ -f backend/openapi.json ]; then rm -f backend/openapi.json; fi
+	# Remove mypy and pytest caches at root
+	rm -rf .mypy_cache .pytest_cache
+	# Remove empty folders
+	find . -type d -empty -delete
+	@echo "$(GREEN)✓ Workspace cleaned$(NC)"
+
 
 # Default target
 .DEFAULT_GOAL := help
@@ -28,7 +44,7 @@ help: ## Display this help message
 
 ##@ Development Lifecycle
 
-up: ## Start docker compose + app services
+up: autoclean ## Start docker compose + app services
 	@echo "$(BLUE)Starting services...$(NC)"
 	docker-compose up -d
 	@echo "$(GREEN)✓ Services started$(NC)"
@@ -51,7 +67,7 @@ status: ## Check system status and health
 
 ##@ Backend Development (Host-based)
 
-be-install: ## Install backend dependencies
+be-install: autoclean ## Install backend dependencies
 	@echo "$(BLUE)Installing backend dependencies...$(NC)"
 	cd backend && pip install -r requirements-dev.txt; cd .. || true
 	@$(MAKE) reset-root
@@ -130,7 +146,7 @@ be-docker-all: ## Run all checks in Docker container
 
 ##@ Frontend Development
 
-fe-install: ## Install frontend dependencies
+fe-install: autoclean ## Install frontend dependencies
 	@echo "$(BLUE)Installing frontend dependencies...$(NC)"
 	cd frontend && npm install
 	@echo "$(GREEN)✓ Frontend dependencies installed$(NC)"
