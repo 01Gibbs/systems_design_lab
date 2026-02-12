@@ -93,3 +93,6 @@ Thumbs.db
 *.tmp
 *.bak
 *.swp
+
+# OpenAPI - only root openapi.json is tracked
+backend/openapi.json
