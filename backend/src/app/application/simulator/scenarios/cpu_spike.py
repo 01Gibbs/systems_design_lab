@@ -15,7 +15,7 @@ class CpuSpike:
     meta = ScenarioMeta(
         name="cpu-spike",
         description="Simulates high CPU usage by burning CPU cycles.",
-        targets=["http", "database"],
+        targets=["http", "db"],
         parameter_schema={
             "type": "object",
             "properties": {
@@ -38,7 +38,7 @@ class CpuSpike:
     )
 
     def is_applicable(self, *, target: dict[str, str]) -> bool:
-        return target.get("category") in ("http", "database")
+        return target.get("category") in ("http", "db")
 
     def apply(self, *, ctx: dict[str, object], parameters: dict[str, object]) -> dict[str, object]:
         spike_probability = float(str(parameters["spike_probability"]))

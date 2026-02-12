@@ -15,7 +15,7 @@ class NetworkPartition:
     meta = ScenarioMeta(
         name="network-partition",
         description="Simulates network partition: drops or delays requests to certain targets.",
-        targets=["http", "database"],
+        targets=["http", "db"],
         parameter_schema={
             "type": "object",
             "properties": {
@@ -42,7 +42,7 @@ class NetworkPartition:
     )
 
     def is_applicable(self, *, target: dict[str, str]) -> bool:
-        return target.get("category") in ("http", "database")
+        return target.get("category") in ("http", "db")
 
     def apply(self, *, ctx: dict[str, object], parameters: dict[str, object]) -> dict[str, object]:
         partition_probability = float(str(parameters["partition_probability"]))

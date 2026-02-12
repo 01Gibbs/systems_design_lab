@@ -15,7 +15,7 @@ class ConnectionPoolExhaustion:
     meta = ScenarioMeta(
         name="connection-pool-exhaustion",
         description="Simulates connection pool exhaustion by making DB connections hang or fail.",
-        targets=["database"],
+        targets=["db"],
         parameter_schema={
             "type": "object",
             "properties": {
@@ -44,7 +44,7 @@ class ConnectionPoolExhaustion:
     )
 
     def is_applicable(self, *, target: dict[str, str]) -> bool:
-        return target.get("category") == "database"
+        return target.get("category") == "db"
 
     def apply(self, *, ctx: dict[str, object], parameters: dict[str, object]) -> dict[str, object]:
         """Returns effect dict simulating connection pool exhaustion"""

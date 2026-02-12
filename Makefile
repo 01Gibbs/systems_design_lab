@@ -1,3 +1,7 @@
+up-test: ## Start only backend and db for test purposes
+	@echo "$(BLUE)Starting backend and db for test...$(NC)"
+	docker-compose up -d backend postgres
+	@echo "$(GREEN)✓ Test services started$(NC)"
 # Always reset to project root (works on both Linux/macOS and Windows)
 reset-root:
 	@cd "$(CURDIR)"
@@ -107,6 +111,7 @@ be-test-integration: ## Run backend integration tests only
 be-coverage: ## Run backend tests with coverage enforcement
 	@echo "$(BLUE)Running tests with coverage...$(NC)"
 	cd backend && PYTHONPATH=src python -m pytest --cov=src/app --cov-report=term-missing --cov-fail-under=85
+	@$(MAKE) reset-root
 	@echo "$(GREEN)✓ Coverage threshold met$(NC)"
 
 be-docker-test: ## Run tests in Docker container
@@ -180,15 +185,6 @@ contracts-check: ## Check for contract drift
 	@echo "$(BLUE)Checking contract drift...$(NC)"
 	cd backend && PYTHONPATH=src python -m app.guardrails.contracts_check
 
-contracts-accept: ## Accept current contract as new snapshot
-	@echo "$(YELLOW)Accepting contract changes...$(NC)"
-	cd backend && PYTHONPATH=src python -m app.guardrails.contracts_accept
-	@echo "$(GREEN)✓ Contract snapshot updated$(NC)"
-
-##@ Quick Shortcuts
-
-format: be-format ## Format all code (shortcut)
-
 lint: be-lint ## Lint all code (shortcut)
 
 test: be-test ## Run all tests (shortcut)
@@ -196,8 +192,21 @@ test: be-test ## Run all tests (shortcut)
 check: guardrails ## Run all checks (shortcut)
 
 # Ensure OpenAPI snapshot exists before checks
+
+contracts-accept: ## Accept current contract as new snapshot
+	@echo "$(YELLOW)Accepting contract changes...$(NC)"
+	cd backend && PYTHONPATH=src python -m app.guardrails.contracts_accept
+	@echo "$(GREEN)✓ Contract snapshot updated$(NC)"
+
 contracts-bootstrap:
 	@if [ ! -f openapi.json ]; then \
 		echo "$(YELLOW)No OpenAPI snapshot found. Bootstrapping...$(NC)"; \
 		$(MAKE) contracts-accept; \
 	fi
+
+##@ Quick Shortcuts
+
+format: be-format ## Format all code (shortcut)
+lint: be-lint ## Lint all code (shortcut)
+test: be-test ## Run all tests (shortcut)
+check: guardrails ## Run all checks (shortcut)

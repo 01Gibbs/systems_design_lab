@@ -15,7 +15,7 @@ class ClockSkew:
     meta = ScenarioMeta(
         name="clock-skew",
         description="Simulates system clock skew: shifts reported time for requests.",
-        targets=["http", "database", "time"],
+        targets=["http", "db"],
         parameter_schema={
             "type": "object",
             "properties": {
