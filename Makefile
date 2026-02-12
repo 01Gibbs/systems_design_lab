@@ -16,8 +16,6 @@ autoclean: contracts-bootstrap guardrails
 	find . -type d -name "__pycache__" -exec rm -rf {} +
 	# Remove backend and frontend test artefacts
 	 rm -rf frontend/playwright-report frontend/test-results
-	# Remove backend openapi.json if root-level exists
-	if [ -f openapi.json ] && [ -f backend/openapi.json ]; then rm -f backend/openapi.json; fi
 	# Remove mypy and pytest caches at root
 	rm -rf .mypy_cache .pytest_cache
 	# Remove empty folders
@@ -194,9 +192,6 @@ contracts-check: ## Check for contract drift
 contracts-accept: ## Accept current contract as new snapshot
 	@echo "$(YELLOW)Accepting contract changes...$(NC)"
 	cd backend && PYTHONPATH=src python -m app.guardrails.contracts_accept
-	@echo "$(GREEN)✓ OpenAPI snapshot updated: backend/openapi.json$(NC)"
-	cp backend/openapi.json openapi.json
-	@echo "$(GREEN)✓ Contract snapshot copied to project root: openapi.json$(NC)"
 	@echo "$(GREEN)✓ Contract snapshot updated$(NC)"
 
 ##@ Quick Shortcuts

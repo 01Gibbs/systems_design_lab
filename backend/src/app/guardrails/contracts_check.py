@@ -12,7 +12,8 @@ class ContractChecker:
 
     def __init__(self, backend_root: Path):
         self.backend_root = backend_root
-        self.snapshot_path = backend_root / "openapi.json"
+        # Look for openapi.json at project root (one level up from backend/)
+        self.snapshot_path = backend_root.parent / "openapi.json"
         self.violations: list[str] = []
 
     def check_drift(self) -> bool:

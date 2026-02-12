@@ -10,7 +10,8 @@ from pathlib import Path
 def accept_contracts() -> int:
     """Accept current OpenAPI schema as new snapshot"""
     backend_root = Path(__file__).parent.parent.parent.parent
-    snapshot_path = backend_root / "openapi.json"
+    # Write snapshot to project root (one level up from backend/)
+    snapshot_path = backend_root.parent / "openapi.json"
 
     try:
         from app.api.main import app
