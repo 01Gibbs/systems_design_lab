@@ -22,6 +22,11 @@ class SimulatorInjectionMiddleware(BaseHTTPMiddleware):
     async def dispatch(
         self, request: Request, call_next: Callable[[Request], Awaitable[Response]]
     ) -> Response:
+        # CRITICAL: Never apply scenarios to simulator API endpoints
+        # to avoid breaking simulator control
+        if request.url.path.startswith("/api/sim"):
+            return await call_next(request)
+
         # Get active scenarios
         sim_service: SimulatorService = request.app.state.simulator_service
         status = sim_service.status()

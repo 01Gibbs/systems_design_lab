@@ -63,12 +63,16 @@ def test_scenario_error_handling():
 @pytest.mark.integration
 def test_multiple_scenarios_concurrently():
     """Test enabling multiple scenarios at the same time"""
-    # Reset first and give time for state to clear
+    # Reset first and verify it succeeded
     reset_resp = requests.post(f"{BASE_URL}/api/sim/reset")
     assert reset_resp.status_code == 200, f"Reset failed: {reset_resp.status_code} {reset_resp.text}"
-    time.sleep(0.5)  # Give backend time to process reset
 
-    # Enable multiple scenarios
+    # Verify clean state
+    status_resp = requests.get(f"{BASE_URL}/api/sim/status")
+    assert status_resp.status_code == 200, f"Status check failed after reset: {status_resp.status_code} {status_resp.text}"
+    assert len(status_resp.json()["active"]) == 0, "Expected no active scenarios after reset"
+
+    # Enable multiple scenarios one by one
     scenarios_to_enable = [
         {"name": "fixed-latency", "parameters": {"ms": 100, "probability": 0.5}},
         {"name": "error-burst-5xx", "parameters": {"probability": 0.1}},
@@ -78,13 +82,12 @@ def test_multiple_scenarios_concurrently():
     for scenario in scenarios_to_enable:
         resp = requests.post(f"{BASE_URL}/api/sim/enable", json=scenario)
         assert resp.status_code == 200, f"Failed to enable {scenario['name']}: {resp.status_code} {resp.text}"
-        time.sleep(0.2)  # Small delay between enables to avoid race conditions
 
-    # Check all are active
+    # Check all are active (simulator endpoints should not be affected by scenarios)
     resp = requests.get(f"{BASE_URL}/api/sim/status")
-    assert resp.status_code == 200
+    assert resp.status_code == 200, f"Status endpoint failed (should never be affected by scenarios): {resp.status_code}"
     active = resp.json()["active"]
-    assert len(active) >= 3
+    assert len(active) == 3, f"Expected 3 active scenarios, got {len(active)}"
     active_names = {a["name"] for a in active}
     assert "fixed-latency" in active_names
     assert "error-burst-5xx" in active_names
