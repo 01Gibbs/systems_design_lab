@@ -1,3 +1,84 @@
+# CpuSpike
+from app.application.simulator.scenarios.cpu_spike import CpuSpike
+def test_cpu_spike_apply_and_applicable(monkeypatch):
+    cs = CpuSpike()
+    assert cs.is_applicable(target={"category": "http"})
+    monkeypatch.setattr("random.random", lambda: 0.0)
+    out = cs.apply(ctx={}, parameters={"spike_probability": 1.0, "duration_ms": 500})
+    assert out["cpu_spike_ms"] == 500
+    # No spike
+    monkeypatch.setattr("random.random", lambda: 1.0)
+    out2 = cs.apply(ctx={}, parameters={"spike_probability": 0.0})
+    assert out2 == {}
+
+# MemoryLeak
+from app.application.simulator.scenarios.memory_leak import MemoryLeak
+def test_memory_leak_apply_and_applicable(monkeypatch):
+    ml = MemoryLeak()
+    assert ml.is_applicable(target={"category": "database"})
+    monkeypatch.setattr("random.random", lambda: 0.0)
+    out = ml.apply(ctx={}, parameters={"leak_probability": 1.0, "leak_size_kb": 256})
+    assert out["memory_leak_kb"] == 256
+    # No leak
+    monkeypatch.setattr("random.random", lambda: 1.0)
+    out2 = ml.apply(ctx={}, parameters={"leak_probability": 0.0})
+    assert out2 == {}
+
+# DiskFull
+from app.application.simulator.scenarios.disk_full import DiskFull
+def test_disk_full_apply_and_applicable(monkeypatch):
+    df = DiskFull()
+    assert df.is_applicable(target={"category": "filesystem"})
+    monkeypatch.setattr("random.random", lambda: 0.0)
+    out = df.apply(ctx={}, parameters={"failure_probability": 1.0, "path_prefix": "/tmp"})
+    assert out["disk_full_error"] is True
+    assert out["path_prefix"] == "/tmp"
+    # No failure
+    monkeypatch.setattr("random.random", lambda: 1.0)
+    out2 = df.apply(ctx={}, parameters={"failure_probability": 0.0})
+    assert out2 == {}
+
+# NetworkPartition
+from app.application.simulator.scenarios.network_partition import NetworkPartition
+def test_network_partition_apply_and_applicable(monkeypatch):
+    np = NetworkPartition()
+    assert np.is_applicable(target={"category": "http"})
+    monkeypatch.setattr("random.random", lambda: 0.0)
+    out = np.apply(ctx={}, parameters={"partition_probability": 1.0, "delay_ms": 200, "drop": True})
+    assert out["network_partition"] is True
+    assert out["delay_ms"] == 200
+    assert out["drop_request"] is True
+    # No partition
+    monkeypatch.setattr("random.random", lambda: 1.0)
+    out2 = np.apply(ctx={}, parameters={"partition_probability": 0.0})
+    assert out2 == {}
+
+# ClockSkew
+from app.application.simulator.scenarios.clock_skew import ClockSkew
+def test_clock_skew_apply_and_applicable(monkeypatch):
+    cs = ClockSkew()
+    assert cs.is_applicable(target={"category": "time"})
+    monkeypatch.setattr("random.random", lambda: 0.0)
+    out = cs.apply(ctx={}, parameters={"skew_probability": 1.0, "skew_ms": -5000})
+    assert out["clock_skew_ms"] == -5000
+    # No skew
+    monkeypatch.setattr("random.random", lambda: 1.0)
+    out2 = cs.apply(ctx={}, parameters={"skew_probability": 0.0})
+    assert out2 == {}
+
+# ResourceStarvation
+from app.application.simulator.scenarios.resource_starvation import ResourceStarvation
+def test_resource_starvation_apply_and_applicable(monkeypatch):
+    rs = ResourceStarvation()
+    assert rs.is_applicable(target={"category": "database"})
+    monkeypatch.setattr("random.random", lambda: 0.0)
+    out = rs.apply(ctx={}, parameters={"starvation_probability": 1.0, "max_workers": 3})
+    assert out["resource_starvation"] is True
+    assert out["max_workers"] == 3
+    # No starvation
+    monkeypatch.setattr("random.random", lambda: 1.0)
+    out2 = rs.apply(ctx={}, parameters={"starvation_probability": 0.0})
+    assert out2 == {}
 """Test all scenario classes for effect dicts and applicability"""
 import pytest
 from app.application.simulator.scenarios.algorithmic_degradation import AlgorithmicDegradation
