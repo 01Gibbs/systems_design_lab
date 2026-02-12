@@ -238,6 +238,7 @@ make arch-check      # Fail on boundary violations
 
 **Later:** Prometheus, Grafana, Loki, OpenTelemetry
 
+
 ## Output Rules for AI Agents
 
 When implementing features, ALWAYS provide:
@@ -246,6 +247,19 @@ When implementing features, ALWAYS provide:
 2. **Code/config** — with minimal, clear comments
 3. **How to run** — exact commands
 4. **Which guardrails enforce it** — reference Makefile targets
+
+**Workflow Requirements:**
+
+- Always open a new branch from `main` when starting a new feature or fix (use a descriptive branch name)
+- Commit changes at appropriate intervals (atomic, logical commits)
+- Before pushing, review your changes and ensure you are satisfied with them
+- All commits and pushes are blocked unless both `make guardrails` and `make be-coverage` pass (enforced by pre-commit and CI)
+- CI (GitHub Actions) will also enforce these checks on PRs and pushes
+
+**A feature is only considered complete if:**
+
+- All checks in `make guardrails` pass
+- Test coverage threshold is met (`make be-coverage` must pass)
 
 **Do NOT:**
 
@@ -267,6 +281,8 @@ Before completing any task, verify:
 - [ ] Tests are deterministic and properly layered
 - [ ] Makefile targets work end-to-end
 - [ ] Guardrails pass (`make guardrails`)
+- [ ] Test coverage threshold is met (`make be-coverage`)
+- [ ] All commits and pushes are blocked unless these checks pass (pre-commit/CI)
 
 ## Adding New Simulator Scenarios
 

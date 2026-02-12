@@ -1,0 +1,32 @@
+﻿name: CI
+
+on:
+  push:
+    branches: [ main, "feature/*", "chore/*" ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  guardrails-and-coverage:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install backend dev dependencies
+        run: pip install -r backend/requirements-dev.txt
+      - name: Install backend dependencies
+        run: make be-install
+      - name: Install frontend dependencies
+        run: make fe-install
+      - name: Run guardrails
+        run: make guardrails
+      - name: Run backend coverage
+        run: make be-coverage

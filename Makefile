@@ -10,14 +10,12 @@ reset-root:
         guardrails arch-check contracts-check contracts-accept
 ##@ Automated Cleanup
 
-autoclean: guardrails
+autoclean: contracts-bootstrap guardrails
 	@echo "$(YELLOW)Running workspace cleanup...$(NC)"
 	# Remove Python __pycache__ folders
 	find . -type d -name "__pycache__" -exec rm -rf {} +
 	# Remove backend and frontend test artefacts
-	rm -rf frontend/playwright-report frontend/test-results
-	# Remove backend openapi.json if root-level exists
-	if [ -f openapi.json ] && [ -f backend/openapi.json ]; then rm -f backend/openapi.json; fi
+	 rm -rf frontend/playwright-report frontend/test-results
 	# Remove mypy and pytest caches at root
 	rm -rf .mypy_cache .pytest_cache
 	# Remove empty folders
@@ -177,7 +175,7 @@ fe-test-e2e: ## Run frontend E2E tests with Playwright
 
 ##@ Guardrails & Enforcement
 
-guardrails: be-format-check be-lint be-typecheck be-test arch-check contracts-check ## Run all guardrails checks
+guardrails: contracts-bootstrap be-format-check be-lint be-typecheck be-test arch-check contracts-check ## Run all guardrails checks
 	@echo ""
 	@echo "$(GREEN)========================================$(NC)"
 	@echo "$(GREEN)✓ All guardrails checks passed$(NC)"
@@ -205,3 +203,10 @@ lint: be-lint ## Lint all code (shortcut)
 test: be-test ## Run all tests (shortcut)
 
 check: guardrails ## Run all checks (shortcut)
+
+# Ensure OpenAPI snapshot exists before checks
+contracts-bootstrap:
+	@if [ ! -f openapi.json ]; then \
+		echo "$(YELLOW)No OpenAPI snapshot found. Bootstrapping...$(NC)"; \
+		$(MAKE) contracts-accept; \
+	fi
