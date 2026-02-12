@@ -67,55 +67,46 @@ status: ## Check system status and health
 
 be-install: autoclean ## Install backend dependencies
 	@echo "$(BLUE)Installing backend dependencies...$(NC)"
-	cd backend && pip install -r requirements-dev.txt; cd .. || true
-	@$(MAKE) reset-root
+	cd backend && pip install -r requirements-dev.txt
 	@echo "$(GREEN)✓ Backend dependencies installed$(NC)"
 
 be-format: ## Format backend code with black
 	@echo "$(BLUE)Formatting backend code...$(NC)"
-	cd backend && black src/; cd .. || true
-	@$(MAKE) reset-root
+	cd backend && python -m black src/
 	@echo "$(GREEN)✓ Code formatted$(NC)"
 
 be-format-check: ## Check backend code formatting
 	@echo "$(BLUE)Checking code formatting...$(NC)"
-	cd backend && black --check src/; cd .. || true
-	@$(MAKE) reset-root
+	cd backend && python -m black --check src/
 
 be-lint: ## Lint backend code with ruff
 	@echo "$(BLUE)Linting backend code...$(NC)"
-	cd backend && ruff check src/; cd .. || true
-	@$(MAKE) reset-root
+	cd backend && python -m ruff check src/
 	@echo "$(GREEN)✓ Linting passed$(NC)"
 
 be-typecheck: ## Type check backend code with mypy
 	@echo "$(BLUE)Type checking backend code...$(NC)"
-	cd backend && mypy; cd .. || true
-	@$(MAKE) reset-root
+	cd backend && python -m mypy
 	@echo "$(GREEN)✓ Type checking passed$(NC)"
 
 be-test: ## Run all backend tests
 	@echo "$(BLUE)Running all backend tests...$(NC)"
-	cd backend && PYTHONPATH=src pytest; cd .. || true
-	@$(MAKE) reset-root
+	cd backend && PYTHONPATH=src python -m pytest
 	@echo "$(GREEN)✓ All tests passed$(NC)"
 
 be-test-unit: ## Run backend unit tests only
 	@echo "$(BLUE)Running unit tests...$(NC)"
-	cd backend && PYTHONPATH=src pytest -m "not integration" tests/unit; cd .. || true
-	@$(MAKE) reset-root
+	cd backend && PYTHONPATH=src python -m pytest -m "not integration" tests/unit
 	@echo "$(GREEN)✓ Unit tests passed$(NC)"
 
 be-test-integration: ## Run backend integration tests only
 	@echo "$(BLUE)Running integration tests...$(NC)"
-	cd backend && PYTHONPATH=src pytest -m integration tests/integration; cd .. || true
-	@$(MAKE) reset-root
+	cd backend && PYTHONPATH=src python -m pytest -m integration tests/integration
 	@echo "$(GREEN)✓ Integration tests passed$(NC)"
 
 be-coverage: ## Run backend tests with coverage enforcement
 	@echo "$(BLUE)Running tests with coverage...$(NC)"
-	cd backend && PYTHONPATH=src pytest --cov=src/app --cov-report=term-missing --cov-fail-under=85; cd .. || true
-	@$(MAKE) reset-root
+	cd backend && PYTHONPATH=src python -m pytest --cov=src/app --cov-report=term-missing --cov-fail-under=85
 	@echo "$(GREEN)✓ Coverage threshold met$(NC)"
 
 be-docker-test: ## Run tests in Docker container
