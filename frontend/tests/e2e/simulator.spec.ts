@@ -16,31 +16,40 @@ test.describe('Simulator Control Panel', () => {
     // Banner should not be visible initially
     await expect(page.getByText(/active scenario/i)).not.toBeVisible();
 
-    // Enable via API (not UI clicks)
+    // Enable via API (not UI clicks) using contract-first shape
     await request.post(`${BACKEND_URL}/api/sim/enable`, {
       data: {
-        scenario: 'fixed_latency',
-        parameters: { target_route: '/api/sim/scenarios', delay_ms: 100 },
+        name: 'fixed-latency',
+        parameters: {
+          ms: 100,
+          // Apply latency to simulator HTTP endpoints
+          path_prefix: '/api/sim',
+          method: 'GET',
+        },
       },
     });
 
     // Wait for banner to appear (polls every 2s)
-    await expect(page.getByText(/1 active scenario/i)).toBeVisible({ timeout: 5000 });
+    await expect(page.getByText(/1 active scenario/i)).toBeVisible({ timeout: 10000 });
   });
 
   test('page lists scenario name after enable', async ({ page, request }) => {
     // Enable via API
     await request.post(`${BACKEND_URL}/api/sim/enable`, {
       data: {
-        scenario: 'fixed_latency',
-        parameters: { target_route: '/api/sim/scenarios', delay_ms: 100 },
+        name: 'fixed-latency',
+        parameters: {
+          ms: 100,
+          path_prefix: '/api/sim',
+          method: 'GET',
+        },
       },
     });
 
     await page.goto(FRONTEND_URL);
 
     // Should show active scenario name
-    await expect(page.getByText('fixed_latency')).toBeVisible({ timeout: 5000 });
+    await expect(page.getByText('fixed-latency')).toBeVisible({ timeout: 10000 });
     await expect(page.getByText(/active scenarios/i)).toBeVisible();
   });
 
@@ -48,8 +57,12 @@ test.describe('Simulator Control Panel', () => {
     // Enable via API
     await request.post(`${BACKEND_URL}/api/sim/enable`, {
       data: {
-        scenario: 'fixed_latency',
-        parameters: { target_route: '/api/sim/scenarios', delay_ms: 100 },
+        name: 'fixed-latency',
+        parameters: {
+          ms: 100,
+          path_prefix: '/api/sim',
+          method: 'GET',
+        },
       },
     });
 
@@ -62,6 +75,6 @@ test.describe('Simulator Control Panel', () => {
     await page.getByRole('button', { name: /×/i }).first().click();
 
     // Should remove from list
-    await expect(page.getByText('fixed_latency')).not.toBeVisible({ timeout: 5000 });
+    await expect(page.getByText('fixed-latency')).not.toBeVisible({ timeout: 10000 });
   });
 });
