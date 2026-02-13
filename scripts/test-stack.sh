@@ -30,10 +30,10 @@ fi
 echo ""
 echo "3️⃣  Checking scenarios..."
 scenario_count=$(docker exec sysdesign_backend curl -s http://localhost:8000/api/sim/scenarios 2>/dev/null | grep -o '"name"' | wc -l)
-if [ "$scenario_count" -ge 5 ]; then
+if [ "$scenario_count" -ge 15 ]; then
     echo "   ✓ $scenario_count scenarios available"
 else
-    echo "   ⚠️  Expected 5 scenarios, found $scenario_count"
+    echo "   ⚠️  Expected 15 scenarios, found $scenario_count"
 fi
 
 echo ""

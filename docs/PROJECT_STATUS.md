@@ -23,12 +23,22 @@ Production-grade local systems design lab for simulating 50+ real-world system i
 
 - ✅ Effect-based scenario pattern (scenarios return dicts, middleware applies)
 - ✅ Registry pattern for dynamic scenario management
-- ✅ 5 starter scenarios implemented:
+- ✅ 15 scenarios implemented:
   - `fixed-latency` - Add HTTP latency
   - `error-burst` - Probabilistic 5xx errors
   - `slow-db-query` - Slow DB operations
   - `lock-contention` - Concurrent update conflicts
   - `algorithmic-degradation` - O(n) vs O(n²) performance
+  - `circuit-breaker` - Circuit breaker pattern simulation
+  - `retry-storm` - Retry amplification failures
+  - `connection-pool-exhaustion` - Connection pool depletion
+  - `cache-stampede` - Thundering herd on cache miss
+  - `cpu-spike` - CPU usage spikes
+  - `memory-leak` - Memory leak simulation
+  - `disk-full` - Disk space exhaustion
+  - `network-partition` - Network split-brain scenarios
+  - `clock-skew` - Time synchronization issues
+  - `resource-starvation` - Resource contention simulation
 
 ### Infrastructure
 
@@ -197,7 +207,7 @@ backend/tests/
 | Category             | Progress | Status         |
 | -------------------- | -------- | -------------- |
 | Backend Architecture | 5/5      | ✅ Complete    |
-| Simulator Scenarios  | 5/50     | 🔄 10%         |
+| Simulator Scenarios  | 15/50    | 🔄 30%         |
 | Frontend             | 1/1      | ✅ Complete    |
 | CI/CD Enforcement    | 1/1      | ✅ Complete    |
 | Backend Unit Tests   | 41+      | ✅ 92%+ cov    |
@@ -210,7 +220,7 @@ backend/tests/
 
 ## 🔧 Technical Debt
 
-1. **Scenario Expansion**: Only 5/50 scenarios implemented - 45 more to add
+1. **Scenario Expansion**: Only 15/50 scenarios implemented - 35 more to add
 2. **Template Scenario**: No template file - use existing scenarios as reference
 3. **Redis Adapter**: InMemorySimulatorStore works but Redis adapter pending for production
 4. **Integration Tests**: Need testcontainers + real Postgres integration tests
