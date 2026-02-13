@@ -1,6 +1,7 @@
 import { render } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { act } from 'react';
+import { vi } from 'vitest';
 import App from '../App';
 
 // Mock child components to isolate App.tsx testing

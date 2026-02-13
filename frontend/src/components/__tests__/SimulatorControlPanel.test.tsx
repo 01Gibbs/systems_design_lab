@@ -1,6 +1,7 @@
 import { render, screen, waitFor, fireEvent } from '@testing-library/react';
-import '@testing-library/jest-dom';
+import { vi, beforeAll, afterEach, afterAll } from 'vitest';
 import SimulatorControlPanel from '../../pages/SimulatorControlPanel';
+import { simApi, type StatusResponse } from '@/api/client';
 import { http, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
 
@@ -115,6 +116,19 @@ describe('SimulatorControlPanel', () => {
     let resetCalled = false;
 
     server.use(
+      // Mock status with active scenario to ensure ActiveScenarios renders
+      http.get('http://localhost:8000/api/sim/status', () =>
+        HttpResponse.json({
+          active: [
+            {
+              name: 'active_test',
+              enabled_at: new Date().toISOString(),
+              expires_at: null,
+              parameters: {},
+            },
+          ],
+        })
+      ),
       http.post('http://localhost:8000/api/sim/reset', () => {
         resetCalled = true;
         return HttpResponse.json({ success: true });
@@ -125,6 +139,11 @@ describe('SimulatorControlPanel', () => {
 
     await waitFor(() => {
       expect(screen.getByText('test')).toBeInTheDocument();
+    });
+
+    // Wait for ActiveScenarios to render with the active scenario
+    await waitFor(() => {
+      expect(screen.getByText('🔴 Active Scenarios (1)')).toBeInTheDocument();
     });
 
     // Find and click reset all button via ActiveScenarios component
@@ -204,6 +223,19 @@ describe('SimulatorControlPanel', () => {
 
   it('handles API failures in reset gracefully', async () => {
     server.use(
+      // Mock status with active scenario to ensure ActiveScenarios renders
+      http.get('http://localhost:8000/api/sim/status', () =>
+        HttpResponse.json({
+          active: [
+            {
+              name: 'active_test',
+              enabled_at: new Date().toISOString(),
+              expires_at: null,
+              parameters: {},
+            },
+          ],
+        })
+      ),
       http.post('http://localhost:8000/api/sim/reset', () =>
         HttpResponse.json({ error: 'Reset failed' }, { status: 500 })
       )
@@ -213,6 +245,11 @@ describe('SimulatorControlPanel', () => {
 
     await waitFor(() => {
       expect(screen.getByText('test')).toBeInTheDocument();
+    });
+
+    // Wait for ActiveScenarios to render
+    await waitFor(() => {
+      expect(screen.getByText('🔴 Active Scenarios (1)')).toBeInTheDocument();
     });
 
     const resetButton = screen.getByText('Reset All');
@@ -280,19 +317,34 @@ describe('SimulatorControlPanel', () => {
   });
 
   it('handles status polling failures gracefully', async () => {
-    vi.useFakeTimers();
     const onStatusChange = vi.fn();
-    let pollCount = 0;
+    let callCount = 0;
 
-    server.use(
-      http.get('http://localhost:8000/api/sim/status', () => {
-        pollCount++;
-        if (pollCount > 2) {
-          return HttpResponse.json({ error: 'Poll failed' }, { status: 500 });
+    type StatusResult = Awaited<ReturnType<typeof simApi.status>>;
+
+    const statusMock = vi
+      .spyOn(simApi, 'status')
+      .mockImplementation(async (): Promise<StatusResult> => {
+        callCount++;
+        if (callCount > 2) {
+          return { ok: false, status: 500, error: { error: 'Poll failed' } };
         }
-        return HttpResponse.json({ active: [] });
-      })
-    );
+        const data: StatusResponse = { active: [] };
+        return { ok: true, data };
+      });
+
+    const setIntervalSpy = vi.spyOn(global, 'setInterval').mockImplementation(((
+      callback: TimerHandler,
+      _ms?: number
+    ) => {
+      // Immediately invoke the callback multiple times to simulate repeated polls
+      const fn = callback as () => void;
+      fn();
+      fn();
+      fn();
+      // Return a dummy handle matching the real setInterval return type
+      return {} as unknown as ReturnType<typeof setInterval>;
+    }) as unknown as typeof setInterval);
 
     render(<SimulatorControlPanel onStatusChange={onStatusChange} />);
 
@@ -300,13 +352,15 @@ describe('SimulatorControlPanel', () => {
       expect(screen.getByText('test')).toBeInTheDocument();
     });
 
-    // Fast forward to trigger polling
-    vi.advanceTimersByTime(4000);
+    // onStatusChange should be called from initial load and not break when polling fails
+    await waitFor(() => {
+      expect(onStatusChange).toHaveBeenCalled();
+    });
 
-    // Should continue to work despite polling failures
-    expect(onStatusChange).toHaveBeenCalled();
+    expect(statusMock).toHaveBeenCalled();
 
-    vi.useRealTimers();
+    setIntervalSpy.mockRestore();
+    statusMock.mockRestore();
   });
 
   it('cleans up interval on unmount', () => {

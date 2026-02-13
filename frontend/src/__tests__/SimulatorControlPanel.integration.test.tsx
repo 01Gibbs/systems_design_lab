@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
+import { beforeAll, afterEach, afterAll } from 'vitest';
 import SimulatorControlPanel from '../pages/SimulatorControlPanel';
 import { http, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';

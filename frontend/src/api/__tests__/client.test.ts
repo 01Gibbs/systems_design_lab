@@ -28,6 +28,9 @@ describe('API Client', () => {
       // Set Node environment variable
       process.env.VITE_API_URL = 'http://test-node.com';
 
+      // Create a fresh import to get the updated environment
+      const { simApi } = await import('../client.ts');
+
       mockFetch.mockResolvedValueOnce({
         ok: true,
         text: () => Promise.resolve('{"scenarios":[]}'),
@@ -39,6 +42,9 @@ describe('API Client', () => {
         'http://test-node.com/api/sim/scenarios',
         expect.any(Object)
       );
+
+      // Cleanup
+      delete process.env.VITE_API_URL;
     });
 
     it('should use default URL when no environment variables', async () => {
@@ -56,6 +62,9 @@ describe('API Client', () => {
     });
 
     it('should use vite environment URL in browser context', async () => {
+      // Ensure no process.env variable
+      delete process.env.VITE_API_URL;
+
       // Mock browser environment
       Object.defineProperty(global, 'window', {
         value: {},
@@ -68,12 +77,15 @@ describe('API Client', () => {
         return () => 'http://vite-test.com';
       });
 
+      // Create a fresh import to get the updated environment
+      const { simApi: freshSimApi } = await import('../client.ts');
+
       mockFetch.mockResolvedValueOnce({
         ok: true,
         text: () => Promise.resolve('{"scenarios":[]}'),
       });
 
-      await simApi.scenarios();
+      await freshSimApi.scenarios();
 
       expect(mockFetch).toHaveBeenCalledWith(
         'http://vite-test.com/api/sim/scenarios',

@@ -1,5 +1,6 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
+import { vi, beforeAll, afterEach, afterAll } from 'vitest';
 import ScenarioCard from '../ScenarioCard';
 import { http, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';

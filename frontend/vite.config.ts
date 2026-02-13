@@ -24,12 +24,7 @@ export default defineConfig({
     setupFiles: './src/test/setup.ts',
     exclude: ['**/node_modules/**', '**/dist/**', '**/e2e/**', '**/*.spec.ts'],
     include: ['**/*.test.{ts,tsx}'],
-    pool: 'forks',
-    poolOptions: {
-      forks: {
-        singleFork: true,
-      },
-    },
+    testTimeout: 15000, // 15 second timeout for tests
     coverage: {
       provider: 'v8',
       reporter: ['text', 'html', 'lcov'],

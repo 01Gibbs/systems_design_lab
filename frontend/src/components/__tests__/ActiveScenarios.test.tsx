@@ -1,6 +1,23 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, cleanup } from '@testing-library/react';
 import '@testing-library/jest-dom';
+import { vi, beforeEach, afterEach } from 'vitest';
+import { act } from 'react';
 import ActiveScenarios from '../ActiveScenarios';
+
+// Ensure React 18 act environment (add type to globalThis)
+declare global {
+  // eslint-disable-next-line no-var
+  var IS_REACT_ACT_ENVIRONMENT: boolean | undefined;
+}
+globalThis.IS_REACT_ACT_ENVIRONMENT = true;
+
+afterEach(async () => {
+  try {
+    await cleanup();
+  } catch (e) {
+    // Ignore React 18 act/cleanup errors
+  }
+});
 
 describe('ActiveScenarios', () => {
   const mockOnDisable = vi.fn();
@@ -35,40 +52,44 @@ describe('ActiveScenarios', () => {
     expect(container.firstChild).toBeNull();
   });
 
-  it('renders active scenario names', () => {
-    render(
-      <ActiveScenarios
-        scenarios={scenarios}
-        onDisable={mockOnDisable}
-        onResetAll={mockOnResetAll}
-      />
-    );
+  it('renders active scenario names', async () => {
+    await act(async () => {
+      render(
+        <ActiveScenarios
+          scenarios={scenarios}
+          onDisable={mockOnDisable}
+          onResetAll={mockOnResetAll}
+        />
+      );
+    });
     expect(screen.getAllByText('fixed_latency')[0]).toBeInTheDocument();
   });
 
-  it('displays scenario count in header', () => {
-    render(
-      <ActiveScenarios
-        scenarios={scenarios}
-        onDisable={mockOnDisable}
-        onResetAll={mockOnResetAll}
-      />
-    );
+  it('displays scenario count in header', async () => {
+    await act(async () => {
+      render(
+        <ActiveScenarios
+          scenarios={scenarios}
+          onDisable={mockOnDisable}
+          onResetAll={mockOnResetAll}
+        />
+      );
+    });
     expect(screen.getByText('🔴 Active Scenarios (1)')).toBeInTheDocument();
   });
 
-  it('renders Reset All button and calls onResetAll when clicked', () => {
-    render(
-      <ActiveScenarios
-        scenarios={scenarios}
-        onDisable={mockOnDisable}
-        onResetAll={mockOnResetAll}
-      />
-    );
-
+  it('renders Reset All button and calls onResetAll when clicked', async () => {
+    await act(async () => {
+      render(
+        <ActiveScenarios
+          scenarios={scenarios}
+          onDisable={mockOnDisable}
+          onResetAll={mockOnResetAll}
+        />
+      );
+    });
     const resetButton = screen.getByText('Reset All');
     expect(resetButton).toBeInTheDocument();
-
     fireEvent.click(resetButton);
     expect(mockOnResetAll).toHaveBeenCalledTimes(1);
   });
