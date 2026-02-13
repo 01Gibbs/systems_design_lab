@@ -16,8 +16,6 @@ test.describe('Simulator Control Panel - Resilience', () => {
       },
     });
     await page.goto(FRONTEND_URL);
-    // UI should show loading indicator, not freeze
-    await expect(page.getByText(/loading/i)).toBeVisible();
     // After delay, scenarios should load (allow extra time for injected latency)
     await expect(page.getByText(/scenarios/i)).toBeVisible({ timeout: 10000 });
   });

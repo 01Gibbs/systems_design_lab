@@ -49,7 +49,11 @@ test.describe('Simulator Control Panel', () => {
     await page.goto(FRONTEND_URL);
 
     // Should show active scenario name
-    await expect(page.getByText('fixed-latency')).toBeVisible({ timeout: 10000 });
+    await expect(
+      page.getByRole('heading', {
+        name: 'fixed-latency',
+      })
+    ).toBeVisible({ timeout: 10000 });
     await expect(page.getByText(/active scenarios/i)).toBeVisible();
   });
 
@@ -72,7 +76,9 @@ test.describe('Simulator Control Panel', () => {
     await expect(page.getByText(/active scenarios/i)).toBeVisible({ timeout: 5000 });
 
     // Click disable button (× button)
-    await page.getByRole('button', { name: /×/i }).first().click();
+    const disableButton = page.getByRole('button', { name: /Disable fixed-latency/i });
+    await expect(disableButton).toBeVisible({ timeout: 10000 });
+    await disableButton.click();
 
     // Should remove from list
     await expect(page.getByText('fixed-latency')).not.toBeVisible({ timeout: 10000 });
