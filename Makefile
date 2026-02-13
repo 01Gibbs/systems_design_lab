@@ -10,7 +10,7 @@ reset-root:
  .PHONY: help up down reset logs status grafana prometheus logs-obs metrics \
         be-install be-format be-format-check be-lint be-typecheck be-test be-test-unit be-test-integration be-coverage \
         be-docker-test be-docker-format be-docker-lint be-docker-typecheck be-docker-all \
-        fe-install fe-format fe-format-check be-lint fe-typecheck fe-test-e2e \
+        fe-install fe-format fe-format-check fe-lint fe-typecheck fe-test fe-coverage fe-test-e2e \
         guardrails arch-check contracts-check contracts-accept
 
 ##@ Automated Cleanup
@@ -190,6 +190,16 @@ fe-typecheck: ## Type check frontend code with tsc
 	@echo "$(BLUE)Type checking frontend code...$(NC)"
 	cd frontend && npm run typecheck
 	@echo "$(GREEN)✓ Type checking passed$(NC)"
+
+fe-test: ## Run frontend unit tests with vitest
+	@echo "$(BLUE)Running frontend unit tests...$(NC)"
+	cd frontend && npm run test -- --run
+	@echo "$(GREEN)✓ Frontend tests passed$(NC)"
+
+fe-coverage: ## Run frontend unit tests with coverage enforcement
+	@echo "$(BLUE)Running frontend tests with coverage...$(NC)"
+	cd frontend && npm run test:coverage
+	@echo "$(GREEN)✓ Frontend coverage threshold met$(NC)"
 
 fe-test-e2e: ## Run frontend E2E tests with Playwright
 	@echo "$(BLUE)Running E2E tests...$(NC)"
