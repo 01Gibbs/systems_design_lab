@@ -22,6 +22,7 @@ This project provides a **disciplined, maintainable baseline application** with 
 - **Backend**: Python + FastAPI + Uvicorn
 - **Database**: PostgreSQL (local, Docker)
 - **Infrastructure**: Docker Compose
+- **Observability**: Prometheus + Grafana + Loki + Tempo (local)
 
 ## Quick Start
 
@@ -108,6 +109,16 @@ The Makefile is your single entry point for all development tasks:
 - `make down` - Stop services
 - `make reset` - Stop and remove volumes
 - `make logs` - Tail service logs
+- `make status` - Check system health
+
+### Observability
+
+- `make grafana` - Open Grafana dashboards (http://localhost:3000)
+- `make prometheus` - Open Prometheus UI (http://localhost:9090)
+- `make logs-obs` - Tail observability stack logs
+- `make metrics` - Check backend metrics endpoint
+
+See [OBSERVABILITY.md](docs/OBSERVABILITY.md) for complete observability documentation.
 
 ### Backend Development (Host-based)
 

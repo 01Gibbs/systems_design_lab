@@ -78,6 +78,7 @@ class SimulatorInjectionMiddleware(BaseHTTPMiddleware):
             delay_ms = effects["http_delay_ms"]
             path_prefix = effects.get("http_path_prefix", "")
             method = effects.get("http_method", "")
+            scenario_name = effects.get("scenario_name", "unknown")
 
             # Check if this request matches
             if (
@@ -85,6 +86,12 @@ class SimulatorInjectionMiddleware(BaseHTTPMiddleware):
                 or (isinstance(path_prefix, str) and request.url.path.startswith(path_prefix))
             ) and (not method or request.method == method):
                 if isinstance(delay_ms, (int, float)):
+                    # Emit metric before applying delay
+                    if hasattr(request.app.state, "metrics"):
+                        request.app.state.metrics.increment_counter(
+                            "simulator_injections_total",
+                            {"scenario_name": str(scenario_name), "effect_type": "http_delay"},
+                        )
                     await asyncio.sleep(delay_ms / 1000.0)
 
     async def _apply_post_response_effects(
@@ -93,6 +100,15 @@ class SimulatorInjectionMiddleware(BaseHTTPMiddleware):
         """Apply effects after request processing"""
         # Force error
         if effects.get("http_force_error"):
+            scenario_name = effects.get("scenario_name", "unknown")
+
+            # Emit metric
+            if hasattr(response, "app") and hasattr(response.app.state, "metrics"):
+                response.app.state.metrics.increment_counter(
+                    "simulator_injections_total",
+                    {"scenario_name": str(scenario_name), "effect_type": "http_error"},
+                )
+
             # Return 500 instead
             from fastapi.responses import JSONResponse
 

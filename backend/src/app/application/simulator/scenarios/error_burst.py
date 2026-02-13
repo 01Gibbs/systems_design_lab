@@ -42,4 +42,5 @@ class ErrorBurst:
             "http_force_error": True,
             "http_path_prefix": str(parameters.get("path_prefix", "")),
             "http_method": str(parameters.get("method", "")).upper(),
+            "scenario_name": self.meta.name,
         }

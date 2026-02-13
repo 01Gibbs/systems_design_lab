@@ -1,5 +1,7 @@
 # CpuSpike
 from app.application.simulator.scenarios.cpu_spike import CpuSpike
+
+
 def test_cpu_spike_apply_and_applicable(monkeypatch):
     cs = CpuSpike()
     assert cs.is_applicable(target={"category": "http"})
@@ -11,8 +13,11 @@ def test_cpu_spike_apply_and_applicable(monkeypatch):
     out2 = cs.apply(ctx={}, parameters={"spike_probability": 0.0})
     assert out2 == {}
 
+
 # MemoryLeak
 from app.application.simulator.scenarios.memory_leak import MemoryLeak
+
+
 def test_memory_leak_apply_and_applicable(monkeypatch):
     ml = MemoryLeak()
     assert ml.is_applicable(target={"category": "database"})
@@ -24,8 +29,11 @@ def test_memory_leak_apply_and_applicable(monkeypatch):
     out2 = ml.apply(ctx={}, parameters={"leak_probability": 0.0})
     assert out2 == {}
 
+
 # DiskFull
 from app.application.simulator.scenarios.disk_full import DiskFull
+
+
 def test_disk_full_apply_and_applicable(monkeypatch):
     df = DiskFull()
     assert df.is_applicable(target={"category": "filesystem"})
@@ -38,8 +46,11 @@ def test_disk_full_apply_and_applicable(monkeypatch):
     out2 = df.apply(ctx={}, parameters={"failure_probability": 0.0})
     assert out2 == {}
 
+
 # NetworkPartition
 from app.application.simulator.scenarios.network_partition import NetworkPartition
+
+
 def test_network_partition_apply_and_applicable(monkeypatch):
     np = NetworkPartition()
     assert np.is_applicable(target={"category": "http"})
@@ -53,8 +64,11 @@ def test_network_partition_apply_and_applicable(monkeypatch):
     out2 = np.apply(ctx={}, parameters={"partition_probability": 0.0})
     assert out2 == {}
 
+
 # ClockSkew
 from app.application.simulator.scenarios.clock_skew import ClockSkew
+
+
 def test_clock_skew_apply_and_applicable(monkeypatch):
     cs = ClockSkew()
     assert cs.is_applicable(target={"category": "time"})
@@ -66,8 +80,11 @@ def test_clock_skew_apply_and_applicable(monkeypatch):
     out2 = cs.apply(ctx={}, parameters={"skew_probability": 0.0})
     assert out2 == {}
 
+
 # ResourceStarvation
 from app.application.simulator.scenarios.resource_starvation import ResourceStarvation
+
+
 def test_resource_starvation_apply_and_applicable(monkeypatch):
     rs = ResourceStarvation()
     assert rs.is_applicable(target={"category": "database"})
@@ -79,6 +96,8 @@ def test_resource_starvation_apply_and_applicable(monkeypatch):
     monkeypatch.setattr("random.random", lambda: 1.0)
     out2 = rs.apply(ctx={}, parameters={"starvation_probability": 0.0})
     assert out2 == {}
+
+
 """Test all scenario classes for effect dicts and applicability"""
 import pytest
 from app.application.simulator.scenarios.algorithmic_degradation import AlgorithmicDegradation
@@ -95,6 +114,8 @@ from app.application.simulator.scenarios.slow_db_query import SlowDbQuery
 
 # AlgorithmicDegradation
 ALG = AlgorithmicDegradation()
+
+
 def test_algorithmic_degradation_apply_and_applicable():
     assert ALG.is_applicable(target={"category": "algorithm"})
     out = ALG.apply(ctx={}, parameters={"use_slow_path": True, "input_size": 123})
@@ -104,21 +125,32 @@ def test_algorithmic_degradation_apply_and_applicable():
     assert out2["algorithm_use_slow"] is False
     assert out2["algorithm_input_size"] == 100
 
+
 # ErrorBurst
 EB = ErrorBurst()
+
+
 def test_error_burst_apply_and_applicable(monkeypatch):
     assert EB.is_applicable(target={"category": "http"})
     # Always return 0.0 for random.random to force error
     monkeypatch.setattr("random.random", lambda: 0.0)
     out = EB.apply(ctx={}, parameters={"probability": 1.0})
-    assert out == {"http_force_error": True, "http_path_prefix": "", "http_method": ""}
+    assert out == {
+        "http_force_error": True,
+        "http_path_prefix": "",
+        "http_method": "",
+        "scenario_name": "error-burst-5xx",
+    }
     # Always return 1.0 for random.random to avoid error
     monkeypatch.setattr("random.random", lambda: 1.0)
     out2 = EB.apply(ctx={}, parameters={"probability": 0.5})
     assert out2 == {}
 
+
 # FixedLatency
 FL = FixedLatency()
+
+
 def test_fixed_latency_apply_and_applicable(monkeypatch):
     assert FL.is_applicable(target={"category": "http"})
     monkeypatch.setattr("random.random", lambda: 0.0)
@@ -128,8 +160,11 @@ def test_fixed_latency_apply_and_applicable(monkeypatch):
     out2 = FL.apply(ctx={}, parameters={"ms": 100, "probability": 0.5})
     assert out2 == {}
 
+
 # LockContention
 LC = LockContention()
+
+
 def test_lock_contention_apply_and_applicable():
     assert LC.is_applicable(target={"category": "db"})
     out = LC.apply(ctx={}, parameters={"row_id": 5, "update_count": 3})
@@ -137,8 +172,11 @@ def test_lock_contention_apply_and_applicable():
     assert out["db_target_row_id"] == 5
     assert out["db_concurrent_updates"] == 3
 
+
 # SlowDbQuery
 SDQ = SlowDbQuery()
+
+
 def test_slow_db_query_apply_and_applicable(monkeypatch):
     assert SDQ.is_applicable(target={"category": "db"})
     monkeypatch.setattr("random.random", lambda: 0.0)
@@ -151,11 +189,15 @@ def test_slow_db_query_apply_and_applicable(monkeypatch):
 
 # CircuitBreaker
 CB = CircuitBreaker()
+
+
 def test_circuit_breaker_apply_and_applicable(monkeypatch):
     assert CB.is_applicable(target={"category": "http"})
     # Force circuit open
     monkeypatch.setattr("random.random", lambda: 0.1)
-    out = CB.apply(ctx={}, parameters={"failure_threshold": 5, "timeout_ms": 3000, "status_code": 503})
+    out = CB.apply(
+        ctx={}, parameters={"failure_threshold": 5, "timeout_ms": 3000, "status_code": 503}
+    )
     assert out["circuit_breaker_open"] is True
     assert out["http_status"] == 503
     assert out["http_delay_ms"] == 3000
@@ -167,11 +209,15 @@ def test_circuit_breaker_apply_and_applicable(monkeypatch):
 
 # RetryStorm
 RS = RetryStorm()
+
+
 def test_retry_storm_apply_and_applicable(monkeypatch):
     assert RS.is_applicable(target={"category": "http"})
     # Force failure
     monkeypatch.setattr("random.random", lambda: 0.1)
-    out = RS.apply(ctx={}, parameters={"failure_rate": 0.5, "retry_multiplier": 3.0, "status_code": 503})
+    out = RS.apply(
+        ctx={}, parameters={"failure_rate": 0.5, "retry_multiplier": 3.0, "status_code": 503}
+    )
     assert out["retry_storm_active"] is True
     assert out["http_status"] == 503
     assert out["retry_multiplier"] == 3.0
@@ -183,11 +229,16 @@ def test_retry_storm_apply_and_applicable(monkeypatch):
 
 # ConnectionPoolExhaustion
 CPE = ConnectionPoolExhaustion()
+
+
 def test_connection_pool_exhaustion_apply_and_applicable(monkeypatch):
     assert CPE.is_applicable(target={"category": "database"})
     # Force exhaustion
     monkeypatch.setattr("random.random", lambda: 0.1)
-    out = CPE.apply(ctx={}, parameters={"exhaustion_probability": 0.8, "hang_duration_ms": 5000, "pool_size_limit": 20})
+    out = CPE.apply(
+        ctx={},
+        parameters={"exhaustion_probability": 0.8, "hang_duration_ms": 5000, "pool_size_limit": 20},
+    )
     assert out["db_connection_exhausted"] is True
     assert out["db_hang_duration_ms"] == 5000
     assert out["db_pool_size_limit"] == 20
@@ -199,12 +250,21 @@ def test_connection_pool_exhaustion_apply_and_applicable(monkeypatch):
 
 # CacheStampede
 CS = CacheStampede()
+
+
 def test_cache_stampede_apply_and_applicable(monkeypatch):
     assert CS.is_applicable(target={"category": "cache"})
     assert CS.is_applicable(target={"category": "database"})
     # Force stampede
     monkeypatch.setattr("random.random", lambda: 0.1)
-    out = CS.apply(ctx={}, parameters={"stampede_probability": 0.8, "concurrent_requests": 100, "backend_delay_ms": 3000})
+    out = CS.apply(
+        ctx={},
+        parameters={
+            "stampede_probability": 0.8,
+            "concurrent_requests": 100,
+            "backend_delay_ms": 3000,
+        },
+    )
     assert out["cache_stampede_active"] is True
     assert out["cache_miss"] is True
     assert out["concurrent_backend_requests"] == 100

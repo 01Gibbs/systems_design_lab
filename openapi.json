@@ -267,6 +267,26 @@
         ]
       }
     },
+    "/api/metrics": {
+      "get": {
+        "description": "Prometheus metrics endpoint.\n\nReturns metrics in Prometheus text exposition format.",
+        "operationId": "metrics_endpoint_api_metrics_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Metrics Endpoint",
+        "tags": [
+          "observability"
+        ]
+      }
+    },
     "/api/sim/disable": {
       "post": {
         "description": "Disable a scenario",
