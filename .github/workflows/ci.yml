@@ -44,7 +44,7 @@ jobs:
       - name: Install backend dependencies
         run: pip install -r backend/requirements-dev.txt && pip install -r backend/requirements.txt
       - name: Start services
-        run: make up-test
+        run: docker compose up -d --build backend postgres
       - name: Wait for services to be ready
         run: |
           echo "Waiting for backend to be ready..."
@@ -57,10 +57,10 @@ jobs:
             sleep 2
           done
           echo "Backend failed to start"
-          docker-compose -f docker-compose.yml logs
+          docker compose logs
           exit 1
       - name: Run integration tests
         run: make be-test-integration
       - name: Cleanup
         if: always()
-        run: make down
+        run: docker compose down -v
