@@ -82,7 +82,10 @@ describe('API Client', () => {
 
       // Restore
       global.Function = originalFunction;
-      (global as any).window = undefined;
+      Object.defineProperty(global, 'window', {
+        value: undefined,
+        configurable: true,
+      });
     });
 
     it('should handle vite environment function errors gracefully', async () => {
