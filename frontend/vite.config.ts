@@ -36,10 +36,14 @@ export default defineConfig({
       exclude: [
         'node_modules/**',
         'src/test/**',
-        '**/*.config.{ts,js}',
+        '**/*.config.{ts,js,cjs}',
         '**/tests/**',
         '**/*.d.ts',
         '**/e2e/**',
+        '**/__tests__/**',
+        '**/*.test.{ts,tsx}',
+        '**/*.spec.{ts,tsx}',
+        'src/main.tsx', // Entry point, not testable
       ],
       thresholds: {
         lines: 80,
