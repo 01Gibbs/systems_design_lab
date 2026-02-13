@@ -80,6 +80,40 @@ describe('ActiveScenarios', () => {
     expect(timeInfo).toBeInTheDocument();
   });
 
+  it('calls toLocaleString function on expires_at dates properly', () => {
+    const mockDateSpy = vi.spyOn(Date.prototype, 'toLocaleString');
+    
+    render(<ActiveScenarios scenarios={scenariosWithExpiry} onDisable={mockOnDisable} onResetAll={mockOnResetAll} />);
+    
+    // Should be called for both enabled_at and expires_at
+    expect(mockDateSpy).toHaveBeenCalledTimes(2);
+    
+    mockDateSpy.mockRestore();
+  });
+
+  it('handles null expires_at without calling date functions', () => {
+    const mockDateSpy = vi.spyOn(Date.prototype, 'toLocaleString');
+    
+    render(<ActiveScenarios scenarios={scenarios} onDisable={mockOnDisable} onResetAll={mockOnResetAll} />);
+    
+    // Should only be called once for enabled_at, not for expires_at since it's null
+    expect(mockDateSpy).toHaveBeenCalledTimes(1);
+    
+    mockDateSpy.mockRestore();
+  });
+
+  it('properly renders JSX fragment for expires information', () => {
+    // This specifically targets the JSX fragment function on line 43
+    const { container } = render(
+      <ActiveScenarios scenarios={scenariosWithExpiry} onDisable={mockOnDisable} onResetAll={mockOnResetAll} />
+    );
+    
+    // Check that the fragment content is rendered as expected
+    const expiresText = container.querySelector('.text-sm');
+    expect(expiresText?.textContent).toContain('Expires:');
+    expect(expiresText?.textContent).toMatch(/\d{1,2}\/\d{1,2}\/\d{4}.*Expires:.*\d{1,2}\/\d{1,2}\/\d{4}/);
+  });
+
   it('does not display expires info when expires_at is null', () => {
     render(<ActiveScenarios scenarios={scenarios} onDisable={mockOnDisable} onResetAll={mockOnResetAll} />);
     

@@ -222,6 +222,61 @@ describe('SimulatorControlPanel', () => {
     });
   });
 
+  it('handles API failures in disable gracefully', async () => {
+    server.use(
+      http.get('http://localhost:8000/api/sim/status', () => 
+        HttpResponse.json({
+          active: [{
+            name: 'test_scenario',
+            enabled_at: new Date().toISOString(),
+            expires_at: null,
+            parameters: {}
+          }]
+        })
+      ),
+      http.post('http://localhost:8000/api/sim/disable', () =>
+        HttpResponse.json({ error: 'Disable failed' }, { status: 500 })
+      )
+    );
+
+    render(<SimulatorControlPanel onStatusChange={() => {}} />);
+    
+    await waitFor(() => {
+      expect(screen.getByText('🔴 Active Scenarios (1)')).toBeInTheDocument();
+    });
+
+    const disableButton = screen.getByLabelText('Disable test_scenario');
+    fireEvent.click(disableButton);
+
+    // Should not crash or throw error - just not reload data
+    await waitFor(() => {
+      expect(screen.getByText('🔴 Active Scenarios (1)')).toBeInTheDocument();
+    });
+  });
+
+  it('tests handleEnable function directly via scenario card enable', async () => {
+    const onStatusChange = vi.fn();
+    server.use(
+      http.post('http://localhost:8000/api/sim/enable', () =>
+        HttpResponse.json({ success: true })
+      )
+    );
+
+    render(<SimulatorControlPanel onStatusChange={onStatusChange} />);
+    
+    await waitFor(() => {
+      expect(screen.getByText('test')).toBeInTheDocument();
+    });
+
+    const enableButton = screen.getByRole('button', { name: /enable/i });
+    fireEvent.click(enableButton);
+
+    // handleEnable should be called after successful enable
+    await waitFor(() => {
+      expect(onStatusChange).toHaveBeenCalled();
+    });
+  });
+
   it('handles status polling failures gracefully', async () => {
     vi.useFakeTimers();
     const onStatusChange = vi.fn();

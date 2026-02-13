@@ -55,6 +55,36 @@ describe('API Client', () => {
       );
     });
 
+    it('should use vite environment URL in browser context', async () => {
+      // Mock browser environment
+      Object.defineProperty(global, 'window', {
+        value: {},
+        configurable: true
+      });
+      
+      // Mock the Function constructor to return a fake vite URL
+      const originalFunction = global.Function;
+      global.Function = vi.fn().mockImplementation(() => {
+        return () => 'http://vite-test.com';
+      });
+
+      mockFetch.mockResolvedValueOnce({
+        ok: true,
+        text: () => Promise.resolve('{"scenarios":[]}'),
+      });
+
+      await simApi.scenarios();
+      
+      expect(mockFetch).toHaveBeenCalledWith(
+        'http://vite-test.com/api/sim/scenarios',
+        expect.any(Object)
+      );
+      
+      // Restore
+      global.Function = originalFunction;
+      delete global.window;
+    });
+
     it('should handle vite environment function errors gracefully', async () => {
       // This tests the try-catch in getViteEnvUrl()
       const originalFunction = global.Function;
@@ -123,6 +153,19 @@ describe('API Client', () => {
       const result = await simApi.scenarios();
       
       expect(result).toEqual({ ok: false, status: 0, error: networkError });
+    });
+
+    it('should handle fetch throwing non-Error objects', async () => {
+      const weirdError = 'string error';
+      mockFetch.mockRejectedValueOnce(weirdError);
+
+      const result = await simApi.scenarios();
+      
+      expect(result.ok).toBe(false);
+      if (!result.ok) {
+        expect(result.status).toBe(0);
+        expect(result.error).toBe(weirdError);
+      }
     });
 
     it('should handle JSON parse errors in success responses', async () => {
