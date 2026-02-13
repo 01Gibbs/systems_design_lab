@@ -30,6 +30,14 @@ jobs:
         run: make guardrails
       - name: Run backend coverage
         run: make be-coverage
+      - name: Run frontend lint
+        run: make fe-lint
+      - name: Run frontend typecheck
+        run: make fe-typecheck
+      - name: Run frontend tests
+        run: make fe-test
+      - name: Run frontend coverage
+        run: make fe-coverage
 
   integration-tests:
     runs-on: ubuntu-latest
