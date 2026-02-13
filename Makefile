@@ -171,7 +171,7 @@ fe-test-e2e: ## Run frontend E2E tests with Playwright
 
 ##@ Guardrails & Enforcement
 
-guardrails: contracts-bootstrap be-format-check be-lint be-typecheck be-test arch-check contracts-check ## Run all guardrails checks
+guardrails: contracts-bootstrap be-format-check be-lint be-typecheck be-test-unit arch-check contracts-check ## Run all guardrails checks
 	@echo ""
 	@echo "$(GREEN)========================================$(NC)"
 	@echo "$(GREEN)✓ All guardrails checks passed$(NC)"
