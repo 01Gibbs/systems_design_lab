@@ -100,7 +100,7 @@
 
 - ✅ Display control panel
 - ✅ Show backend health
-- ✅ List all 5 scenarios
+- ✅ List all 15 scenarios
 - ✅ Enable fixed-latency scenario
 - ✅ Observe latency in requests
 - ✅ Disable individual scenario
@@ -191,7 +191,7 @@ http://localhost:5173
 
 # Should see:
 # - "Backend online" indicator
-# - 5 scenario cards
+# - 15 scenario cards
 # - Can enable scenarios
 # - Active banner appears when scenarios enabled
 ```
@@ -231,7 +231,7 @@ make fe-test-e2e
 ## 🎯 Success Criteria
 
 - [x] Frontend displays control panel
-- [x] Lists all 5 scenarios from backend
+- [x] Lists all 15 scenarios from backend
 - [x] Can enable scenarios with parameters
 - [x] Active scenarios shown in banner
 - [x] Can disable individual scenarios

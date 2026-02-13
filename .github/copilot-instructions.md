@@ -17,9 +17,9 @@ This is a **production-grade local systems design lab** — NOT a demo app or on
 
 ## Technology Stack (NON-NEGOTIABLE)
 
-**Frontend:** Vite + TypeScript + Playwright  
-**Backend:** Python + FastAPI + Uvicorn  
-**Database:** PostgreSQL (local, Docker)  
+**Frontend:** Vite + TypeScript + Playwright
+**Backend:** Python + FastAPI + Uvicorn
+**Database:** PostgreSQL (local, Docker)
 **Infrastructure:** Docker Compose (local only)
 
 **Forbidden:** cloud services, serverless, magic generators that bypass contracts
@@ -109,15 +109,25 @@ The simulator is a first-class, extensible subsystem for injecting 50+ real-worl
 - Adapter wrapping for DB/cache behaviours
 - NO simulator logic in domain layer
 
-**Initial starter scenarios (5):**
+**Implemented scenarios (15):**
 
 1. Fixed latency injection (per route)
 2. Error burst (probabilistic 5xx)
 3. Slow DB query path
 4. Lock contention (concurrent updates same row)
 5. Algorithmic degradation (O(n) vs O(n²))
+6. Circuit breaker pattern simulation
+7. Retry storm (retry amplification)
+8. Connection pool exhaustion
+9. Cache stampede (thundering herd)
+10. CPU spike simulation
+11. Memory leak simulation
+12. Disk full simulation
+13. Network partition (split-brain)
+14. Clock skew (time sync issues)
+15. Resource starvation
 
-**Target catalogue:** 50 scenarios across latency, HTTP failures, DB issues, caching, concurrency, resource exhaustion (see full list in spec)
+**Target catalogue:** 50 scenarios total (35 remaining) across latency, HTTP failures, DB issues, caching, concurrency, resource exhaustion
 
 ## Guardrails & Enforcement (Packwerk-Style)
 
@@ -163,7 +173,7 @@ Commands:
 - **testcontainers** or docker-compose (integration tests)
 
 ## TypeScript Tooling
-  
+
 - **prettier** (formatting)
 - **eslint** (linting)
 - **tsc --noEmit** (type checking)
@@ -237,7 +247,6 @@ make arch-check      # Fail on boundary violations
 - Structure code to allow future OpenTelemetry without refactors
 
 **Later:** Prometheus, Grafana, Loki, OpenTelemetry
-
 
 ## Output Rules for AI Agents
 
