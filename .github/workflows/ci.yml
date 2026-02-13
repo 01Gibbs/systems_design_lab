@@ -47,7 +47,7 @@ jobs:
           node-version: '20'
       - name: Install backend dependencies
         run: pip install -r backend/requirements-dev.txt && pip install -r backend/requirements.txt
-      - name: Install frontend dependencies  
+      - name: Install frontend dependencies
         run: make fe-install
       - name: Start services
         run: docker compose up -d --build backend postgres
@@ -79,6 +79,10 @@ jobs:
             echo "Attempt $i: Frontend not ready, waiting..."
             sleep 2
           done
+      - name: Install Playwright browsers
+        run: |
+          cd frontend
+          npx playwright install --with-deps
       - name: Run E2E tests
         run: make fe-test-e2e
       - name: Cleanup
