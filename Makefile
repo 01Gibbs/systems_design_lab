@@ -105,12 +105,12 @@ be-test-unit: ## Run backend unit tests only
 
 be-test-integration: ## Run backend integration tests only
 	@echo "$(BLUE)Running integration tests...$(NC)"
-	cd backend && PYTHONPATH=src python -m pytest -m integration tests/integration
-	@echo "$(GREEN)✓ Integration tests passed$(NC)"
+	cd backend && PYTHONPATH=src python -m pytest -m integration --no-cov tests/integration
+	@echo "$(GREEN)✓ Integration tests passed (coverage is only enforced for unit tests)$(NC)"
 
-be-coverage: ## Run backend tests with coverage enforcement
-	@echo "$(BLUE)Running tests with coverage...$(NC)"
-	cd backend && PYTHONPATH=src python -m pytest --cov=src/app --cov-report=term-missing --cov-fail-under=85
+be-coverage: ## Run backend unit tests with coverage enforcement
+	@echo "$(BLUE)Running unit tests with coverage...$(NC)"
+	cd backend && PYTHONPATH=src python -m pytest -m "not integration" --cov=src/app --cov-report=term-missing --cov-fail-under=85
 	@$(MAKE) reset-root
 	@echo "$(GREEN)✓ Coverage threshold met$(NC)"
 
