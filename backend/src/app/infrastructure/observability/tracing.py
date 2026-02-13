@@ -25,6 +25,10 @@ def setup_tracing(app_name: str = "systems-design-lab-backend") -> None:
     Args:
         app_name: Service name for tracing
     """
+    # Skip tracing if explicitly disabled (e.g., during tests)
+    if os.getenv("OTEL_SDK_DISABLED", "false").lower() == "true":
+        return
+
     # Resource identifies your service
     resource = Resource(
         attributes={

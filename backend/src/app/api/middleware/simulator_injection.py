@@ -9,6 +9,7 @@ from typing import Any
 from fastapi import Request, Response
 from starlette.middleware.base import BaseHTTPMiddleware
 
+from app.application.ports.metrics import MetricsPort
 from app.application.simulator.service import SimulatorService
 
 
@@ -18,6 +19,10 @@ class SimulatorInjectionMiddleware(BaseHTTPMiddleware):
 
     This is where effect dicts from scenarios get executed.
     """
+
+    def __init__(self, app: Any, metrics: MetricsPort | None = None) -> None:
+        super().__init__(app)
+        self.metrics = metrics
 
     async def dispatch(
         self, request: Request, call_next: Callable[[Request], Awaitable[Response]]
@@ -87,8 +92,8 @@ class SimulatorInjectionMiddleware(BaseHTTPMiddleware):
             ) and (not method or request.method == method):
                 if isinstance(delay_ms, (int, float)):
                     # Emit metric before applying delay
-                    if hasattr(request.app.state, "metrics"):
-                        request.app.state.metrics.increment_counter(
+                    if self.metrics:
+                        self.metrics.increment_counter(
                             "simulator_injections_total",
                             {"scenario_name": str(scenario_name), "effect_type": "http_delay"},
                         )
@@ -103,8 +108,8 @@ class SimulatorInjectionMiddleware(BaseHTTPMiddleware):
             scenario_name = effects.get("scenario_name", "unknown")
 
             # Emit metric
-            if hasattr(response, "app") and hasattr(response.app.state, "metrics"):
-                response.app.state.metrics.increment_counter(
+            if self.metrics:
+                self.metrics.increment_counter(
                     "simulator_injections_total",
                     {"scenario_name": str(scenario_name), "effect_type": "http_error"},
                 )

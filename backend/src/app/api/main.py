@@ -75,7 +75,7 @@ def create_app() -> FastAPI:
     # Observability tracks all requests (after CORS)
     app.add_middleware(ObservabilityMiddleware, metrics=metrics)
     # Simulator injection applies effects (after observability)
-    app.add_middleware(SimulatorInjectionMiddleware)
+    app.add_middleware(SimulatorInjectionMiddleware, metrics=metrics)
     # Request ID is innermost (runs first)
     app.add_middleware(RequestIdMiddleware)
 
