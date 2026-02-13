@@ -82,7 +82,7 @@ describe('API Client', () => {
 
       // Restore
       global.Function = originalFunction;
-      delete global.window;
+      (global as any).window = undefined;
     });
 
     it('should handle vite environment function errors gracefully', async () => {
