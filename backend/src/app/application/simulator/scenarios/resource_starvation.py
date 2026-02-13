@@ -15,7 +15,7 @@ class ResourceStarvation:
     meta = ScenarioMeta(
         name="resource-starvation",
         description="Simulates resource starvation: limits available worker threads/processes.",
-        targets=["http", "database"],
+        targets=["http", "db"],
         parameter_schema={
             "type": "object",
             "properties": {

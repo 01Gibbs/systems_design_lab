@@ -18,7 +18,7 @@ class CacheStampede:
             "Simulates cache stampede: multiple requests simultaneously "
             "query backend when cache expires."
         ),
-        targets=["cache", "database"],
+        targets=["db"],
         parameter_schema={
             "type": "object",
             "properties": {
@@ -49,7 +49,7 @@ class CacheStampede:
 
     def is_applicable(self, *, target: dict[str, str]) -> bool:
         category = target.get("category", "")
-        return category in ("cache", "database")
+        return category == "db"
 
     def apply(self, *, ctx: dict[str, object], parameters: dict[str, object]) -> dict[str, object]:
         """Returns effect dict simulating cache stampede"""

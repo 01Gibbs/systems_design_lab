@@ -15,7 +15,7 @@ class DiskFull:
     meta = ScenarioMeta(
         name="disk-full",
         description="Simulates disk full: causes write operations to fail.",
-        targets=["database", "filesystem"],
+        targets=["db"],
         parameter_schema={
             "type": "object",
             "properties": {
@@ -33,7 +33,7 @@ class DiskFull:
     )
 
     def is_applicable(self, *, target: dict[str, str]) -> bool:
-        return target.get("category") in ("database", "filesystem")
+        return target.get("category") == "db"
 
     def apply(self, *, ctx: dict[str, object], parameters: dict[str, object]) -> dict[str, object]:
         failure_probability = float(str(parameters["failure_probability"]))

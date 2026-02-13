@@ -15,7 +15,7 @@ class MemoryLeak:
     meta = ScenarioMeta(
         name="memory-leak",
         description="Simulates memory leak: increases memory usage over time.",
-        targets=["http", "database"],
+        targets=["http", "db"],
         parameter_schema={
             "type": "object",
             "properties": {
@@ -38,7 +38,7 @@ class MemoryLeak:
     )
 
     def is_applicable(self, *, target: dict[str, str]) -> bool:
-        return target.get("category") in ("http", "database")
+        return target.get("category") in ("http", "db")
 
     def apply(self, *, ctx: dict[str, object], parameters: dict[str, object]) -> dict[str, object]:
         leak_probability = float(str(parameters["leak_probability"]))

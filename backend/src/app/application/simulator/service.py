@@ -14,6 +14,7 @@ from app.application.simulator.app_models import (
     ScenariosResponseApp,
     StatusResponseApp,
 )
+from app.application.simulator.exceptions import ScenarioNotFoundError
 from app.application.simulator.models import ActiveScenarioState
 from app.application.simulator.registry import ScenarioRegistry
 
@@ -70,7 +71,10 @@ class SimulatorService:
     def enable(self, req: EnableScenarioRequestApp) -> StatusResponseApp:
         """Enable a scenario with given parameters"""
         # Validate scenario exists
-        scenario = self._registry.get(req.name)
+        try:
+            scenario = self._registry.get(req.name)
+        except KeyError as e:
+            raise ScenarioNotFoundError(req.name) from e
 
         # Calculate expiry
         now = self._clock.now()

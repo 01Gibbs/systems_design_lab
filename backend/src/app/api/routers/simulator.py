@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from fastapi import APIRouter, Request
+from fastapi import APIRouter, HTTPException, Request
 
 from app.application.simulator.app_models import (
     DisableScenarioRequestApp,
@@ -10,6 +10,7 @@ from app.application.simulator.app_models import (
     ScenariosResponseApp,
     StatusResponseApp,
 )
+from app.application.simulator.exceptions import ScenarioNotFoundError
 from app.application.simulator.service import SimulatorService
 from app.contracts.simulator import (
     ActiveScenario,
@@ -67,23 +68,26 @@ async def status(request: Request) -> StatusResponse:
 @router.post("/enable", response_model=StatusResponse)
 async def enable(request: Request, body: EnableScenarioRequest) -> StatusResponse:
     """Enable a scenario"""
-    app_req = EnableScenarioRequestApp(
-        name=body.name,
-        parameters=body.parameters,
-        duration_seconds=body.duration_seconds,
-    )
-    app_resp: StatusResponseApp = _get_service(request).enable(app_req)
-    return StatusResponse(
-        active=[
-            ActiveScenario(
-                name=a.name,
-                parameters=a.parameters,
-                enabled_at=a.enabled_at,
-                expires_at=a.expires_at,
-            )
-            for a in app_resp.active
-        ]
-    )
+    try:
+        app_req = EnableScenarioRequestApp(
+            name=body.name,
+            parameters=body.parameters,
+            duration_seconds=body.duration_seconds,
+        )
+        app_resp: StatusResponseApp = _get_service(request).enable(app_req)
+        return StatusResponse(
+            active=[
+                ActiveScenario(
+                    name=a.name,
+                    parameters=a.parameters,
+                    enabled_at=a.enabled_at,
+                    expires_at=a.expires_at,
+                )
+                for a in app_resp.active
+            ]
+        )
+    except ScenarioNotFoundError as e:
+        raise HTTPException(status_code=404, detail=str(e)) from e
 
 
 @router.post("/disable", response_model=StatusResponse)

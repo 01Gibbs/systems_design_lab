@@ -15,7 +15,7 @@ def test_cpu_spike_apply_and_applicable(monkeypatch):
 from app.application.simulator.scenarios.memory_leak import MemoryLeak
 def test_memory_leak_apply_and_applicable(monkeypatch):
     ml = MemoryLeak()
-    assert ml.is_applicable(target={"category": "database"})
+    assert ml.is_applicable(target={"category": "db"})
     monkeypatch.setattr("random.random", lambda: 0.0)
     out = ml.apply(ctx={}, parameters={"leak_probability": 1.0, "leak_size_kb": 256})
     assert out["memory_leak_kb"] == 256
@@ -28,7 +28,7 @@ def test_memory_leak_apply_and_applicable(monkeypatch):
 from app.application.simulator.scenarios.disk_full import DiskFull
 def test_disk_full_apply_and_applicable(monkeypatch):
     df = DiskFull()
-    assert df.is_applicable(target={"category": "filesystem"})
+    assert df.is_applicable(target={"category": "db"})
     monkeypatch.setattr("random.random", lambda: 0.0)
     out = df.apply(ctx={}, parameters={"failure_probability": 1.0, "path_prefix": "/tmp"})
     assert out["disk_full_error"] is True
@@ -184,7 +184,7 @@ def test_retry_storm_apply_and_applicable(monkeypatch):
 # ConnectionPoolExhaustion
 CPE = ConnectionPoolExhaustion()
 def test_connection_pool_exhaustion_apply_and_applicable(monkeypatch):
-    assert CPE.is_applicable(target={"category": "database"})
+    assert CPE.is_applicable(target={"category": "db"})
     # Force exhaustion
     monkeypatch.setattr("random.random", lambda: 0.1)
     out = CPE.apply(ctx={}, parameters={"exhaustion_probability": 0.8, "hang_duration_ms": 5000, "pool_size_limit": 20})
@@ -200,8 +200,7 @@ def test_connection_pool_exhaustion_apply_and_applicable(monkeypatch):
 # CacheStampede
 CS = CacheStampede()
 def test_cache_stampede_apply_and_applicable(monkeypatch):
-    assert CS.is_applicable(target={"category": "cache"})
-    assert CS.is_applicable(target={"category": "database"})
+    assert CS.is_applicable(target={"category": "db"})
     # Force stampede
     monkeypatch.setattr("random.random", lambda: 0.1)
     out = CS.apply(ctx={}, parameters={"stampede_probability": 0.8, "concurrent_requests": 100, "backend_delay_ms": 3000})
