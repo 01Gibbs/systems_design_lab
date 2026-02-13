@@ -11,11 +11,7 @@ vi.mock('../components/GlobalBanner', () => ({
 }));
 
 vi.mock('../pages/SimulatorControlPanel', () => ({
-  default: ({
-    onStatusChange,
-  }: {
-    onStatusChange: (count: number) => void;
-  }) => (
+  default: ({ onStatusChange }: { onStatusChange: (count: number) => void }) => (
     <div data-testid="simulator-panel">
       <button onClick={() => onStatusChange(3)}>Set Active</button>
     </div>

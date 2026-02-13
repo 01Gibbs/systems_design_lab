@@ -48,7 +48,9 @@ describe('ScenarioCard', () => {
   });
 
   it('renders parameter inputs for scenario with parameters', () => {
-    const { container } = render(<ScenarioCard scenario={scenarioWithParams} onEnable={() => {}} />);
+    const { container } = render(
+      <ScenarioCard scenario={scenarioWithParams} onEnable={() => {}} />
+    );
     expect(screen.getByText('Parameters')).toBeInTheDocument();
     expect(screen.getByText('probability')).toBeInTheDocument();
     expect(screen.getByText('duration_ms')).toBeInTheDocument();
@@ -71,7 +73,9 @@ describe('ScenarioCard', () => {
   });
 
   it('handles number input changes', () => {
-    const { container } = render(<ScenarioCard scenario={scenarioWithParams} onEnable={() => {}} />);
+    const { container } = render(
+      <ScenarioCard scenario={scenarioWithParams} onEnable={() => {}} />
+    );
     const inputs = container.querySelectorAll('input[type="number"]');
     const probabilityInput = inputs[0] as HTMLInputElement; // First number input is probability
     fireEvent.change(probabilityInput, { target: { value: '0.5' } });
@@ -79,7 +83,9 @@ describe('ScenarioCard', () => {
   });
 
   it('handles integer input changes', () => {
-    const { container } = render(<ScenarioCard scenario={scenarioWithParams} onEnable={() => {}} />);
+    const { container } = render(
+      <ScenarioCard scenario={scenarioWithParams} onEnable={() => {}} />
+    );
     const inputs = container.querySelectorAll('input[type="number"]');
     const durationInput = inputs[1] as HTMLInputElement; // Second number input is duration_ms
     fireEvent.change(durationInput, { target: { value: '1000' } });
@@ -149,7 +155,9 @@ describe('ScenarioCard', () => {
   });
 
   it('clears parameters after successful enable', async () => {
-    const { container } = render(<ScenarioCard scenario={scenarioWithParams} onEnable={() => {}} />);
+    const { container } = render(
+      <ScenarioCard scenario={scenarioWithParams} onEnable={() => {}} />
+    );
 
     // Fill in a parameter
     const inputs = container.querySelectorAll('input[type="number"]');

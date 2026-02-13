@@ -5,12 +5,20 @@ import { http, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
 
 const server = setupServer(
-  http.get('http://localhost:8000/api/sim/scenarios', () => 
-    HttpResponse.json({ scenarios: [{ name: 'test', description: 'Test', parameter_schema: {}, safety_limits: {}, targets: ['http'] }] })
+  http.get('http://localhost:8000/api/sim/scenarios', () =>
+    HttpResponse.json({
+      scenarios: [
+        {
+          name: 'test',
+          description: 'Test',
+          parameter_schema: {},
+          safety_limits: {},
+          targets: ['http'],
+        },
+      ],
+    })
   ),
-  http.get('http://localhost:8000/api/sim/status', () => 
-    HttpResponse.json({ active: [] })
-  )
+  http.get('http://localhost:8000/api/sim/status', () => HttpResponse.json({ active: [] }))
 );
 
 beforeAll(() => server.listen());
@@ -32,8 +40,8 @@ describe('SimulatorControlPanel', () => {
 
   it('shows error state on API failure', async () => {
     server.use(
-      http.get('http://localhost:8000/api/sim/scenarios', () => 
-        HttpResponse.json({ error: 'Failed' }, {status: 500 })
+      http.get('http://localhost:8000/api/sim/scenarios', () =>
+        HttpResponse.json({ error: 'Failed' }, { status: 500 })
       )
     );
 
@@ -45,15 +53,19 @@ describe('SimulatorControlPanel', () => {
 
   it('calls onStatusChange with active scenario count', async () => {
     const onStatusChange = vi.fn();
-    
+
     server.use(
-      http.get('http://localhost:8000/api/sim/status', () => 
-        HttpResponse.json({ active: [{ name: 'scenario1', enabled: true, probability: 1.0, until: Date.now() + 100000 }] })
+      http.get('http://localhost:8000/api/sim/status', () =>
+        HttpResponse.json({
+          active: [
+            { name: 'scenario1', enabled: true, probability: 1.0, until: Date.now() + 100000 },
+          ],
+        })
       )
     );
 
     render(<SimulatorControlPanel onStatusChange={onStatusChange} />);
-    
+
     await waitFor(() => {
       expect(onStatusChange).toHaveBeenCalledWith(1);
     });
@@ -72,7 +84,7 @@ describe('SimulatorControlPanel', () => {
     );
 
     render(<SimulatorControlPanel onStatusChange={() => {}} />);
-    
+
     await waitFor(() => {
       expect(screen.getByText(/error/i)).toBeInTheDocument();
     });
