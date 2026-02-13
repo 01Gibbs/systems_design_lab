@@ -113,7 +113,7 @@ describe('SimulatorControlPanel', () => {
   it('calls handleResetAll and reloads data', async () => {
     const onStatusChange = vi.fn();
     let resetCalled = false;
-    
+
     server.use(
       http.post('http://localhost:8000/api/sim/reset', () => {
         resetCalled = true;
@@ -122,7 +122,7 @@ describe('SimulatorControlPanel', () => {
     );
 
     render(<SimulatorControlPanel onStatusChange={onStatusChange} />);
-    
+
     await waitFor(() => {
       expect(screen.getByText('test')).toBeInTheDocument();
     });
@@ -140,28 +140,30 @@ describe('SimulatorControlPanel', () => {
     const onStatusChange = vi.fn();
     let disableCalled = false;
     let disabledScenario = '';
-    
+
     server.use(
-      http.get('http://localhost:8000/api/sim/status', () => 
+      http.get('http://localhost:8000/api/sim/status', () =>
         HttpResponse.json({
-          active: [{
-            name: 'test_scenario',
-            enabled_at: new Date().toISOString(),
-            expires_at: null,
-            parameters: {}
-          }]
+          active: [
+            {
+              name: 'test_scenario',
+              enabled_at: new Date().toISOString(),
+              expires_at: null,
+              parameters: {},
+            },
+          ],
         })
       ),
       http.post('http://localhost:8000/api/sim/disable', async ({ request }) => {
         disableCalled = true;
-        const body = await request.json() as { name: string };
+        const body = (await request.json()) as { name: string };
         disabledScenario = body.name;
         return HttpResponse.json({ success: true });
       })
     );
 
     render(<SimulatorControlPanel onStatusChange={onStatusChange} />);
-    
+
     await waitFor(() => {
       expect(screen.getByText('🔴 Active Scenarios (1)')).toBeInTheDocument();
     });
@@ -178,7 +180,7 @@ describe('SimulatorControlPanel', () => {
   it('calls handleEnable when scenario is enabled', async () => {
     const onStatusChange = vi.fn();
     let enableCalled = false;
-    
+
     server.use(
       http.post('http://localhost:8000/api/sim/enable', () => {
         enableCalled = true;
@@ -187,7 +189,7 @@ describe('SimulatorControlPanel', () => {
     );
 
     render(<SimulatorControlPanel onStatusChange={onStatusChange} />);
-    
+
     await waitFor(() => {
       expect(screen.getByText('test')).toBeInTheDocument();
     });
@@ -208,7 +210,7 @@ describe('SimulatorControlPanel', () => {
     );
 
     render(<SimulatorControlPanel onStatusChange={() => {}} />);
-    
+
     await waitFor(() => {
       expect(screen.getByText('test')).toBeInTheDocument();
     });
@@ -224,14 +226,16 @@ describe('SimulatorControlPanel', () => {
 
   it('handles API failures in disable gracefully', async () => {
     server.use(
-      http.get('http://localhost:8000/api/sim/status', () => 
+      http.get('http://localhost:8000/api/sim/status', () =>
         HttpResponse.json({
-          active: [{
-            name: 'test_scenario',
-            enabled_at: new Date().toISOString(),
-            expires_at: null,
-            parameters: {}
-          }]
+          active: [
+            {
+              name: 'test_scenario',
+              enabled_at: new Date().toISOString(),
+              expires_at: null,
+              parameters: {},
+            },
+          ],
         })
       ),
       http.post('http://localhost:8000/api/sim/disable', () =>
@@ -240,7 +244,7 @@ describe('SimulatorControlPanel', () => {
     );
 
     render(<SimulatorControlPanel onStatusChange={() => {}} />);
-    
+
     await waitFor(() => {
       expect(screen.getByText('🔴 Active Scenarios (1)')).toBeInTheDocument();
     });
@@ -257,13 +261,11 @@ describe('SimulatorControlPanel', () => {
   it('tests handleEnable function directly via scenario card enable', async () => {
     const onStatusChange = vi.fn();
     server.use(
-      http.post('http://localhost:8000/api/sim/enable', () =>
-        HttpResponse.json({ success: true })
-      )
+      http.post('http://localhost:8000/api/sim/enable', () => HttpResponse.json({ success: true }))
     );
 
     render(<SimulatorControlPanel onStatusChange={onStatusChange} />);
-    
+
     await waitFor(() => {
       expect(screen.getByText('test')).toBeInTheDocument();
     });
@@ -281,7 +283,7 @@ describe('SimulatorControlPanel', () => {
     vi.useFakeTimers();
     const onStatusChange = vi.fn();
     let pollCount = 0;
-    
+
     server.use(
       http.get('http://localhost:8000/api/sim/status', () => {
         pollCount++;
@@ -293,30 +295,30 @@ describe('SimulatorControlPanel', () => {
     );
 
     render(<SimulatorControlPanel onStatusChange={onStatusChange} />);
-    
+
     await waitFor(() => {
       expect(screen.getByText('test')).toBeInTheDocument();
     });
 
     // Fast forward to trigger polling
     vi.advanceTimersByTime(4000);
-    
+
     // Should continue to work despite polling failures
     expect(onStatusChange).toHaveBeenCalled();
-    
+
     vi.useRealTimers();
   });
 
   it('cleans up interval on unmount', () => {
     vi.useFakeTimers();
     const clearIntervalSpy = vi.spyOn(global, 'clearInterval');
-    
+
     const { unmount } = render(<SimulatorControlPanel onStatusChange={() => {}} />);
-    
+
     unmount();
-    
+
     expect(clearIntervalSpy).toHaveBeenCalled();
-    
+
     vi.useRealTimers();
     clearIntervalSpy.mockRestore();
   });

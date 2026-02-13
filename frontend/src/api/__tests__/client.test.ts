@@ -1,6 +1,6 @@
 /**
  * API Client Tests - Comprehensive function coverage
- * 
+ *
  * Tests all API client functions including environment detection,
  * error handling, and API methods to boost function coverage.
  */
@@ -27,14 +27,14 @@ describe('API Client', () => {
     it('should use process.env.VITE_API_URL in Node environment', async () => {
       // Set Node environment variable
       process.env.VITE_API_URL = 'http://test-node.com';
-      
+
       mockFetch.mockResolvedValueOnce({
         ok: true,
         text: () => Promise.resolve('{"scenarios":[]}'),
       });
 
       await simApi.scenarios();
-      
+
       expect(mockFetch).toHaveBeenCalledWith(
         'http://test-node.com/api/sim/scenarios',
         expect.any(Object)
@@ -48,7 +48,7 @@ describe('API Client', () => {
       });
 
       await simApi.scenarios();
-      
+
       expect(mockFetch).toHaveBeenCalledWith(
         'http://localhost:8000/api/sim/scenarios',
         expect.any(Object)
@@ -59,9 +59,9 @@ describe('API Client', () => {
       // Mock browser environment
       Object.defineProperty(global, 'window', {
         value: {},
-        configurable: true
+        configurable: true,
       });
-      
+
       // Mock the Function constructor to return a fake vite URL
       const originalFunction = global.Function;
       global.Function = vi.fn().mockImplementation(() => {
@@ -74,12 +74,12 @@ describe('API Client', () => {
       });
 
       await simApi.scenarios();
-      
+
       expect(mockFetch).toHaveBeenCalledWith(
         'http://vite-test.com/api/sim/scenarios',
         expect.any(Object)
       );
-      
+
       // Restore
       global.Function = originalFunction;
       delete global.window;
@@ -98,7 +98,7 @@ describe('API Client', () => {
       });
 
       await simApi.scenarios();
-      
+
       // Should fallback to default localhost
       expect(mockFetch).toHaveBeenCalledWith(
         'http://localhost:8000/api/sim/scenarios',
@@ -118,7 +118,7 @@ describe('API Client', () => {
       });
 
       const result = await simApi.scenarios();
-      
+
       expect(result).toEqual({ ok: true, data: mockData });
     });
 
@@ -129,7 +129,7 @@ describe('API Client', () => {
       });
 
       const result = await simApi.scenarios();
-      
+
       expect(result).toEqual({ ok: true, data: null });
     });
 
@@ -142,7 +142,7 @@ describe('API Client', () => {
       });
 
       const result = await simApi.scenarios();
-      
+
       expect(result).toEqual({ ok: false, status: 404, error: errorBody });
     });
 
@@ -151,7 +151,7 @@ describe('API Client', () => {
       mockFetch.mockRejectedValueOnce(networkError);
 
       const result = await simApi.scenarios();
-      
+
       expect(result).toEqual({ ok: false, status: 0, error: networkError });
     });
 
@@ -160,7 +160,7 @@ describe('API Client', () => {
       mockFetch.mockRejectedValueOnce(weirdError);
 
       const result = await simApi.scenarios();
-      
+
       expect(result.ok).toBe(false);
       if (!result.ok) {
         expect(result.status).toBe(0);
@@ -175,7 +175,7 @@ describe('API Client', () => {
       });
 
       const result = await simApi.scenarios();
-      
+
       expect(result.ok).toBe(false);
       if (!result.ok) {
         expect(result.status).toBe(0);
@@ -191,8 +191,8 @@ describe('API Client', () => {
       });
 
       const result = await simApi.scenarios();
-      
-      expect(result.ok).toBe(false);  
+
+      expect(result.ok).toBe(false);
       if (!result.ok) {
         expect(result.status).toBe(0);
         expect(result.error).toBeInstanceOf(SyntaxError);
@@ -210,7 +210,7 @@ describe('API Client', () => {
 
     it('should call scenarios endpoint', async () => {
       await simApi.scenarios();
-      
+
       expect(mockFetch).toHaveBeenCalledWith(
         'http://localhost:8000/api/sim/scenarios',
         expect.objectContaining({
@@ -223,7 +223,7 @@ describe('API Client', () => {
 
     it('should call status endpoint', async () => {
       await simApi.status();
-      
+
       expect(mockFetch).toHaveBeenCalledWith(
         'http://localhost:8000/api/sim/status',
         expect.objectContaining({
@@ -237,7 +237,7 @@ describe('API Client', () => {
     it('should call enable endpoint with parameters', async () => {
       const params = { delay: 100 };
       await simApi.enable('test-scenario', params, 60);
-      
+
       expect(mockFetch).toHaveBeenCalledWith(
         'http://localhost:8000/api/sim/enable',
         expect.objectContaining({
@@ -257,7 +257,7 @@ describe('API Client', () => {
     it('should call enable endpoint without duration', async () => {
       const params = { delay: 100 };
       await simApi.enable('test-scenario', params);
-      
+
       expect(mockFetch).toHaveBeenCalledWith(
         'http://localhost:8000/api/sim/enable',
         expect.objectContaining({
@@ -273,7 +273,7 @@ describe('API Client', () => {
 
     it('should call disable endpoint', async () => {
       await simApi.disable('test-scenario');
-      
+
       expect(mockFetch).toHaveBeenCalledWith(
         'http://localhost:8000/api/sim/disable',
         expect.objectContaining({
@@ -288,7 +288,7 @@ describe('API Client', () => {
 
     it('should call reset endpoint', async () => {
       await simApi.reset();
-      
+
       expect(mockFetch).toHaveBeenCalledWith(
         'http://localhost:8000/api/sim/reset',
         expect.objectContaining({
@@ -310,7 +310,7 @@ describe('API Client', () => {
 
       // Test internal request function via simApi
       await simApi.scenarios();
-      
+
       expect(mockFetch).toHaveBeenCalledWith(
         expect.any(String),
         expect.objectContaining({
