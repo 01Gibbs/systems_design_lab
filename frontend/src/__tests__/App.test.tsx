@@ -38,15 +38,15 @@ describe('App', () => {
   it('updates activeCount when SimulatorControlPanel changes status', () => {
     const { getByText, getByTestId } = render(<App />);
     const setActiveButton = getByText('Set Active');
-    
+
     // Initially activeCount should be 0
     expect(getByTestId('global-banner')).toHaveTextContent('Active: 0');
-    
+
     // Click button to trigger onStatusChange
     act(() => {
       setActiveButton.click();
     });
-    
+
     // activeCount should now be 3
     expect(getByTestId('global-banner')).toHaveTextContent('Active: 3');
   });

@@ -26,18 +26,10 @@ jobs:
         run: make be-install
       - name: Install frontend dependencies
         run: make fe-install
-      - name: Run guardrails
+      - name: Run all guardrails checks
         run: make guardrails
       - name: Run backend coverage
         run: make be-coverage
-      - name: Run frontend lint
-        run: make fe-lint
-      - name: Run frontend typecheck
-        run: make fe-typecheck
-      - name: Run frontend tests
-        run: make fe-test
-      - name: Run frontend coverage
-        run: make fe-coverage
 
   integration-tests:
     runs-on: ubuntu-latest
@@ -49,8 +41,14 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
       - name: Install backend dependencies
         run: pip install -r backend/requirements-dev.txt && pip install -r backend/requirements.txt
+      - name: Install frontend dependencies  
+        run: make fe-install
       - name: Start services
         run: docker compose up -d --build backend postgres
       - name: Wait for services to be ready
@@ -67,8 +65,22 @@ jobs:
           echo "Backend failed to start"
           docker compose logs
           exit 1
-      - name: Run integration tests
+      - name: Run backend integration tests
         run: make be-test-integration
+      - name: Start frontend for E2E tests
+        run: |
+          cd frontend && npm run build && npm run preview &
+          echo "Waiting for frontend to be ready..."
+          for i in {1..15}; do
+            if curl -f http://localhost:4173 2>/dev/null; then
+              echo "Frontend is ready!"
+              exit 0
+            fi
+            echo "Attempt $i: Frontend not ready, waiting..."
+            sleep 2
+          done
+      - name: Run E2E tests
+        run: make fe-test-e2e
       - name: Cleanup
         if: always()
         run: docker compose down -v

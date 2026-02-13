@@ -115,7 +115,7 @@ describe('ScenarioCard', () => {
     render(<ScenarioCard scenario={basicScenario} onEnable={() => {}} />);
     const enableBtn = screen.getByRole('button', { name: /enable/i });
     fireEvent.click(enableBtn);
-    
+
     await waitFor(() => {
       expect(screen.getByText(/Failed to enable scenario/i)).toBeInTheDocument();
     });
@@ -123,11 +123,11 @@ describe('ScenarioCard', () => {
 
   it('shows validation error for invalid input', async () => {
     render(<ScenarioCard scenario={scenarioWithParams} onEnable={() => {}} />);
-    
+
     // Leave required field empty and click enable
     const enableBtn = screen.getByRole('button', { name: /enable/i });
     fireEvent.click(enableBtn);
-    
+
     // Should show validation error (Zod error message for missing required field)
     await waitFor(() => {
       const errorDiv = screen.getByText(/required|invalid|expected/i);
@@ -138,9 +138,9 @@ describe('ScenarioCard', () => {
   it('disables button while loading', async () => {
     render(<ScenarioCard scenario={basicScenario} onEnable={() => {}} />);
     const enableBtn = screen.getByRole('button', { name: /enable/i });
-    
+
     fireEvent.click(enableBtn);
-    
+
     // Button should show "Enabling..." and be disabled
     await waitFor(() => {
       const loadingBtn = screen.getByRole('button', { name: /enabling/i });
@@ -150,17 +150,17 @@ describe('ScenarioCard', () => {
 
   it('clears parameters after successful enable', async () => {
     const { container } = render(<ScenarioCard scenario={scenarioWithParams} onEnable={() => {}} />);
-    
+
     // Fill in a parameter
     const inputs = container.querySelectorAll('input[type="number"]');
     const probabilityInput = inputs[0] as HTMLInputElement;
     fireEvent.change(probabilityInput, { target: { value: '0.8' } });
     expect(probabilityInput.value).toBe('0.8');
-    
+
     // Enable scenario
     const enableBtn = screen.getByRole('button', { name: /enable/i });
     fireEvent.click(enableBtn);
-    
+
     // Parameters should be cleared
     await waitFor(() => {
       expect(probabilityInput.value).toBe('');
