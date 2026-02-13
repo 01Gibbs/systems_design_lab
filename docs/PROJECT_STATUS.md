@@ -135,7 +135,46 @@ backend/tests/
 
 ---
 
-## ⏳ Phase 5: Observability (FUTURE)
+## ✅ Phase 5: Observability (COMPLETE)
+
+### Implementation
+
+- ✅ Prometheus metrics collection with auto-instrumented HTTP metrics
+- ✅ Grafana dashboards (System Metrics + Simulator Scenarios)
+- ✅ Loki log aggregation with structured JSON logs
+- ✅ Tempo distributed tracing with OpenTelemetry
+- ✅ Promtail log shipping from Docker containers
+- ✅ Clean Architecture compliant (MetricsPort interface + PrometheusMetrics adapter)
+- ✅ Simulator metrics integration (active scenarios, injection tracking)
+- ✅ Request correlation (request_id + trace_id + span_id)
+- ✅ Makefile commands: `grafana`, `prometheus`, `logs-obs`, `metrics`
+- ✅ Complete documentation in [OBSERVABILITY.md](OBSERVABILITY.md)
+
+### Stack
+
+- **Prometheus** - Metrics scraping from `/api/metrics` endpoint
+- **Grafana** - Pre-provisioned dashboards + datasources
+- **Loki** - Log aggregation with 7-day retention
+- **Tempo** - Trace storage with 48-hour retention
+- **Promtail** - Docker log shipping
+
+### Metrics Available
+
+- `http_requests_total` - HTTP request counter by method/endpoint/status
+- `http_request_duration_seconds` - Request latency histogram
+- `simulator_scenarios_enabled` - Active scenarios (gauge)
+- `simulator_scenarios_active_total` - Scenario activation counter
+- `simulator_injections_total` - Effect injection counter by scenario/type
+- `simulator_effect_duration_seconds` - Effect application time
+
+### Dashboards
+
+1. **System Metrics** - HTTP metrics, error rates, application logs
+2. **Simulator Scenarios** - Active scenarios, injection rates, effect durations
+
+---
+
+## ⏳ Phase 6: Scenario Expansion (PENDING)
 
 ### Goals
 
@@ -161,11 +200,11 @@ backend/tests/
 | Simulator Scenarios  | 5/50     | 🔄 10%         |
 | Frontend             | 1/1      | ✅ Complete    |
 | CI/CD Enforcement    | 1/1      | ✅ Complete    |
-| Backend Unit Tests   | 41       | ✅ 92.64% cov  |
+| Backend Unit Tests   | 41+      | ✅ 92%+ cov    |
 | Frontend Tests       | 14       | ✅ Passing     |
 | E2E Tests            | 3        | ✅ Passing     |
 | Integration Tests    | 0/∞      | ⏳ Not Started |
-| Observability        | 0/4      | ⏳ Not Started |
+| Observability        | 4/4      | ✅ Complete    |
 
 ---
 
@@ -175,7 +214,7 @@ backend/tests/
 2. **Template Scenario**: No template file - use existing scenarios as reference
 3. **Redis Adapter**: InMemorySimulatorStore works but Redis adapter pending for production
 4. **Integration Tests**: Need testcontainers + real Postgres integration tests
-5. **Pre-commit Stage Names**: Deprecated warnings (run `pre-commit migrate-config` if not done)
+5. **Observability Alerting**: No alerting rules configured yet (Grafana supports this)
 
 ---
 
@@ -186,16 +225,17 @@ backend/tests/
    - Retry storms, rate limiting
    - Connection pool exhaustion, deadlocks
    - Cache stampede, stale data
+   - **Now easier to debug with observability dashboards!**
 
 2. **Integration Testing** (Infrastructure):
    - Add testcontainers setup
    - Real Postgres integration tests
    - Increase test coverage for edge cases
 
-3. **Observability** (Future):
-   - Prometheus metrics export
-   - Grafana dashboards
-   - OpenTelemetry instrumentation
+3. **Observability Enhancements** (Polish):
+   - Grafana alert rules (e.g., p95 > 1s for 5 min)
+   - Custom dashboards for specific scenarios
+   - Trace sampling for high-volume scenarios
 
 ---
 
@@ -209,7 +249,7 @@ This lab enables hands-on practice with:
 - Resilient frontend patterns
 - Systems design failure modes
 - Test pyramid (unit → integration → E2E)
-- Observability patterns (future)
+- Production observability patterns (metrics, logs, traces)
 
 ---
 
@@ -218,4 +258,6 @@ This lab enables hands-on practice with:
 - All guardrails are enforced via `make guardrails`
 - Domain layer is pure - no framework imports
 - Simulator scenarios are effect-based - no side effects in scenario code
-- Frontend will validate entire stack works end-to-end
+- Frontend validates entire stack works end-to-end
+- Observability stack respects Clean Architecture (MetricsPort interface)
+- Grafana dashboards auto-reload on file change

@@ -7,7 +7,7 @@ reset-root:
 	@cd "$(CURDIR)"
 	@cd "$(shell git rev-parse --show-toplevel 2>/dev/null || echo $(CURDIR))"
 	@echo "$(YELLOW)Reset to project root: $$(pwd)$(NC)"
- .PHONY: help up down reset logs status \
+ .PHONY: help up down reset logs status grafana prometheus logs-obs metrics \
         be-install be-format be-format-check be-lint be-typecheck be-test be-test-unit be-test-integration be-coverage \
         be-docker-test be-docker-format be-docker-lint be-docker-typecheck be-docker-all \
         fe-install fe-format fe-format-check be-lint fe-typecheck fe-test-e2e \
@@ -66,6 +66,33 @@ logs: ## Tail logs from all services
 
 status: ## Check system status and health
 	@bash scripts/status.sh
+
+##@ Observability
+
+grafana: ## Open Grafana dashboards in browser
+	@echo "$(BLUE)Opening Grafana...$(NC)"
+	@echo "$(YELLOW)URL: http://localhost:3000$(NC)"
+	@echo "$(YELLOW)Login: admin / admin$(NC)"
+	@command -v xdg-open > /dev/null && xdg-open "http://localhost:3000" || \
+	 command -v open > /dev/null && open "http://localhost:3000" || \
+	 command -v start > /dev/null && start "http://localhost:3000" || \
+	 echo "$(YELLOW)Please open http://localhost:3000 manually$(NC)"
+
+prometheus: ## Open Prometheus UI in browser
+	@echo "$(BLUE)Opening Prometheus...$(NC)"
+	@echo "$(YELLOW)URL: http://localhost:9090$(NC)"
+	@command -v xdg-open > /dev/null && xdg-open "http://localhost:9090" || \
+	 command -v open > /dev/null && open "http://localhost:9090" || \
+	 command -v start > /dev/null && start "http://localhost:9090" || \
+	 echo "$(YELLOW)Please open http://localhost:9090 manually$(NC)"
+
+logs-obs: ## Tail observability stack logs
+	@echo "$(BLUE)Tailing observability logs...$(NC)"
+	docker-compose logs -f prometheus grafana loki tempo promtail
+
+metrics: ## Check backend metrics endpoint
+	@echo "$(BLUE)Fetching backend metrics...$(NC)"
+	@curl -s http://localhost:8000/api/metrics | head -n 50 || echo "$(RED)Backend not available$(NC)"
 
 ##@ Backend Development (Host-based)
 

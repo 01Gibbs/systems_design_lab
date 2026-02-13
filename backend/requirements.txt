@@ -4,3 +4,24 @@ pydantic>=2.8.2
 sqlalchemy>=2.0.32
 psycopg[binary]>=3.2.1
 python-multipart>=0.0.6
+
+# Observability - Metrics
+prometheus-client==0.20.0
+
+# Observability - Structured Logging
+python-json-logger==2.0.7
+
+# Observability - OpenTelemetry Core
+opentelemetry-api==1.23.0
+opentelemetry-sdk==1.23.0
+opentelemetry-instrumentation==0.44b0
+
+# Observability - OpenTelemetry Instrumentation
+opentelemetry-instrumentation-fastapi==0.44b0
+opentelemetry-instrumentation-asyncio==0.44b0
+opentelemetry-instrumentation-logging==0.44b0
+opentelemetry-instrumentation-sqlalchemy==0.44b0
+
+# Observability - OpenTelemetry Exporters
+opentelemetry-exporter-otlp-proto-grpc==1.23.0
+opentelemetry-exporter-prometheus==0.44b0

@@ -5,6 +5,7 @@ from __future__ import annotations
 from datetime import timedelta
 
 from app.application.ports.clock import Clock
+from app.application.ports.metrics import MetricsPort
 from app.application.ports.simulator_store import SimulatorStore
 from app.application.simulator.app_models import (
     ActiveScenarioApp,
@@ -23,13 +24,21 @@ class SimulatorService:
     """
     Application service for simulator operations.
 
-    Orchestrates between registry, store, and clock (all injected).
+    Orchestrates between registry, store, clock, and metrics (all injected).
     """
 
-    def __init__(self, *, store: SimulatorStore, clock: Clock, registry: ScenarioRegistry) -> None:
+    def __init__(
+        self,
+        *,
+        store: SimulatorStore,
+        clock: Clock,
+        registry: ScenarioRegistry,
+        metrics: MetricsPort | None = None,
+    ) -> None:
         self._store = store
         self._clock = clock
         self._registry = registry
+        self._metrics = metrics
 
     def list_scenarios(self) -> ScenariosResponseApp:
         """List all available scenarios"""
@@ -92,11 +101,23 @@ class SimulatorService:
             )
         )
 
+        # Emit metrics
+        if self._metrics:
+            self._metrics.increment_counter(
+                "simulator_scenarios_active", {"scenario_name": req.name}
+            )
+            self._metrics.set_gauge("simulator_scenarios_enabled", 1.0, {"scenario_name": req.name})
+
         return self.status()
 
     def disable(self, req: DisableScenarioRequestApp) -> StatusResponseApp:
         """Disable a scenario"""
         self._store.remove(req.name)
+
+        # Emit metrics
+        if self._metrics:
+            self._metrics.set_gauge("simulator_scenarios_enabled", 0.0, {"scenario_name": req.name})
+
         return self.status()
 
     def reset(self) -> StatusResponseApp:

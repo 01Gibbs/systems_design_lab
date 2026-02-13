@@ -44,4 +44,5 @@ class FixedLatency:
             "http_delay_ms": int(ms) if isinstance(ms, (int, str)) else 0,
             "http_path_prefix": str(parameters.get("path_prefix", "")),
             "http_method": str(parameters.get("method", "")).upper(),
+            "scenario_name": self.meta.name,
         }
