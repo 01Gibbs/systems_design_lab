@@ -14,7 +14,7 @@ reset-root:
         guardrails arch-check contracts-check contracts-accept
 
 ##@ Automated Cleanup
-autoclean: contracts-bootstrap guardrails
+autoclean: contracts-bootstrap
 	@echo "$(YELLOW)Running workspace cleanup...$(NC)"
 	# Remove Python __pycache__ folders
 	find . -type d -name "__pycache__" -exec rm -rf {} +
@@ -171,7 +171,7 @@ be-docker-all: ## Run all checks in Docker container
 
 ##@ Frontend Development
 
-fe-install: autoclean ## Install frontend dependencies
+fe-install: ## Install frontend dependencies
 	@echo "$(BLUE)Installing frontend dependencies...$(NC)"
 	cd frontend && npm install
 	@echo "$(GREEN)✓ Frontend dependencies installed$(NC)"
