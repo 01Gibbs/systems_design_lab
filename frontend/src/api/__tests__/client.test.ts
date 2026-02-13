@@ -6,7 +6,7 @@
  */
 
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { simApi } from '../api/client';
+import { simApi } from '../client';
 
 // Mock fetch globally
 const mockFetch = vi.fn();
@@ -134,8 +134,10 @@ describe('API Client', () => {
       const result = await simApi.scenarios();
       
       expect(result.ok).toBe(false);
-      expect(result.status).toBe(0);
-      expect(result.error).toBeInstanceOf(SyntaxError);
+      if (!result.ok) {
+        expect(result.status).toBe(0);
+        expect(result.error).toBeInstanceOf(SyntaxError);
+      }
     });
 
     it('should handle JSON parse errors in error responses', async () => {
@@ -147,9 +149,11 @@ describe('API Client', () => {
 
       const result = await simApi.scenarios();
       
-      expect(result.ok).toBe(false);
-      expect(result.status).toBe(0);
-      expect(result.error).toBeInstanceOf(SyntaxError);
+      expect(result.ok).toBe(false);  
+      if (!result.ok) {
+        expect(result.status).toBe(0);
+        expect(result.error).toBeInstanceOf(SyntaxError);
+      }
     });
   });
 

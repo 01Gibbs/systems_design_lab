@@ -96,4 +96,173 @@ describe('SimulatorControlPanel', () => {
       expect(screen.queryByText(/error/i)).not.toBeInTheDocument();
     });
   });
+
+  it('handles status API failure during initial load', async () => {
+    server.use(
+      http.get('http://localhost:8000/api/sim/status', () =>
+        HttpResponse.json({ error: 'Status failed' }, { status: 500 })
+      )
+    );
+
+    render(<SimulatorControlPanel onStatusChange={() => {}} />);
+    await waitFor(() => {
+      expect(screen.getByText(/failed to load status/i)).toBeInTheDocument();
+    });
+  });
+
+  it('calls handleResetAll and reloads data', async () => {
+    const onStatusChange = vi.fn();
+    let resetCalled = false;
+    
+    server.use(
+      http.post('http://localhost:8000/api/sim/reset', () => {
+        resetCalled = true;
+        return HttpResponse.json({ success: true });
+      })
+    );
+
+    render(<SimulatorControlPanel onStatusChange={onStatusChange} />);
+    
+    await waitFor(() => {
+      expect(screen.getByText('test')).toBeInTheDocument();
+    });
+
+    // Find and click reset all button via ActiveScenarios component
+    const resetButton = screen.getByText('Reset All');
+    fireEvent.click(resetButton);
+
+    await waitFor(() => {
+      expect(resetCalled).toBe(true);
+    });
+  });
+
+  it('calls handleDisable and reloads data', async () => {
+    const onStatusChange = vi.fn();
+    let disableCalled = false;
+    let disabledScenario = '';
+    
+    server.use(
+      http.get('http://localhost:8000/api/sim/status', () => 
+        HttpResponse.json({
+          active: [{
+            name: 'test_scenario',
+            enabled_at: new Date().toISOString(),
+            expires_at: null,
+            parameters: {}
+          }]
+        })
+      ),
+      http.post('http://localhost:8000/api/sim/disable', async ({ request }) => {
+        disableCalled = true;
+        const body = await request.json() as { name: string };
+        disabledScenario = body.name;
+        return HttpResponse.json({ success: true });
+      })
+    );
+
+    render(<SimulatorControlPanel onStatusChange={onStatusChange} />);
+    
+    await waitFor(() => {
+      expect(screen.getByText('🔴 Active Scenarios (1)')).toBeInTheDocument();
+    });
+
+    const disableButton = screen.getByLabelText('Disable test_scenario');
+    fireEvent.click(disableButton);
+
+    await waitFor(() => {
+      expect(disableCalled).toBe(true);
+      expect(disabledScenario).toBe('test_scenario');
+    });
+  });
+
+  it('calls handleEnable when scenario is enabled', async () => {
+    const onStatusChange = vi.fn();
+    let enableCalled = false;
+    
+    server.use(
+      http.post('http://localhost:8000/api/sim/enable', () => {
+        enableCalled = true;
+        return HttpResponse.json({ success: true });
+      })
+    );
+
+    render(<SimulatorControlPanel onStatusChange={onStatusChange} />);
+    
+    await waitFor(() => {
+      expect(screen.getByText('test')).toBeInTheDocument();
+    });
+
+    const enableButton = screen.getByRole('button', { name: /enable/i });
+    fireEvent.click(enableButton);
+
+    await waitFor(() => {
+      expect(enableCalled).toBe(true);
+    });
+  });
+
+  it('handles API failures in reset gracefully', async () => {
+    server.use(
+      http.post('http://localhost:8000/api/sim/reset', () =>
+        HttpResponse.json({ error: 'Reset failed' }, { status: 500 })
+      )
+    );
+
+    render(<SimulatorControlPanel onStatusChange={() => {}} />);
+    
+    await waitFor(() => {
+      expect(screen.getByText('test')).toBeInTheDocument();
+    });
+
+    const resetButton = screen.getByText('Reset All');
+    fireEvent.click(resetButton);
+
+    // Should not crash or throw error
+    await waitFor(() => {
+      expect(screen.getByText('test')).toBeInTheDocument();
+    });
+  });
+
+  it('handles status polling failures gracefully', async () => {
+    vi.useFakeTimers();
+    const onStatusChange = vi.fn();
+    let pollCount = 0;
+    
+    server.use(
+      http.get('http://localhost:8000/api/sim/status', () => {
+        pollCount++;
+        if (pollCount > 2) {
+          return HttpResponse.json({ error: 'Poll failed' }, { status: 500 });
+        }
+        return HttpResponse.json({ active: [] });
+      })
+    );
+
+    render(<SimulatorControlPanel onStatusChange={onStatusChange} />);
+    
+    await waitFor(() => {
+      expect(screen.getByText('test')).toBeInTheDocument();
+    });
+
+    // Fast forward to trigger polling
+    vi.advanceTimersByTime(4000);
+    
+    // Should continue to work despite polling failures
+    expect(onStatusChange).toHaveBeenCalled();
+    
+    vi.useRealTimers();
+  });
+
+  it('cleans up interval on unmount', () => {
+    vi.useFakeTimers();
+    const clearIntervalSpy = vi.spyOn(global, 'clearInterval');
+    
+    const { unmount } = render(<SimulatorControlPanel onStatusChange={() => {}} />);
+    
+    unmount();
+    
+    expect(clearIntervalSpy).toHaveBeenCalled();
+    
+    vi.useRealTimers();
+    clearIntervalSpy.mockRestore();
+  });
 });
