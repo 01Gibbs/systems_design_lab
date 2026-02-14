@@ -358,3 +358,4 @@ This lab enables hands-on practice with:
 - Frontend validates entire stack works end-to-end
 - Observability stack respects Clean Architecture (MetricsPort interface)
 - Grafana dashboards auto-reload on file change
+d
