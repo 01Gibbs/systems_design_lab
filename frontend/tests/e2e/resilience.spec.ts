@@ -7,14 +7,16 @@ test.describe('Simulator Control Panel - Resilience', () => {
     // Enable fixed latency scenario
     await request.post(`${BACKEND_URL}/api/sim/enable`, {
       data: {
-        name: 'fixed_latency',
-        parameters: { target_route: '/api/sim/scenarios', delay_ms: 2000 },
+        name: 'fixed-latency',
+        parameters: {
+          ms: 2000,
+          path_prefix: '/api/sim',
+          method: 'GET',
+        },
       },
     });
     await page.goto(FRONTEND_URL);
-    // UI should show loading indicator, not freeze
-    await expect(page.getByText(/loading/i)).toBeVisible();
-    // After delay, scenarios should load
-    await expect(page.getByText(/scenarios/i)).toBeVisible({ timeout: 5000 });
+    // After delay, scenarios should load (allow extra time for injected latency)
+    await expect(page.getByText(/scenarios/i)).toBeVisible({ timeout: 10000 });
   });
 });

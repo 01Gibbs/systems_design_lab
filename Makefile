@@ -14,12 +14,16 @@ reset-root:
         guardrails arch-check contracts-check contracts-accept
 
 ##@ Automated Cleanup
-autoclean: contracts-bootstrap guardrails
+autoclean: contracts-bootstrap
 	@echo "$(YELLOW)Running workspace cleanup...$(NC)"
 	# Remove Python __pycache__ folders
 	find . -type d -name "__pycache__" -exec rm -rf {} +
 	# Remove backend and frontend test artefacts
 	 rm -rf frontend/playwright-report frontend/test-results
+	# Remove coverage and test result files
+	rm -f coverage*.txt fe-test*.txt test-*.txt
+	# Remove frontend coverage output
+	rm -rf frontend/coverage
 	# Remove mypy and pytest caches at root
 	rm -rf .mypy_cache .pytest_cache
 	# Remove empty folders
@@ -167,7 +171,7 @@ be-docker-all: ## Run all checks in Docker container
 
 ##@ Frontend Development
 
-fe-install: autoclean ## Install frontend dependencies
+fe-install: ## Install frontend dependencies
 	@echo "$(BLUE)Installing frontend dependencies...$(NC)"
 	cd frontend && npm install
 	@echo "$(GREEN)✓ Frontend dependencies installed$(NC)"
@@ -208,7 +212,7 @@ fe-test-e2e: ## Run frontend E2E tests with Playwright
 
 ##@ Guardrails & Enforcement
 
-guardrails: contracts-bootstrap be-format-check be-lint be-typecheck be-test-unit arch-check contracts-check ## Run all guardrails checks
+guardrails: contracts-bootstrap be-format-check be-lint be-typecheck be-test-unit fe-format-check fe-lint fe-typecheck fe-coverage arch-check contracts-check ## Run all guardrails checks (backend + frontend)
 	@echo ""
 	@echo "$(GREEN)========================================$(NC)"
 	@echo "$(GREEN)✓ All guardrails checks passed$(NC)"

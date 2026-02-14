@@ -47,13 +47,15 @@ function getBaseUrl(): string {
   return 'http://localhost:8000';
 }
 
-const BASE_URL = getBaseUrl();
+function getApiUrl(endpoint: string): string {
+  return `${getBaseUrl()}${endpoint}`;
+}
 
 type ApiResult<T> = { ok: true; data: T } | { ok: false; status: number; error: unknown };
 
 async function request<T>(path: string, init?: RequestInit): Promise<ApiResult<T>> {
   try {
-    const res = await fetch(`${BASE_URL}${path}`, {
+    const res = await fetch(getApiUrl(path), {
       ...init,
       headers: {
         'content-type': 'application/json',

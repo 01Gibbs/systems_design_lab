@@ -38,18 +38,22 @@ export default function SimulatorControlPanel({ onStatusChange }: SimulatorContr
   };
 
   useEffect(() => {
-    loadData();
-
-    // Poll status every 2 seconds
-    const interval = setInterval(async () => {
+    let cancelled = false;
+    async function poll() {
       const statusRes = await simApi.status();
-      if (statusRes.ok) {
+      if (!cancelled && statusRes.ok) {
         setActiveScenarios(statusRes.data.active);
         onStatusChange(statusRes.data.active.length);
       }
+    }
+    loadData();
+    const interval = setInterval(() => {
+      void poll();
     }, 2000);
-
-    return () => clearInterval(interval);
+    return () => {
+      cancelled = true;
+      clearInterval(interval);
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
