@@ -307,6 +307,12 @@ Code is structured for future observability:
 
 Future additions: Prometheus, Grafana, Loki.
 
+## Branch Naming & Traceability
+
+See [BRANCH_NAMING_STANDARDS.md](docs/BRANCH_NAMING_STANDARDS.md) for mandatory branch naming conventions and traceability requirements. All new branches must reference a roadmap or scenario ID and follow the documented pattern.
+
+---
+
 ## Contributing Guidelines
 
 1. **Domain layer purity**: No framework imports in `domain/`

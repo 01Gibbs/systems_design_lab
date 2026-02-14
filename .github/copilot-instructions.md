@@ -306,6 +306,19 @@ make logs-obs     # Tail observability stack logs
 
 ## Output Rules for AI Agents
 
+## Branch Naming & Traceability (MANDATORY)
+
+- All new branches must follow the convention in [docs/BRANCH_NAMING_STANDARDS.md](../docs/BRANCH_NAMING_STANDARDS.md):
+  - `feature/{roadmap-id}-{short-description}`
+  - `fix/{roadmap-id}-{short-description}`
+  - `docs/{roadmap-id}-{short-description}`
+  - `chore/{roadmap-id}-{short-description}`
+- `{roadmap-id}` must match an entry in ROADMAP.md or SCENARIO_TRACKER.md
+- PRs and commit messages must reference the roadmap/scenario ID
+- All work must be traceable to a roadmap item
+
+---
+
 When implementing features, ALWAYS provide:
 
 1. **File/folder plan** — what files will be added/changed
