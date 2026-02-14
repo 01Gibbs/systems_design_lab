@@ -333,11 +333,13 @@ When implementing features, ALWAYS provide:
 - Before pushing, review your changes and ensure you are satisfied with them
 - All commits and pushes are blocked unless both `make guardrails` and `make be-coverage` pass (enforced by pre-commit and CI)
 - CI (GitHub Actions) will also enforce these checks on PRs and pushes
+- **Update documentation** (ROADMAP.md, SCENARIO_TRACKER.md, etc.) as part of the same commit/branch
 
 **A feature is only considered complete if:**
 
 - All checks in `make guardrails` pass
 - Test coverage threshold is met (`make be-coverage` must pass)
+- **Documentation is updated** to reflect the changes (ROADMAP.md, SCENARIO_TRACKER.md, relevant docs)
 
 **Do NOT:**
 
@@ -361,6 +363,7 @@ Before completing any task, verify:
 - [ ] Guardrails pass (`make guardrails`)
 - [ ] Test coverage threshold is met (`make be-coverage`)
 - [ ] All commits and pushes are blocked unless these checks pass (pre-commit/CI)
+- [ ] **Documentation updated** (ROADMAP.md, SCENARIO_TRACKER.md, relevant docs)
 
 ## Adding New Simulator Scenarios
 
@@ -369,9 +372,12 @@ Before completing any task, verify:
 3. **CRITICAL:** Use only valid target categories: `["http", "db", "cpu", "algorithm"]` (type-checked by `TargetCategory` literal)
 4. Register in scenario registry (`backend/src/app/application/simulator/registry.py`)
 5. Add tests validating injection + safety limits in `backend/tests/unit/`
-6. Document in scenario catalogue
-7. Update frontend control panel if new parameter types needed
+6. **Update ROADMAP.md**: Move scenario from "To Implement" to "Implemented", update progress counter (X/50, Y%)
+7. **Update SCENARIO_TRACKER.md**: Move scenario from "To Implement" to "Implemented", update progress counter, remove from priority queue if present
+8. Document in scenario catalogue (if applicable)
+9. Update frontend control panel if new parameter types needed
 
 **Template:** See existing scenarios like `fixed_latency.py` or `TEMPLATE.py` for reference
 **Pattern:** Scenarios return effect dicts, middleware applies them (no side effects in scenario code)
 **Type Safety:** `ScenarioMeta.targets` is typed as `list[TargetCategory]` - mypy will catch invalid values at type-check time
+**Documentation:** MUST update ROADMAP.md and SCENARIO_TRACKER.md in the same branch/commit as the scenario implementation

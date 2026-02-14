@@ -26,7 +26,7 @@
 | **Phase 1**: Foundation & Backend | ✅ Complete    | 100%        | Done (Feb 2026) |
 | **Phase 2**: Frontend & E2E       | ✅ Complete    | 100%        | Done (Feb 2026) |
 | **Phase 3**: Observability Stack  | ✅ Complete    | 100%        | Done (Feb 2026) |
-| **Phase 4**: Core Scenarios (50)  | 🔄 In Progress | 30% (15/50) | Q2 2026         |
+| **Phase 4**: Core Scenarios (50)  | 🔄 In Progress | 34% (17/50) | Q2 2026         |
 | **Phase 4C**: Type Safety Audit   | ⏳ Planned     | 0%          | Q2 2026         |
 | **Phase 5**: Guided Tutorials     | ⏳ Planned     | 0%          | Q2 2026         |
 | **Phase 6**: CQRS/Event Sourcing  | ⏳ Planned     | 0%          | Q3 2026         |
@@ -40,7 +40,7 @@
 
 **Goal**: Implement 35 additional scenarios to reach 50 total, covering fundamental distributed systems failure modes. **Enhance all scenarios with domain-specific observability metrics.**
 
-**Status**: 15/50 complete (30%)
+**Status**: 17/50 complete (34%)
 
 **Sub-Phases**:
 
@@ -49,7 +49,7 @@
 - **Phase 4C**: New Scenarios (ongoing) - All 35 new scenarios include metrics from day one
 - **Phase 4D**: Dynamic Grafana Panels (2-3 days) - Auto-show/hide panels based on active scenarios
 
-### ✅ Currently Implemented (15)
+### ✅ Currently Implemented (16)
 
 1. `fixed-latency` - HTTP latency injection
 2. `error-burst` - Probabilistic 5xx errors
@@ -66,6 +66,8 @@
 13. `network-partition` - Network split-brain scenarios
 14. `clock-skew` - Time synchronization issues
 15. `resource-starvation` - Resource contention simulation
+16. `stale-read` - Serve stale cache data (TTL expiry, cache bypass)
+17. `n-plus-one-query` - Simulate N+1 query problem with observable query counts
 
 ### 🔄 To Implement (35)
 
@@ -75,9 +77,9 @@
 
 **Learning Value**: Teaches strict typing discipline, maintainability, and architectural clarity.
 
-#### Caching & Data Consistency (5 scenarios)
+#### Caching & Data Consistency (4 scenarios remaining)
 
-- [ ] `stale-read` - Serve stale cache data (TTL expiry, cache bypass)
+- [x] `stale-read` - Serve stale cache data (TTL expiry, cache bypass) ✅
 - [ ] `cache-warming-failure` - Cache preload failures on startup
 - [ ] `cache-invalidation-race` - Cache invalidation race conditions
 - [ ] `read-through-cache-failure` - Read-through pattern failures
@@ -85,9 +87,9 @@
 
 **Learning Value**: Cache strategies, consistency trade-offs, cache patterns
 
-#### Database Patterns (5 scenarios)
+#### Database Patterns (4 scenarios remaining)
 
-- [ ] `n-plus-one-query` - Simulate N+1 query problem with observable query counts
+- [x] `n-plus-one-query` - Simulate N+1 query problem with observable query counts ✅
 - [ ] `missing-index` - Slow queries without indexes (table scan simulation)
 - [ ] `deadlock` - Database deadlock simulation with retry logic
 - [ ] `connection-leak` - Connection not returned to pool, gradual exhaustion

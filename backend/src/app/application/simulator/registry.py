@@ -67,6 +67,7 @@ def build_registry() -> ScenarioRegistry:
     from app.application.simulator.scenarios.fixed_latency import FixedLatency
     from app.application.simulator.scenarios.lock_contention import LockContention
     from app.application.simulator.scenarios.memory_leak import MemoryLeak
+    from app.application.simulator.scenarios.n_plus_one_query import NPlusOneQuery
     from app.application.simulator.scenarios.network_partition import NetworkPartition
     from app.application.simulator.scenarios.resource_starvation import ResourceStarvation
     from app.application.simulator.scenarios.retry_storm import RetryStorm
@@ -90,5 +91,6 @@ def build_registry() -> ScenarioRegistry:
         ClockSkew(),
         ResourceStarvation(),
         StaleRead(),
+        NPlusOneQuery(),
     ]
     return ScenarioRegistry({s.meta.name: s for s in items})

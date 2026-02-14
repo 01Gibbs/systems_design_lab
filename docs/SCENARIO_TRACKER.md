@@ -2,13 +2,13 @@
 
 **Goal**: Track progress toward 50 core scenarios + 50+ advanced scenarios
 
-**Last Updated**: February 14, 2026
+**Last Updated**: February 15, 2026
 
 ---
 
-## 📊 Core Scenarios Progress: 15/50 (30%)
+## 📊 Core Scenarios Progress: 17/50 (34%)
 
-### ✅ Implemented (15)
+### ✅ Implemented (17)
 
 | #   | Scenario                     | Category       | File                            | Tested |
 | --- | ---------------------------- | -------------- | ------------------------------- | ------ |
@@ -27,46 +27,44 @@
 | 13  | `network-partition`          | Network        | `network_partition.py`          | ✅     |
 | 14  | `clock-skew`                 | Infrastructure | `clock_skew.py`                 | ✅     |
 | 15  | `resource-starvation`        | Resources      | `resource_starvation.py`        | ✅     |
+| 16  | `stale-read`                 | Caching        | `stale_read.py`                 | ✅     |
+| 17  | `n-plus-one-query`           | Database       | `n_plus_one_query.py`           | ✅     |
 
 ---
 
-## 🔄 To Implement (35)
+## 🔄 To Implement (33)
 
-### Caching & Data Consistency (5 scenarios)
+### Caching & Data Consistency (4 scenarios)
 
 | #   | Scenario                     | Priority | Complexity | Estimated Effort |
 | --- | ---------------------------- | -------- | ---------- | ---------------- |
-| 16  | `stale-read`                 | High     | Low        | 2 hours          |
 | 17  | `cache-warming-failure`      | Medium   | Medium     | 3 hours          |
 | 18  | `cache-invalidation-race`    | High     | Medium     | 4 hours          |
 | 19  | `read-through-cache-failure` | Medium   | Medium     | 3 hours          |
 | 20  | `write-behind-cache-lag`     | Low      | Medium     | 3 hours          |
 
-**Total**: 15 hours
+**Total**: 13 hours
 
 **Description**:
 
-- `stale-read`: Serve stale cache data due to TTL expiry or cache bypass
 - `cache-warming-failure`: Cache preload failures on application startup
 - `cache-invalidation-race`: Race conditions in cache invalidation logic
 - `read-through-cache-failure`: Read-through pattern where cache lookup and DB fallback fail
 - `write-behind-cache-lag`: Write-behind (async write) delay simulation
 
-### Database Patterns (5 scenarios)
+### Database Patterns (4 scenarios)
 
 | #   | Scenario                   | Priority | Complexity | Estimated Effort |
 | --- | -------------------------- | -------- | ---------- | ---------------- |
-| 21  | `n-plus-one-query`         | High     | Medium     | 4 hours          |
-| 22  | `missing-index`            | High     | Medium     | 3 hours          |
-| 23  | `deadlock`                 | High     | High       | 5 hours          |
-| 24  | `connection-leak`          | High     | Low        | 2 hours          |
-| 25  | `long-running-transaction` | Medium   | Medium     | 3 hours          |
+| 18  | `missing-index`            | High     | Medium     | 3 hours          |
+| 19  | `deadlock`                 | High     | High       | 5 hours          |
+| 20  | `connection-leak`          | High     | Low        | 2 hours          |
+| 21  | `long-running-transaction` | Medium   | Medium     | 3 hours          |
 
-**Total**: 17 hours
+**Total**: 13 hours
 
 **Description**:
 
-- `n-plus-one-query`: Simulate N+1 query problem with observable query counts
 - `missing-index`: Slow queries without indexes (table scan simulation)
 - `deadlock`: Database deadlock simulation with retry logic needed
 - `connection-leak`: Connection not returned to pool, causing gradual exhaustion
@@ -76,11 +74,11 @@
 
 | #   | Scenario                 | Priority | Complexity | Estimated Effort |
 | --- | ------------------------ | -------- | ---------- | ---------------- |
-| 26  | `rate-limit`             | High     | Medium     | 3 hours          |
-| 27  | `timeout-cascade`        | High     | Medium     | 4 hours          |
-| 28  | `partial-response`       | Medium   | Medium     | 3 hours          |
-| 29  | `api-version-mismatch`   | Low      | Low        | 2 hours          |
-| 30  | `dns-resolution-failure` | Medium   | Medium     | 3 hours          |
+| 22  | `rate-limit`             | High     | Medium     | 3 hours          |
+| 23  | `timeout-cascade`        | High     | Medium     | 4 hours          |
+| 24  | `partial-response`       | Medium   | Medium     | 3 hours          |
+| 25  | `api-version-mismatch`   | Low      | Low        | 2 hours          |
+| 26  | `dns-resolution-failure` | Medium   | Medium     | 3 hours          |
 
 **Total**: 15 hours
 
@@ -96,11 +94,11 @@
 
 | #   | Scenario                       | Priority | Complexity | Estimated Effort |
 | --- | ------------------------------ | -------- | ---------- | ---------------- |
-| 31  | `double-write`                 | High     | Medium     | 4 hours          |
-| 32  | `phantom-read`                 | Medium   | High       | 5 hours          |
-| 33  | `optimistic-locking-collision` | High     | Medium     | 4 hours          |
-| 34  | `async-callback-storm`         | Low      | Medium     | 3 hours          |
-| 35  | `event-ordering-violation`     | Medium   | Medium     | 4 hours          |
+| 27  | `double-write`                 | High     | Medium     | 4 hours          |
+| 28  | `phantom-read`                 | Medium   | High       | 5 hours          |
+| 29  | `optimistic-locking-collision` | High     | Medium     | 4 hours          |
+| 30  | `async-callback-storm`         | Low      | Medium     | 3 hours          |
+| 31  | `event-ordering-violation`     | Medium   | Medium     | 4 hours          |
 
 **Total**: 20 hours
 
@@ -116,11 +114,11 @@
 
 | #   | Scenario            | Priority | Complexity | Estimated Effort |
 | --- | ------------------- | -------- | ---------- | ---------------- |
-| 36  | `variable-latency`  | High     | Low        | 2 hours          |
-| 37  | `tail-latency`      | High     | Medium     | 3 hours          |
-| 38  | `timeout-too-short` | Medium   | Low        | 2 hours          |
-| 39  | `timeout-too-long`  | Medium   | Low        | 2 hours          |
-| 40  | `slow-start`        | Low      | Medium     | 3 hours          |
+| 32  | `variable-latency`  | High     | Low        | 2 hours          |
+| 33  | `tail-latency`      | High     | Medium     | 3 hours          |
+| 34  | `timeout-too-short` | Medium   | Low        | 2 hours          |
+| 35  | `timeout-too-long`  | Medium   | Low        | 2 hours          |
+| 36  | `slow-start`        | Low      | Medium     | 3 hours          |
 
 **Total**: 12 hours
 
@@ -136,11 +134,11 @@
 
 | #   | Scenario                | Priority | Complexity | Estimated Effort |
 | --- | ----------------------- | -------- | ---------- | ---------------- |
-| 41  | `intermittent-5xx`      | High     | Low        | 2 hours          |
-| 42  | `503-backpressure`      | High     | Medium     | 3 hours          |
-| 43  | `502-bad-gateway`       | Medium   | Low        | 2 hours          |
-| 44  | `499-client-disconnect` | Low      | Medium     | 3 hours          |
-| 45  | `429-rate-limit`        | High     | Low        | 2 hours          |
+| 37  | `intermittent-5xx`      | High     | Low        | 2 hours          |
+| 38  | `503-backpressure`      | High     | Medium     | 3 hours          |
+| 39  | `502-bad-gateway`       | Medium   | Low        | 2 hours          |
+| 40  | `499-client-disconnect` | Low      | Medium     | 3 hours          |
+| 41  | `429-rate-limit`        | High     | Low        | 2 hours          |
 
 **Total**: 12 hours
 
@@ -156,11 +154,11 @@
 
 | #   | Scenario                 | Priority | Complexity | Estimated Effort |
 | --- | ------------------------ | -------- | ---------- | ---------------- |
-| 46  | `thread-pool-exhaustion` | High     | Medium     | 3 hours          |
-| 47  | `file-descriptor-leak`   | Medium   | Medium     | 3 hours          |
-| 48  | `memory-pressure`        | Medium   | Medium     | 3 hours          |
-| 49  | `disk-io-saturation`     | Low      | Medium     | 3 hours          |
-| 50  | `bandwidth-limit`        | Low      | Low        | 2 hours          |
+| 42  | `thread-pool-exhaustion` | High     | Medium     | 3 hours          |
+| 43  | `file-descriptor-leak`   | Medium   | Medium     | 3 hours          |
+| 44  | `memory-pressure`        | Medium   | Medium     | 3 hours          |
+| 45  | `disk-io-saturation`     | Low      | Medium     | 3 hours          |
+| 46  | `bandwidth-limit`        | Low      | Low        | 2 hours          |
 
 **Total**: 14 hours
 
@@ -178,14 +176,14 @@
 
 | Category                      | Count  | Total Hours | Average per Scenario |
 | ----------------------------- | ------ | ----------- | -------------------- |
-| Caching & Data Consistency    | 5      | 15h         | 3h                   |
-| Database Patterns             | 5      | 17h         | 3.4h                 |
+| Caching & Data Consistency    | 4      | 13h         | 3.25h                |
+| Database Patterns             | 4      | 13h         | 3.25h                |
 | API & Network                 | 5      | 15h         | 3h                   |
 | Concurrency & Race Conditions | 5      | 20h         | 4h                   |
 | Latency & Timeouts            | 5      | 12h         | 2.4h                 |
 | HTTP Failures                 | 5      | 12h         | 2.4h                 |
 | Resource Exhaustion           | 5      | 14h         | 2.8h                 |
-| **Total Core Scenarios**      | **35** | **105h**    | **3h**               |
+| **Total Core Scenarios**      | **33** | **99h**     | **3h**               |
 
 **Sprint Planning**: At ~20 hours/week, this is approximately **5 weeks** of focused work to complete all 50 core scenarios.
 
@@ -265,12 +263,10 @@
 
 ### Sprint 1 (Week 1-2): High-Impact Database + Caching
 
-1. `n-plus-one-query` ⭐
-2. `missing-index` ⭐
-3. `connection-leak` ⭐
-4. `stale-read` ⭐
-5. `cache-invalidation-race` ⭐
-6. `deadlock` ⭐
+1. `missing-index` ⭐
+2. `connection-leak` ⭐
+3. `cache-invalidation-race` ⭐
+4. `deadlock` ⭐
 
 **Value**: Most common production issues
 
