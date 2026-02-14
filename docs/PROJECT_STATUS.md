@@ -1,10 +1,12 @@
 # Project Status
 
-**Last Updated:** February 12, 2026
+**Last Updated:** February 14, 2026
 
 ## 🎯 Project Goal
 
-Production-grade local systems design lab for simulating 50+ real-world system issues with strict Clean Architecture and contract-first API design.
+Production-grade local systems design lab for simulating 100+ real-world system issues with strict Clean Architecture and contract-first API design.
+
+**📋 See [ROADMAP.md](ROADMAP.md) for comprehensive vision and phases.**
 
 ---
 
@@ -104,48 +106,141 @@ Production-grade local systems design lab for simulating 50+ real-world system i
 
 ---
 
-## ⏳ Phase 3: Scenario Expansion (PENDING)
+## ⏳ Next Phases - See [ROADMAP.md](ROADMAP.md)
 
-### Goals
+### Phase 4: Complete 50 Core Scenarios (In Progress - 30%)
 
-- [ ] Implement 45 additional scenarios (total 50)
-- [ ] Categories:
-  - [ ] Latency & Timeouts (10 scenarios)
-  - [ ] HTTP Failures (10 scenarios)
-  - [ ] Database Issues (10 scenarios)
-  - [ ] Caching Failures (5 scenarios)
-  - [ ] Concurrency Issues (5 scenarios)
-  - [ ] Resource Exhaustion (5 scenarios)
-  - [ ] Network Partitions (5 scenarios)
+**Status**: 15/50 scenarios implemented
 
-### Scenario Catalogue Target
+**Current Focus**: Scenario-Specific Observability Enhancement
 
-See [copilot-instructions.md](.github/copilot-instructions.md) for full scenario list.
+- **Phase 4A**: Metrics Framework - Add `MetricSpec` and dynamic metric registration
+- **Phase 4B**: Retrofit Existing Scenarios - Add domain-specific metrics to all 15 current scenarios
+- **Phase 4C**: New Scenarios - All 35 new scenarios include metrics from day one
+- **Phase 4D**: Dynamic Grafana Panels - Auto-show/hide panels based on active scenarios
+
+**Priority Scenario Areas:**
+
+- Caching & Data Consistency (5 scenarios) - with cache hit/miss metrics
+- Database Patterns (5 scenarios) - with query count, lock wait time metrics
+- API & Network (5 scenarios) - with rate limit, timeout metrics
+- Concurrency & Race Conditions (5 scenarios) - with conflict, retry metrics
+- Plus 15 additional scenarios
+
+**Value**: Each scenario will emit domain-specific metrics (e.g., `cache_miss_total`, `db_queries_per_request`, `db_lock_wait_seconds`) making failure modes directly observable in Grafana.
+
+See [ROADMAP.md - Phase 4](ROADMAP.md#-phase-4-complete-50-core-scenarios) for full details and implementation plan.
+
+### Phase 5: Guided Tutorials (Planned)
+
+**Goal**: Create 6 tutorial series (24+ individual tutorials) teaching systems design with simulator
+
+**Tutorial Topics:**
+
+1. Understanding Latency
+2. Cache Strategies
+3. Database Performance
+4. Handling Failures
+5. Concurrency Patterns
+6. Observability-Driven Development
+
+See [ROADMAP.md - Phase 5](ROADMAP.md#-phase-5-guided-tutorials) for detailed structure.
+
+### Phase 6: CQRS/Event Sourcing Module (Planned)
+
+**Goal**: Implement Order Management system demonstrating CQRS + Event Sourcing patterns
+
+**Includes:**
+
+- Event sourcing with append-only log
+- Read model projections
+- Sagas for distributed transactions
+- 4 CQRS-specific scenarios
+
+See [ROADMAP.md - Phase 6](ROADMAP.md#-phase-6-cqrsevent-sourcing-module) for architecture.
+
+### Phase 7: Production Readiness (Planned)
+
+**Goal**: Deploy as service for teams and organizations
+
+**Includes:**
+
+- Redis integration for distributed state
+- Multi-tenancy with workspace isolation
+- Kubernetes + Helm deployment
+- Comprehensive integration testing
+
+See [ROADMAP.md - Phase 7](ROADMAP.md#-phase-7-production-readiness) for details.
+
+### Phase 8: Interactive Documentation (Planned)
+
+**Goal**: World-class documentation with live examples
+
+**Includes:**
+
+- Docusaurus site with API reference
+- Embedded Grafana panels
+- Code playground
+- Public demo environment
+
+See [ROADMAP.md - Phase 8](ROADMAP.md#-phase-8-interactive-documentation) for features.
+
+### Phase 9: Advanced Scenarios (Planned)
+
+**Goal**: Expand to 100+ scenarios across specialized domains
+
+**Includes:**
+
+- Performance Benchmarking Suite (10 scenarios)
+- Compliance & Security (8 scenarios)
+- Cost Optimization (8 scenarios)
+- Mobile/Edge (8 scenarios)
+- AI/ML Workloads (8 scenarios)
+
+See [ROADMAP.md - Phase 9](ROADMAP.md#-phase-9-advanced-scenarios-100-total) for full expansion plan.
 
 ---
 
-## ⏳ Phase 4: Integration Testing (PENDING)
+## 📊 Quick Progress Metrics
 
-### Goals
-
-- [ ] Testcontainers setup for real Postgres
-- [ ] Integration tests for DB adapters
-- [ ] Integration tests for simulator store (Redis adapter)
-- [ ] Contract tests for OpenAPI validation
-- [ ] Coverage enforcement (85%+ threshold)
-
-### Structure
-
-```
-backend/tests/
-├── unit/              ✅ Complete
-├── integration/       ⏳ Pending
-└── contract/          ⏳ Pending
-```
+| Category             | Progress  | Status      |
+| -------------------- | --------- | ----------- |
+| Backend Architecture | 5/5       | ✅ Complete |
+| Frontend             | 1/1       | ✅ Complete |
+| Observability        | 4/4       | ✅ Complete |
+| **Core Scenarios**   | **15/50** | **🔄 30%**  |
+| Tutorials            | 0/24      | ⏳ Planned  |
+| CQRS Module          | 0/1       | ⏳ Planned  |
+| Production Ready     | 0/4       | ⏳ Planned  |
+| Interactive Docs     | 0/1       | ⏳ Planned  |
+| Advanced Scenarios   | 0/50+     | ⏳ Planned  |
 
 ---
 
-## ✅ Phase 5: Observability (COMPLETE)
+### Implementation
+
+- ✅ Prometheus metrics collection with auto-instrumented HTTP metrics
+- ✅ Grafana dashboards (System Metrics + Simulator Scenarios)
+- ✅ Loki log aggregation with structured JSON logs
+- ✅ Tempo distributed tracing with OpenTelemetry
+- ✅ Promtail log shipping from Docker containers
+- ✅ Clean Architecture compliant (MetricsPort interface + PrometheusMetrics adapter)
+- ✅ Simulator metrics integration (active scenarios, injection tracking)
+- ✅ Request correlation (request_id + trace_id + span_id)
+- ✅ Makefile commands: `grafana`, `prometheus`, `logs-obs`, `metrics`
+- ✅ Complete documentation in [OBSERVABILITY.md](OBSERVABILITY.md)
+
+### Stack
+
+- **Prometheus** - Metrics scraping from `/api/metrics` endpoint
+- **Grafana** - Pre-provisioned dashboards + datasources
+- **Loki** - Log aggregation with 7-day retention
+- **Tempo** - Trace storage with 48-hour retention
+- **Promtail** - Docker log shipping
+
+---
+
+## ✅ Observability Stack (COMPLETE)
 
 ### Implementation
 
@@ -184,68 +279,60 @@ backend/tests/
 
 ---
 
-## ⏳ Phase 6: Scenario Expansion (PENDING)
+## 🔧 Current Priorities (from ROADMAP.md)
 
-### Goals
+### Immediate (Q2 2026)
 
-- [ ] Prometheus metrics export
-- [ ] Grafana dashboards
-- [ ] Loki for log aggregation
-- [ ] OpenTelemetry instrumentation
-- [ ] Distributed tracing
+1. **Complete 50 Core Scenarios** - Add 35 more scenarios
+   - Caching & Data Consistency (5)
+   - Database Patterns (5)
+   - API & Network (5)
+   - Concurrency & Race Conditions (5)
+   - Additional categories (15)
 
-### Current State
+2. **Launch Tutorial Series** - Create 6 tutorial series (24+ tutorials)
+   - Understanding Latency
+   - Cache Strategies
+   - Database Performance
+   - More...
 
-- ✅ Request correlation ready (request_id/trace_id)
-- ✅ Structured logging in place
-- ✅ Code structured for future instrumentation
+### Near-Term (Q3 2026)
 
----
+3. **CQRS/Event Sourcing Module** - Order Management system
+4. **Production Readiness** - Redis, multi-tenancy, K8s
 
-## 📊 Progress Metrics
+### Mid-Term (Q4 2026)
 
-| Category             | Progress | Status         |
-| -------------------- | -------- | -------------- |
-| Backend Architecture | 5/5      | ✅ Complete    |
-| Simulator Scenarios  | 15/50    | 🔄 30%         |
-| Frontend             | 1/1      | ✅ Complete    |
-| CI/CD Enforcement    | 1/1      | ✅ Complete    |
-| Backend Unit Tests   | 41+      | ✅ 92%+ cov    |
-| Frontend Tests       | 14       | ✅ Passing     |
-| E2E Tests            | 3        | ✅ Passing     |
-| Integration Tests    | 0/∞      | ⏳ Not Started |
-| Observability        | 4/4      | ✅ Complete    |
+5. **Interactive Documentation** - Docusaurus site with live demos
 
----
+### Long-Term (Q1 2027+)
 
-## 🔧 Technical Debt
+6. **Advanced Scenarios** - Expand to 100+ scenarios
 
-1. **Scenario Expansion**: Only 15/50 scenarios implemented - 35 more to add
-2. **Template Scenario**: No template file - use existing scenarios as reference
-3. **Redis Adapter**: InMemorySimulatorStore works but Redis adapter pending for production
-4. **Integration Tests**: Need testcontainers + real Postgres integration tests
-5. **Observability Alerting**: No alerting rules configured yet (Grafana supports this)
+**Full details**: [ROADMAP.md](ROADMAP.md)
 
 ---
 
-## 🚀 Recommended Next Steps
+## 🔧 Known Technical Debt
 
-1. **Scenario Expansion** (High Impact): Add 10-15 new scenarios
-   - Circuit breakers, cascading failures
-   - Retry storms, rate limiting
-   - Connection pool exhaustion, deadlocks
-   - Cache stampede, stale data
-   - **Now easier to debug with observability dashboards!**
+1. **Scenario Coverage**: Only 15/50 core scenarios implemented (30%)
+2. **Scenario-Specific Metrics**: Generic HTTP metrics only, need domain-specific metrics per scenario
+3. **Redis Adapter**: Using `InMemorySimulatorStore` (fine for local, not for multi-instance production)
+4. **Integration Tests**: No testcontainers or real DB integration tests yet
+5. **Grafana Alerting**: No alert rules configured (monitoring only)
+6. **API Authentication**: No auth/authz (fine for local lab, needed for production)
 
-2. **Integration Testing** (Infrastructure):
-   - Add testcontainers setup
-   - Real Postgres integration tests
-   - Increase test coverage for edge cases
+---
 
-3. **Observability Enhancements** (Polish):
-   - Grafana alert rules (e.g., p95 > 1s for 5 min)
-   - Custom dashboards for specific scenarios
-   - Trace sampling for high-volume scenarios
+## 🚀 Development Status
+
+**Currently**: Solo development, focused on Phase 4 completion.
+
+**Next Steps**:
+
+- Complete scenario-specific observability framework (Phase 4A-D)
+- Implement remaining 35 core scenarios with domain metrics
+- Build guided tutorial series
 
 ---
 
