@@ -25,11 +25,14 @@ export default defineConfig({
     exclude: ['**/node_modules/**', '**/dist/**', '**/e2e/**', '**/*.spec.ts'],
     include: ['**/*.test.{ts,tsx}'],
     testTimeout: 15000, // 15 second timeout for tests
-    // Reduce worker pool size to avoid EAGAIN errors in WSL
+    // Use forks pool: each test file gets its own process with fresh module cache.
+    // This prevents React DOM's cached window reference from going stale
+    // between jsdom environment teardown/setup cycles.
     pool: 'forks',
     poolOptions: {
       forks: {
-        singleFork: true, // Run in single fork process to avoid resource exhaustion
+        maxForks: 2,
+        minForks: 1,
       },
     },
     coverage: {
