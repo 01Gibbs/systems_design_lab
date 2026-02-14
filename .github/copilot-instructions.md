@@ -5,8 +5,12 @@
 This is a **production-grade local systems design lab** — NOT a demo app or one-off tutorial. It exists to:
 
 - Provide a stable, maintainable baseline application with strict guardrails
-- Enable deliberate, repeatable simulation of 50+ real-world system issues
-- Support deep hands-on learning: systems design, CQRS, caching, observability, DSA, performance, resilience
+- Enable deliberate, repeatable simulation of **100+ real-world system issues**
+- Support deep hands-on learning: systems design, CQRS, event sourcing, caching, observability, DSA, performance, resilience
+- Offer guided tutorials teaching distributed systems concepts
+- Demonstrate production patterns with observable failure modes
+
+**Vision**: The most comprehensive systems design learning platform (see [ROADMAP.md](../docs/ROADMAP.md))
 
 **Critical constraints:**
 
@@ -14,6 +18,34 @@ This is a **production-grade local systems design lab** — NOT a demo app or on
 - Contract-first API design is MANDATORY and automatically enforced
 - Maintainability is first-class; guardrails prevent drift
 - Developer UX matters: Makefile provides single entry point
+- All failure modes must be observable (metrics/logs/traces)
+
+## Project Roadmap & Current Phase
+
+**Current Phase**: Phase 4 - Core Scenario Expansion (30% complete - 15/50 scenarios)
+
+### Completed Phases
+
+- ✅ **Phase 1**: Foundation & Backend
+- ✅ **Phase 2**: Frontend & E2E
+- ✅ **Phase 3**: Observability Stack (Prometheus + Grafana + Loki + Tempo)
+
+### Active Phase
+
+- 🔄 **Phase 4**: Complete 50 Core Scenarios (15 implemented, 35 remaining)
+  - Priority: Caching & Data Consistency, Database Patterns, API & Network, Concurrency
+
+### Upcoming Phases
+
+- ⏳ **Phase 5**: Guided Tutorials (6 series, 24+ tutorials)
+- ⏳ **Phase 6**: CQRS/Event Sourcing Module
+- ⏳ **Phase 7**: Production Readiness (Redis, Multi-tenancy, K8s)
+- ⏳ **Phase 8**: Interactive Documentation (Docusaurus site)
+- ⏳ **Phase 9**: Advanced Scenarios (100+ total)
+
+**Full Roadmap**: [docs/ROADMAP.md](../docs/ROADMAP.md)
+**Scenario Tracker**: [docs/SCENARIO_TRACKER.md](../docs/SCENARIO_TRACKER.md)
+**Project Status**: [docs/PROJECT_STATUS.md](../docs/PROJECT_STATUS.md)
 
 ## Technology Stack (NON-NEGOTIABLE)
 
@@ -109,7 +141,7 @@ The simulator is a first-class, extensible subsystem for injecting 50+ real-worl
 - Adapter wrapping for DB/cache behaviours
 - NO simulator logic in domain layer
 
-**Implemented scenarios (15):**
+**Implemented scenarios (15/50 core, see [SCENARIO_TRACKER.md](../docs/SCENARIO_TRACKER.md)):**
 
 1. Fixed latency injection (per route)
 2. Error burst (probabilistic 5xx)
@@ -127,7 +159,17 @@ The simulator is a first-class, extensible subsystem for injecting 50+ real-worl
 14. Clock skew (time sync issues)
 15. Resource starvation
 
-**Target catalogue:** 50 scenarios total (35 remaining) across latency, HTTP failures, DB issues, caching, concurrency, resource exhaustion
+**Target:** 50 core scenarios + 50+ advanced scenarios (100+ total)
+
+**Priority categories for Phase 4:**
+
+- Caching & Data Consistency (5 scenarios) - `stale-read`, `cache-warming-failure`, etc.
+- Database Patterns (5 scenarios) - `n-plus-one-query`, `missing-index`, `deadlock`, etc.
+- API & Network (5 scenarios) - `rate-limit`, `timeout-cascade`, etc.
+- Concurrency & Race Conditions (5 scenarios) - `double-write`, `optimistic-locking-collision`, etc.
+- Plus 15 additional scenarios across latency, HTTP failures, resources
+
+**See [SCENARIO_TRACKER.md](../docs/SCENARIO_TRACKER.md) for complete list and implementation status.**
 
 ## Guardrails & Enforcement (Packwerk-Style)
 
@@ -238,15 +280,29 @@ make arch-check      # Fail on boundary violations
 - Enable simulator scenarios via backend API
 - Validate UI behaviour under those scenarios
 
-## Observability Readiness
+## Observability Stack (COMPLETE - Phase 3)
 
-**Now:**
+**Implemented:**
 
-- Request correlation ready (request_id/trace_id)
-- Layered logging without leaking internals
-- Structure code to allow future OpenTelemetry without refactors
+- ✅ Prometheus metrics collection with auto-instrumented HTTP metrics
+- ✅ Grafana dashboards (System Metrics + Simulator Scenarios)
+- ✅ Loki log aggregation with structured JSON logs
+- ✅ Tempo distributed tracing with OpenTelemetry
+- ✅ Request correlation (request_id + trace_id + span_id)
+- ✅ Clean Architecture compliant (MetricsPort interface + PrometheusMetrics adapter)
 
-**Later:** Prometheus, Grafana, Loki, OpenTelemetry
+**Makefile commands:**
+
+```bash
+make grafana      # Open Grafana dashboards (http://localhost:3000)
+make prometheus   # Open Prometheus UI (http://localhost:9090)
+make metrics      # Fetch backend metrics endpoint
+make logs-obs     # Tail observability stack logs
+```
+
+**Documentation:** See [docs/OBSERVABILITY.md](../docs/OBSERVABILITY.md) for complete guide.
+
+**Key Principle:** Observability respects Clean Architecture - never inject Prometheus directly into domain/application layers.
 
 ## Output Rules for AI Agents
 

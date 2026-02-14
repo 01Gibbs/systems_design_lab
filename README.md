@@ -4,17 +4,36 @@ Production-grade local systems design lab for learning and simulating real-world
 
 ## Overview
 
-This project provides a **disciplined, maintainable baseline application** with strict architectural guardrails, designed to support deliberate simulation of 50+ common real-world system problems including:
+This project provides a **disciplined, maintainable baseline application** with strict architectural guardrails, designed to support deliberate simulation of **100+ common real-world system problems** including:
 
-- Latency, timeouts, and retries
-- HTTP failures and partial outages
-- Database performance issues
-- Caching strategies and failures
-- Concurrency and race conditions
-- Resource exhaustion
-- CQRS patterns and read model projections
+- **Core Failures**: Latency, timeouts, retries, HTTP failures, partial outages
+- **Database Issues**: N+1 queries, missing indexes, deadlocks, connection leaks
+- **Caching Patterns**: Cache stampede, stale reads, invalidation races
+- **Concurrency**: Race conditions, optimistic locking, event ordering
+- **CQRS/Event Sourcing**: Event replay, projections, sagas
+- **Advanced Topics**: Performance benchmarking, security, cost optimization, AI/ML workloads
 
-**This is NOT a demo app.** It's a production-grade lab with automated enforcement of Clean Architecture and contract-first API design.
+**This is NOT a demo app.** It's a production-grade learning platform with:
+
+- ✅ Automated enforcement of Clean Architecture and contract-first API design
+- ✅ Observable failure modes through Prometheus + Grafana + Loki + Tempo
+- ✅ Guided tutorials teaching systems design concepts
+- ✅ 50 core scenarios + 50+ advanced scenarios (roadmap)
+
+## Vision & Roadmap
+
+🎯 **Goal**: The most comprehensive, production-grade systems design learning platform
+
+📋 **Quick Overview**: [EXECUTIVE_SUMMARY.md](docs/EXECUTIVE_SUMMARY.md) - Visual roadmap and progress
+
+📋 **Full Roadmap**: [ROADMAP.md](docs/ROADMAP.md) - Complete vision including:
+
+- Phase 4: Complete 50 Core Scenarios (15/50 done)
+- Phase 5: Guided Tutorials (24+ tutorials across 6 series)
+- Phase 6: CQRS/Event Sourcing Module
+- Phase 7: Production Readiness (Redis, Multi-tenancy, K8s)
+- Phase 8: Interactive Documentation (Docusaurus + live demos)
+- Phase 9: Advanced Scenarios (Performance, Security, Cost, Mobile, AI/ML)
 
 ## Stack
 
@@ -296,19 +315,49 @@ Future additions: Prometheus, Grafana, Loki.
 4. **Guardrails must pass**: `make guardrails` before commit
 5. **Simulator isolation**: Keep simulator logic out of business logic
 
-## Project Status
+## Project Status & Next Steps
 
-**Current Phase**: Scenario Expansion
+**Current Phase**: Core Scenario Expansion (Phase 4 - 30% complete)
 
-- ✅ Backend foundation complete (Clean Architecture + Ports & Adapters)
-- ✅ CI/CD enforcement (GitHub Actions + pre-commit hooks)
-- ✅ Contract management with drift detection
-- ✅ 5 simulator scenarios implemented
-- ✅ Frontend complete (Vite + React + TypeScript + Tailwind)
-- ✅ SimulatorControlPanel with full functionality
-- ✅ Playwright E2E tests (3 test suites)
-- ✅ 41 backend unit tests (92.64% coverage)
-- ⏳ Integration tests pending
-- ⏳ Additional scenarios (45 more) pending
+### ✅ Complete
 
-See [PROJECT_STATUS.md](docs/PROJECT_STATUS.md) for detailed progress.
+- Backend foundation (Clean Architecture + Ports & Adapters)
+- Frontend (Vite + React + TypeScript + Simulator Control Panel)
+- Observability Stack (Prometheus + Grafana + Loki + Tempo)
+- CI/CD enforcement (GitHub Actions + pre-commit hooks)
+- 15 simulator scenarios implemented
+- 41 backend unit tests (92%+ coverage)
+- 14 frontend tests + 3 E2E Playwright tests
+
+### 🔄 In Progress (Q2 2026)
+
+- **Scenario-Specific Observability Enhancement** 🎯
+  - Add domain-specific metrics to all scenarios (e.g., `cache_miss_total`, `db_queries_per_request`, `db_lock_wait_seconds`)
+  - Dynamic Grafana panels showing metric impact per active scenario
+  - Makes failure modes directly observable and measurable
+- Complete 50 core scenarios (35 remaining)
+  - Caching & Data Consistency (5)
+  - Database Patterns (5)
+  - API & Network (5)
+  - Concurrency & Race Conditions (5)
+  - Plus 15 additional scenarios
+
+### ⏳ Planned
+
+- **Phase 5**: Guided Tutorials (6 series, 24+ tutorials)
+- **Phase 6**: CQRS/Event Sourcing Module
+- **Phase 7**: Production Readiness (Redis, Multi-tenancy, K8s)
+- **Phase 8**: Interactive Documentation (Docusaurus site)
+- **Phase 9**: Advanced Scenarios (100+ total)
+
+**Full roadmap**: [ROADMAP.md](docs/ROADMAP.md)
+**Detailed status**: [PROJECT_STATUS.md](docs/PROJECT_STATUS.md)
+**Scenario tracking**: [SCENARIO_TRACKER.md](docs/SCENARIO_TRACKER.md)
+
+## Project Documentation
+
+See:
+
+- [ROADMAP.md](docs/ROADMAP.md) for vision and planned features
+- [SCENARIO_TRACKER.md](docs/SCENARIO_TRACKER.md) for scenario implementation status
+- [EXECUTIVE_SUMMARY.md](docs/EXECUTIVE_SUMMARY.md) for quick overview
