@@ -50,7 +50,7 @@ help: ## Display this help message
 
 ##@ Development Lifecycle
 
-up: autoclean ## Start docker compose + app services
+up: ## Start docker compose + app services
 	@echo "$(BLUE)Starting services...$(NC)"
 	docker-compose up -d
 	@echo "$(GREEN)✓ Services started$(NC)"
