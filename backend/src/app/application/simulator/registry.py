@@ -71,6 +71,7 @@ def build_registry() -> ScenarioRegistry:
     from app.application.simulator.scenarios.resource_starvation import ResourceStarvation
     from app.application.simulator.scenarios.retry_storm import RetryStorm
     from app.application.simulator.scenarios.slow_db_query import SlowDbQuery
+    from app.application.simulator.scenarios.stale_read import StaleRead
 
     items: list[Scenario] = [
         FixedLatency(),
@@ -88,5 +89,6 @@ def build_registry() -> ScenarioRegistry:
         NetworkPartition(),
         ClockSkew(),
         ResourceStarvation(),
+        StaleRead(),
     ]
     return ScenarioRegistry({s.meta.name: s for s in items})
