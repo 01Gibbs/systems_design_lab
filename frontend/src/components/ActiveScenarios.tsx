@@ -11,13 +11,16 @@ export default function ActiveScenarios({
   onDisable,
   onResetAll,
 }: ActiveScenariosProps) {
-  if (scenarios.length === 0) return null;
+  // Extra defensive: ensure scenarios is defined and is an array
+  const safeScenarios = Array.isArray(scenarios) ? scenarios : [];
+  
+  if (safeScenarios.length === 0) return null;
 
   return (
     <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-6 mb-8">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-bold text-red-800 dark:text-red-200">
-          🔴 Active Scenarios ({scenarios.length})
+          🔴 Active Scenarios ({safeScenarios.length})
         </h2>
         <button
           onClick={onResetAll}
@@ -28,7 +31,7 @@ export default function ActiveScenarios({
       </div>
 
       <div className="space-y-3">
-        {scenarios.map((scenario) => (
+        {safeScenarios.map((scenario) => (
           <div
             key={scenario.name}
             className="flex justify-between items-start bg-white dark:bg-gray-800 rounded-md p-4 border border-red-200 dark:border-red-700"
