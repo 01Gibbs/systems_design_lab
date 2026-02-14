@@ -13,7 +13,7 @@ export default function ActiveScenarios({
 }: ActiveScenariosProps) {
   // Extra defensive: ensure scenarios is defined and is an array
   const safeScenarios = Array.isArray(scenarios) ? scenarios : [];
-  
+
   if (safeScenarios.length === 0) return null;
 
   return (

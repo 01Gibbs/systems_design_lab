@@ -4,430 +4,430 @@
  */
 
 export interface paths {
-    "/api/health": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Health
-         * @description Health check endpoint
-         */
-        get: operations["health_api_health_get"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+  '/api/health': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/api/metrics": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Metrics Endpoint
-         * @description Prometheus metrics endpoint.
-         *
-         *     Returns metrics in Prometheus text exposition format.
-         */
-        get: operations["metrics_endpoint_api_metrics_get"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    /**
+     * Health
+     * @description Health check endpoint
+     */
+    get: operations['health_api_health_get'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/metrics': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/api/sim/disable": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Disable
-         * @description Disable a scenario
-         */
-        post: operations["disable_api_sim_disable_post"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    /**
+     * Metrics Endpoint
+     * @description Prometheus metrics endpoint.
+     *
+     *     Returns metrics in Prometheus text exposition format.
+     */
+    get: operations['metrics_endpoint_api_metrics_get'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/sim/disable': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/api/sim/enable": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Enable
-         * @description Enable a scenario
-         */
-        post: operations["enable_api_sim_enable_post"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    get?: never;
+    put?: never;
+    /**
+     * Disable
+     * @description Disable a scenario
+     */
+    post: operations['disable_api_sim_disable_post'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/sim/enable': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/api/sim/reset": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Reset
-         * @description Disable all scenarios
-         */
-        post: operations["reset_api_sim_reset_post"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    get?: never;
+    put?: never;
+    /**
+     * Enable
+     * @description Enable a scenario
+     */
+    post: operations['enable_api_sim_enable_post'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/sim/reset': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/api/sim/scenarios": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * List Scenarios
-         * @description List all available scenarios
-         */
-        get: operations["list_scenarios_api_sim_scenarios_get"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    get?: never;
+    put?: never;
+    /**
+     * Reset
+     * @description Disable all scenarios
+     */
+    post: operations['reset_api_sim_reset_post'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/sim/scenarios': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    "/api/sim/status": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Status
-         * @description Get status of active scenarios
-         */
-        get: operations["status_api_sim_status_get"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
+    /**
+     * List Scenarios
+     * @description List all available scenarios
+     */
+    get: operations['list_scenarios_api_sim_scenarios_get'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/sim/status': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
+    /**
+     * Status
+     * @description Get status of active scenarios
+     */
+    get: operations['status_api_sim_status_get'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
 }
 export type webhooks = Record<string, never>;
 export interface components {
-    schemas: {
-        /**
-         * ActiveScenario
-         * @description An active scenario with its state
-         */
-        ActiveScenario: {
-            /**
-             * Enabled At
-             * Format: date-time
-             */
-            enabled_at: string;
-            /** Expires At */
-            expires_at?: string | null;
-            /** Name */
-            name: string;
-            /** Parameters */
-            parameters: {
-                [key: string]: unknown;
-            };
-        };
-        /**
-         * DisableScenarioRequest
-         * @description Request to disable a scenario
-         */
-        DisableScenarioRequest: {
-            /** Name */
-            name: string;
-        };
-        /**
-         * EnableScenarioRequest
-         * @description Request to enable a scenario
-         */
-        EnableScenarioRequest: {
-            /** Duration Seconds */
-            duration_seconds?: number | null;
-            /** Name */
-            name: string;
-            /** Parameters */
-            parameters?: {
-                [key: string]: unknown;
-            };
-        };
-        /** HTTPValidationError */
-        HTTPValidationError: {
-            /** Detail */
-            detail?: components["schemas"]["ValidationError"][];
-        };
-        /**
-         * HealthResponse
-         * @description Health check response
-         */
-        HealthResponse: {
-            /** Status */
-            status: string;
-            /** Version */
-            version: string;
-        };
-        /**
-         * ScenarioDescriptor
-         * @description Describes a scenario's metadata
-         */
-        ScenarioDescriptor: {
-            /** Description */
-            description: string;
-            /** Name */
-            name: string;
-            /** Parameter Schema */
-            parameter_schema: {
-                [key: string]: unknown;
-            };
-            /** Safety Limits */
-            safety_limits: {
-                [key: string]: unknown;
-            };
-            /** Targets */
-            targets: ("http" | "db" | "cpu" | "algorithm")[];
-        };
-        /**
-         * ScenariosResponse
-         * @description Response for listing scenarios
-         */
-        ScenariosResponse: {
-            /** Scenarios */
-            scenarios: components["schemas"]["ScenarioDescriptor"][];
-        };
-        /**
-         * StatusResponse
-         * @description Response for status endpoint
-         */
-        StatusResponse: {
-            /** Active */
-            active: components["schemas"]["ActiveScenario"][];
-        };
-        /** ValidationError */
-        ValidationError: {
-            /** Context */
-            ctx?: Record<string, never>;
-            /** Input */
-            input?: unknown;
-            /** Location */
-            loc: (string | number)[];
-            /** Message */
-            msg: string;
-            /** Error Type */
-            type: string;
-        };
+  schemas: {
+    /**
+     * ActiveScenario
+     * @description An active scenario with its state
+     */
+    ActiveScenario: {
+      /**
+       * Enabled At
+       * Format: date-time
+       */
+      enabled_at: string;
+      /** Expires At */
+      expires_at?: string | null;
+      /** Name */
+      name: string;
+      /** Parameters */
+      parameters: {
+        [key: string]: unknown;
+      };
     };
-    responses: never;
-    parameters: never;
-    requestBodies: never;
-    headers: never;
-    pathItems: never;
+    /**
+     * DisableScenarioRequest
+     * @description Request to disable a scenario
+     */
+    DisableScenarioRequest: {
+      /** Name */
+      name: string;
+    };
+    /**
+     * EnableScenarioRequest
+     * @description Request to enable a scenario
+     */
+    EnableScenarioRequest: {
+      /** Duration Seconds */
+      duration_seconds?: number | null;
+      /** Name */
+      name: string;
+      /** Parameters */
+      parameters?: {
+        [key: string]: unknown;
+      };
+    };
+    /** HTTPValidationError */
+    HTTPValidationError: {
+      /** Detail */
+      detail?: components['schemas']['ValidationError'][];
+    };
+    /**
+     * HealthResponse
+     * @description Health check response
+     */
+    HealthResponse: {
+      /** Status */
+      status: string;
+      /** Version */
+      version: string;
+    };
+    /**
+     * ScenarioDescriptor
+     * @description Describes a scenario's metadata
+     */
+    ScenarioDescriptor: {
+      /** Description */
+      description: string;
+      /** Name */
+      name: string;
+      /** Parameter Schema */
+      parameter_schema: {
+        [key: string]: unknown;
+      };
+      /** Safety Limits */
+      safety_limits: {
+        [key: string]: unknown;
+      };
+      /** Targets */
+      targets: ('http' | 'db' | 'cpu' | 'algorithm')[];
+    };
+    /**
+     * ScenariosResponse
+     * @description Response for listing scenarios
+     */
+    ScenariosResponse: {
+      /** Scenarios */
+      scenarios: components['schemas']['ScenarioDescriptor'][];
+    };
+    /**
+     * StatusResponse
+     * @description Response for status endpoint
+     */
+    StatusResponse: {
+      /** Active */
+      active: components['schemas']['ActiveScenario'][];
+    };
+    /** ValidationError */
+    ValidationError: {
+      /** Context */
+      ctx?: Record<string, never>;
+      /** Input */
+      input?: unknown;
+      /** Location */
+      loc: (string | number)[];
+      /** Message */
+      msg: string;
+      /** Error Type */
+      type: string;
+    };
+  };
+  responses: never;
+  parameters: never;
+  requestBodies: never;
+  headers: never;
+  pathItems: never;
 }
 export type $defs = Record<string, never>;
 export interface operations {
-    health_api_health_get: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HealthResponse"];
-                };
-            };
-        };
+  health_api_health_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    metrics_endpoint_api_metrics_get: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
         };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": unknown;
-                };
-            };
+        content: {
+          'application/json': components['schemas']['HealthResponse'];
         };
+      };
     };
-    disable_api_sim_disable_post: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["DisableScenarioRequest"];
-            };
-        };
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["StatusResponse"];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
+  };
+  metrics_endpoint_api_metrics_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    enable_api_sim_enable_post: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
         };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["EnableScenarioRequest"];
-            };
+        content: {
+          'application/json': unknown;
         };
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["StatusResponse"];
-                };
-            };
-            /** @description Validation Error */
-            422: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HTTPValidationError"];
-                };
-            };
-        };
+      };
     };
-    reset_api_sim_reset_post: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["StatusResponse"];
-                };
-            };
-        };
+  };
+  disable_api_sim_disable_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
     };
-    list_scenarios_api_sim_scenarios_get: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ScenariosResponse"];
-                };
-            };
-        };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['DisableScenarioRequest'];
+      };
     };
-    status_api_sim_status_get: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
         };
-        requestBody?: never;
-        responses: {
-            /** @description Successful Response */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["StatusResponse"];
-                };
-            };
+        content: {
+          'application/json': components['schemas']['StatusResponse'];
         };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['HTTPValidationError'];
+        };
+      };
     };
+  };
+  enable_api_sim_enable_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['EnableScenarioRequest'];
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['StatusResponse'];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['HTTPValidationError'];
+        };
+      };
+    };
+  };
+  reset_api_sim_reset_post: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['StatusResponse'];
+        };
+      };
+    };
+  };
+  list_scenarios_api_sim_scenarios_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['ScenariosResponse'];
+        };
+      };
+    };
+  };
+  status_api_sim_status_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['StatusResponse'];
+        };
+      };
+    };
+  };
 }
