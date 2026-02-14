@@ -366,10 +366,12 @@ Before completing any task, verify:
 
 1. Create new class in `backend/src/app/application/simulator/scenarios/`
 2. Implement effect-based scenario interface (meta, is_applicable, apply)
-3. Register in scenario registry (`backend/src/app/application/simulator/registry.py`)
-4. Add tests validating injection + safety limits in `backend/tests/unit/`
-5. Document in scenario catalogue
-6. Update frontend control panel if new parameter types needed
+3. **CRITICAL:** Use only valid target categories: `["http", "db", "cpu", "algorithm"]` (type-checked by `TargetCategory` literal)
+4. Register in scenario registry (`backend/src/app/application/simulator/registry.py`)
+5. Add tests validating injection + safety limits in `backend/tests/unit/`
+6. Document in scenario catalogue
+7. Update frontend control panel if new parameter types needed
 
-**Template:** See existing scenarios like `fixed_latency.py` for reference
+**Template:** See existing scenarios like `fixed_latency.py` or `TEMPLATE.py` for reference
 **Pattern:** Scenarios return effect dicts, middleware applies them (no side effects in scenario code)
+**Type Safety:** `ScenarioMeta.targets` is typed as `list[TargetCategory]` - mypy will catch invalid values at type-check time

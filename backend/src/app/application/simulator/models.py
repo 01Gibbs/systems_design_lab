@@ -6,6 +6,9 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Any, Literal
 
+# Valid target categories for scenarios (must match contract layer)
+TargetCategory = Literal["http", "db", "cpu", "algorithm"]
+
 
 @dataclass(frozen=True)
 class MetricSpec:
@@ -39,7 +42,7 @@ class ScenarioMeta:
 
     name: str
     description: str
-    targets: list[str]  # e.g., ["http", "db", "cpu"]
+    targets: list[TargetCategory]  # e.g., ["http", "db", "cpu", "algorithm"]
     parameter_schema: dict[str, Any]  # JSON schema for parameters
     safety_limits: dict[str, Any]  # max values for safety
     metrics: list[MetricSpec] = field(default_factory=list)  # Scenario-specific metrics

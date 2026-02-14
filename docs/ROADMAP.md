@@ -27,6 +27,7 @@
 | **Phase 2**: Frontend & E2E       | ✅ Complete    | 100%        | Done (Feb 2026) |
 | **Phase 3**: Observability Stack  | ✅ Complete    | 100%        | Done (Feb 2026) |
 | **Phase 4**: Core Scenarios (50)  | 🔄 In Progress | 30% (15/50) | Q2 2026         |
+| **Phase 4C**: Type Safety Audit   | ⏳ Planned     | 0%          | Q2 2026         |
 | **Phase 5**: Guided Tutorials     | ⏳ Planned     | 0%          | Q2 2026         |
 | **Phase 6**: CQRS/Event Sourcing  | ⏳ Planned     | 0%          | Q3 2026         |
 | **Phase 7**: Production Readiness | ⏳ Planned     | 0%          | Q3 2026         |
@@ -67,6 +68,12 @@
 15. `resource-starvation` - Resource contention simulation
 
 ### 🔄 To Implement (35)
+
+#### Codebase Type Safety & Best Practices
+
+- [ ] **Type Safety Audit**: Eliminate all usage of `Any` in codebase; replace with custom types, Protocols, or explicit casting as per best practice. Enforce via guardrails and arch-check.
+
+**Learning Value**: Teaches strict typing discipline, maintainability, and architectural clarity.
 
 #### Caching & Data Consistency (5 scenarios)
 
