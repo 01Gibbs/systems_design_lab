@@ -81,6 +81,8 @@ test.describe('Simulator Control Panel', () => {
     await disableButton.click();
 
     // Should remove from active list - check specifically that disable button is gone
-    await expect(page.getByRole('button', { name: /Disable fixed-latency/i })).not.toBeVisible({ timeout: 10000 });
+    await expect(page.getByRole('button', { name: /Disable fixed-latency/i })).not.toBeVisible({
+      timeout: 10000,
+    });
   });
 });
