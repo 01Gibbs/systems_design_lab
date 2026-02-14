@@ -31,9 +31,13 @@ export default function SimulatorControlPanel({ onStatusChange }: SimulatorContr
       return;
     }
 
-    setScenarios(scenariosRes.data.scenarios);
-    setActiveScenarios(statusRes.data.active);
-    onStatusChange(statusRes.data.active.length);
+    // Defensive: ensure data structure exists
+    const scenariosList = scenariosRes.data?.scenarios ?? [];
+    const activeList = statusRes.data?.active ?? [];
+
+    setScenarios(scenariosList);
+    setActiveScenarios(activeList);
+    onStatusChange(activeList.length);
     setLoading(false);
   };
 
@@ -42,8 +46,9 @@ export default function SimulatorControlPanel({ onStatusChange }: SimulatorContr
     async function poll() {
       const statusRes = await simApi.status();
       if (!cancelled && statusRes.ok) {
-        setActiveScenarios(statusRes.data.active);
-        onStatusChange(statusRes.data.active.length);
+        const activeList = statusRes.data?.active ?? [];
+        setActiveScenarios(activeList);
+        onStatusChange(activeList.length);
       }
     }
     loadData();

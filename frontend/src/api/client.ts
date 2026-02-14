@@ -55,7 +55,10 @@ type ApiResult<T> = { ok: true; data: T } | { ok: false; status: number; error: 
 
 async function request<T>(path: string, init?: RequestInit): Promise<ApiResult<T>> {
   try {
-    const res = await fetch(getApiUrl(path), {
+    const url = getApiUrl(path);
+    console.log(`[API] ${init?.method ?? 'GET'} ${url}`);
+
+    const res = await fetch(url, {
       ...init,
       headers: {
         'content-type': 'application/json',
@@ -67,11 +70,14 @@ async function request<T>(path: string, init?: RequestInit): Promise<ApiResult<T
     const body = text ? JSON.parse(text) : null;
 
     if (!res.ok) {
+      console.error(`[API] ${url} failed with status ${res.status}`, body);
       return { ok: false, status: res.status, error: body };
     }
 
+    console.log(`[API] ${url} success`, body);
     return { ok: true, data: body as T };
   } catch (e) {
+    console.error(`[API] ${path} error:`, e);
     return { ok: false, status: 0, error: e };
   }
 }
