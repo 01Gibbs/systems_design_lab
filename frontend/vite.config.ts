@@ -25,6 +25,13 @@ export default defineConfig({
     exclude: ['**/node_modules/**', '**/dist/**', '**/e2e/**', '**/*.spec.ts'],
     include: ['**/*.test.{ts,tsx}'],
     testTimeout: 15000, // 15 second timeout for tests
+    // Reduce worker pool size to avoid EAGAIN errors in WSL
+    pool: 'threads',
+    poolOptions: {
+      threads: {
+        singleThread: true, // Run in single thread to avoid resource exhaustion
+      },
+    },
     coverage: {
       provider: 'v8',
       reporter: ['text', 'html', 'lcov'],
