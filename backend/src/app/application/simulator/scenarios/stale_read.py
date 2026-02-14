@@ -15,15 +15,15 @@ class StaleRead:
     """Simulates stale cache reads (serving expired or bypassed data)"""
 
     def is_applicable(self, *, target: dict[str, str]) -> bool:
-        """Always applicable for cache targets (example logic)"""
-        return target.get("type") == "cache"
+        """Applies to HTTP requests"""
+        return target.get("category") == "http"
 
     meta = ScenarioMeta(
         name="stale-read",
         description=(
             "Simulates serving stale cache data: requests may receive expired or bypassed values."
         ),
-        targets=["cache", "http"],
+        targets=["http"],
         parameter_schema={
             "stale_probability": {"type": "number", "minimum": 0, "maximum": 1, "default": 0.1},
             "cache_key_pattern": {"type": "string", "default": "*"},

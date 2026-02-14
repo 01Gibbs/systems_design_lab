@@ -40,7 +40,7 @@ class TemplateScenario:
     meta = ScenarioMeta(
         name="template-scenario",  # kebab-case, unique identifier
         description="Brief description shown in API/UI. Keep under 100 chars.",
-        targets=["http"],  # List of categories: "http", "db", "cache", "algorithm"
+        targets=["http"],  # MUST be from: "http", "db", "cpu", "algorithm" (type-checked!)
         parameter_schema={
             # JSON Schema format - used for validation and UI generation
             "type": "object",
