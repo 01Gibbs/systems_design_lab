@@ -19,7 +19,7 @@ def setup_logging(*, level: str = "INFO", json_format: bool = True) -> None:
     if json_format:
         # JSON format for machine parsing (Loki)
         log_handler = logging.StreamHandler(sys.stdout)
-        formatter = jsonlogger.JsonFormatter(  # type: ignore[no-untyped-call]
+        formatter = jsonlogger.JsonFormatter(
             "%(asctime)s %(levelname)s %(name)s %(message)s "
             "%(request_id)s %(trace_id)s %(span_id)s",
             rename_fields={"levelname": "level", "asctime": "timestamp"},

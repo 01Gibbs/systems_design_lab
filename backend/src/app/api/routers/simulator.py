@@ -39,7 +39,7 @@ async def list_scenarios(request: Request) -> ScenariosResponse:
             ScenarioDescriptor(
                 name=s.name,
                 description=s.description,
-                targets=list(s.targets),  # type: ignore
+                targets=list(s.targets),
                 parameter_schema=s.parameter_schema,
                 safety_limits=s.safety_limits,
             )

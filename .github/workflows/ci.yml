@@ -31,6 +31,10 @@ jobs:
           cache-dependency-path: 'frontend/package-lock.json'
       - name: Install backend dependencies
         run: make be-install
+      - name: Debug installed dependencies
+        run: |
+          python -c "import fastapi, pydantic, sqlalchemy, starlette; print('✓ All runtime deps imported successfully')"
+          python -m pip show fastapi pydantic sqlalchemy starlette | grep -E "^(Name|Version):"
       - name: Install frontend dependencies
         run: make fe-install
       - name: Run all guardrails checks
@@ -63,6 +67,10 @@ jobs:
           cache-dependency-path: 'frontend/package-lock.json'
       - name: Install backend dependencies
         run: make be-install
+      - name: Debug installed dependencies
+        run: |
+          python -c "import fastapi, pydantic, sqlalchemy, starlette; print('✓ All runtime deps imported successfully')"
+          python -m pip show fastapi pydantic sqlalchemy starlette | grep -E "^(Name|Version):"
       - name: Install frontend dependencies
         run: make fe-install
       - name: Start services
