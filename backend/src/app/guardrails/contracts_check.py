@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 import sys
 from pathlib import Path
+from typing import Any, cast
 
 
 class ContractChecker:
@@ -56,7 +57,12 @@ class ContractChecker:
         try:
             from app.api.main import app
 
-            return app.openapi()
+            data: Any = app.openapi()
+            if data is None:
+                return None
+            if not isinstance(data, dict):
+                return None
+            return cast(dict[str, object], data)
         except Exception as e:
             print(f"Error generating schema: {e}")
             return None

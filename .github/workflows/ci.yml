@@ -2,7 +2,7 @@
 
 on:
   push:
-    branches: [ main, "feature/*", "chore/*" ]
+    branches: [ main, "feature/*", "chore/*", "fix/*" ]
   pull_request:
     branches: [ main ]
 
@@ -29,10 +29,12 @@ jobs:
           node-version: '20'
           cache: 'npm'
           cache-dependency-path: 'frontend/package-lock.json'
-      - name: Install backend dev dependencies
-        run: pip install -r backend/requirements-dev.txt
       - name: Install backend dependencies
         run: make be-install
+      - name: Debug installed dependencies
+        run: |
+          python -c "import fastapi, pydantic, sqlalchemy, starlette; print('✓ All runtime deps imported successfully')"
+          python -m pip show fastapi pydantic sqlalchemy starlette | grep -E "^(Name|Version):"
       - name: Install frontend dependencies
         run: make fe-install
       - name: Run all guardrails checks
@@ -64,7 +66,11 @@ jobs:
           cache: 'npm'
           cache-dependency-path: 'frontend/package-lock.json'
       - name: Install backend dependencies
-        run: pip install -r backend/requirements-dev.txt && pip install -r backend/requirements.txt
+        run: make be-install
+      - name: Debug installed dependencies
+        run: |
+          python -c "import fastapi, pydantic, sqlalchemy, starlette; print('✓ All runtime deps imported successfully')"
+          python -m pip show fastapi pydantic sqlalchemy starlette | grep -E "^(Name|Version):"
       - name: Install frontend dependencies
         run: make fe-install
       - name: Start services

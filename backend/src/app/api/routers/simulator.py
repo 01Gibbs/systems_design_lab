@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from typing import cast
+
 from fastapi import APIRouter, HTTPException, Request
 
 from app.application.simulator.app_models import (
@@ -19,6 +21,7 @@ from app.contracts.simulator import (
     ScenarioDescriptor,
     ScenariosResponse,
     StatusResponse,
+    TargetCategory,
 )
 
 router = APIRouter(tags=["simulator"])
@@ -39,7 +42,7 @@ async def list_scenarios(request: Request) -> ScenariosResponse:
             ScenarioDescriptor(
                 name=s.name,
                 description=s.description,
-                targets=list(s.targets),  # type: ignore
+                targets=cast(list[TargetCategory], s.targets),
                 parameter_schema=s.parameter_schema,
                 safety_limits=s.safety_limits,
             )

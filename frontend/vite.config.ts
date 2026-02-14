@@ -25,6 +25,16 @@ export default defineConfig({
     exclude: ['**/node_modules/**', '**/dist/**', '**/e2e/**', '**/*.spec.ts'],
     include: ['**/*.test.{ts,tsx}'],
     testTimeout: 15000, // 15 second timeout for tests
+    // Use forks pool: each test file gets its own process with fresh module cache.
+    // This prevents React DOM's cached window reference from going stale
+    // between jsdom environment teardown/setup cycles.
+    pool: 'forks',
+    poolOptions: {
+      forks: {
+        maxForks: 2,
+        minForks: 1,
+      },
+    },
     coverage: {
       provider: 'v8',
       reporter: ['text', 'html', 'lcov'],

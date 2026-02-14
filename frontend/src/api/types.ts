@@ -24,6 +24,28 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  '/api/metrics': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /**
+     * Metrics Endpoint
+     * @description Prometheus metrics endpoint.
+     *
+     *     Returns metrics in Prometheus text exposition format.
+     */
+    get: operations['metrics_endpoint_api_metrics_get'];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   '/api/sim/disable': {
     parameters: {
       query?: never;
@@ -258,6 +280,26 @@ export interface operations {
         };
         content: {
           'application/json': components['schemas']['HealthResponse'];
+        };
+      };
+    };
+  };
+  metrics_endpoint_api_metrics_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      /** @description Successful Response */
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': unknown;
         };
       };
     };

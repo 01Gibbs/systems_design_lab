@@ -51,14 +51,19 @@ services:
     depends_on:
       - backend
     environment:
+      # Browser calls from host, so use localhost
       VITE_API_URL: http://localhost:8000
     ports:
       - "5173:5173"
+    networks:
+      - default
     volumes:
       - ./frontend/src:/app/src
       - ./frontend/index.html:/app/index.html
       - ./frontend/vite.config.ts:/app/vite.config.ts
-    command: npm run dev -- --host 0.0.0.0
+      - ./frontend/tsconfig.json:/app/tsconfig.json
+      - ./frontend/tailwind.config.ts:/app/tailwind.config.ts
+      - ./frontend/postcss.config.cjs:/app/postcss.config.cjs
 
   # Observability Stack
   prometheus:

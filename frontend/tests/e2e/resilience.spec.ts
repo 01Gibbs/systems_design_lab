@@ -17,6 +17,8 @@ test.describe('Simulator Control Panel - Resilience', () => {
     });
     await page.goto(FRONTEND_URL);
     // After delay, scenarios should load (allow extra time for injected latency)
-    await expect(page.getByText(/scenarios/i)).toBeVisible({ timeout: 10000 });
+    await expect(page.getByRole('heading', { name: /Available Scenarios/i })).toBeVisible({
+      timeout: 10000,
+    });
   });
 });

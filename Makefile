@@ -50,7 +50,7 @@ help: ## Display this help message
 
 ##@ Development Lifecycle
 
-up: autoclean ## Start docker compose + app services
+up: ## Start docker compose + app services
 	@echo "$(BLUE)Starting services...$(NC)"
 	docker-compose up -d
 	@echo "$(GREEN)✓ Services started$(NC)"
@@ -102,7 +102,8 @@ metrics: ## Check backend metrics endpoint
 
 be-install: autoclean ## Install backend dependencies
 	@echo "$(BLUE)Installing backend dependencies...$(NC)"
-	cd backend && pip install -r requirements-dev.txt
+	cd backend && python -m pip install --upgrade pip
+	cd backend && python -m pip install -r requirements.txt -r requirements-dev.txt
 	@echo "$(GREEN)✓ Backend dependencies installed$(NC)"
 
 be-format: ## Format backend code with black

@@ -1,4 +1,5 @@
 // Vitest setup file
+
 import '@testing-library/jest-dom';
 import { cleanup } from '@testing-library/react';
 import { afterEach, beforeAll } from 'vitest';
@@ -8,6 +9,7 @@ declare global {
   // eslint-disable-next-line no-var
   var IS_REACT_ACT_ENVIRONMENT: boolean | undefined;
 }
+
 beforeAll(() => {
   // Enable React testing library act warnings
   globalThis.IS_REACT_ACT_ENVIRONMENT = true;
