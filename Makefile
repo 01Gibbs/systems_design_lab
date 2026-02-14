@@ -102,7 +102,7 @@ metrics: ## Check backend metrics endpoint
 
 be-install: autoclean ## Install backend dependencies
 	@echo "$(BLUE)Installing backend dependencies...$(NC)"
-	cd backend && pip install -r requirements-dev.txt
+	cd backend && pip install -r requirements.txt -r requirements-dev.txt
 	@echo "$(GREEN)✓ Backend dependencies installed$(NC)"
 
 be-format: ## Format backend code with black
