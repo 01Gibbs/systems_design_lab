@@ -1,7 +1,22 @@
 // Vitest setup file
+
+// Polyfill window.event for React DOM BEFORE any imports
+// React DOM's getCurrentEventPriority checks window.event
+// Must be defined at module level before React DOM loads
+if (typeof globalThis.window !== 'undefined') {
+  Object.defineProperty(globalThis.window, 'event', {
+    get: () => undefined,
+    set: () => {
+      /* noop */
+    },
+    configurable: true,
+    enumerable: true,
+  });
+}
+
 import '@testing-library/jest-dom';
 import { cleanup } from '@testing-library/react';
-import { afterEach, beforeAll, beforeEach } from 'vitest';
+import { afterEach, beforeAll } from 'vitest';
 
 // Setup React 18 testing environment to avoid concurrent rendering issues
 declare global {
@@ -12,26 +27,6 @@ declare global {
 beforeAll(() => {
   // Enable React testing library act warnings
   globalThis.IS_REACT_ACT_ENVIRONMENT = true;
-});
-
-beforeEach(() => {
-  // Polyfill window.event for React DOM's getCurrentEventPriority
-  // React DOM checks if window.event is undefined, but jsdom doesn't define it
-  if (typeof window !== 'undefined') {
-    try {
-      // @ts-expect-error - window.event is a legacy property
-      delete window.event;
-      Object.defineProperty(window, 'event', {
-        get: () => undefined,
-        set: () => {
-          /* noop */
-        },
-        configurable: true,
-      });
-    } catch {
-      // Ignore if property already exists and can't be redefined
-    }
-  }
 });
 
 // Cleanup after each test case with proper error handling
