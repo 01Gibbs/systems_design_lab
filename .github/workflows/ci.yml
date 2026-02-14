@@ -2,7 +2,7 @@
 
 on:
   push:
-    branches: [ main, "feature/*", "chore/*" ]
+    branches: [ main, "feature/*", "chore/*", "fix/*" ]
   pull_request:
     branches: [ main ]
 
