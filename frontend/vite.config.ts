@@ -26,10 +26,10 @@ export default defineConfig({
     include: ['**/*.test.{ts,tsx}'],
     testTimeout: 15000, // 15 second timeout for tests
     // Reduce worker pool size to avoid EAGAIN errors in WSL
-    pool: 'threads',
+    pool: 'forks',
     poolOptions: {
-      threads: {
-        singleThread: true, // Run in single thread to avoid resource exhaustion
+      forks: {
+        singleFork: true, // Run in single fork process to avoid resource exhaustion
       },
     },
     coverage: {
