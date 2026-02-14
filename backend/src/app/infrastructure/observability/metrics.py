@@ -1,7 +1,5 @@
 """Prometheus metrics adapter - Infrastructure implementation"""
 
-from typing import cast
-
 from prometheus_client import (
     REGISTRY,
     CollectorRegistry,
@@ -98,4 +96,4 @@ class PrometheusMetrics(MetricsPort):
 
     def get_metrics(self) -> bytes:
         """Generate metrics in Prometheus format"""
-        return cast(bytes, generate_latest(self.registry))
+        return generate_latest(self.registry)
