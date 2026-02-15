@@ -2,13 +2,13 @@
 
 **Goal**: Track progress toward 50 core scenarios + 50+ advanced scenarios
 
-**Last Updated**: February 14, 2026
+**Last Updated**: February 15, 2026
 
 ---
 
-## 📊 Core Scenarios Progress: 15/50 (30%)
+## 📊 Core Scenarios Progress: 16/50 (32%)
 
-### ✅ Implemented (15)
+### ✅ Implemented (16)
 
 | #   | Scenario                     | Category       | File                            | Tested |
 | --- | ---------------------------- | -------------- | ------------------------------- | ------ |
@@ -27,26 +27,25 @@
 | 13  | `network-partition`          | Network        | `network_partition.py`          | ✅     |
 | 14  | `clock-skew`                 | Infrastructure | `clock_skew.py`                 | ✅     |
 | 15  | `resource-starvation`        | Resources      | `resource_starvation.py`        | ✅     |
+| 16  | `stale-read`                 | Caching        | `stale_read.py`                 | ✅     |
 
 ---
 
-## 🔄 To Implement (35)
+## 🔄 To Implement (34)
 
-### Caching & Data Consistency (5 scenarios)
+### Caching & Data Consistency (4 scenarios)
 
 | #   | Scenario                     | Priority | Complexity | Estimated Effort |
 | --- | ---------------------------- | -------- | ---------- | ---------------- |
-| 16  | `stale-read`                 | High     | Low        | 2 hours          |
 | 17  | `cache-warming-failure`      | Medium   | Medium     | 3 hours          |
 | 18  | `cache-invalidation-race`    | High     | Medium     | 4 hours          |
 | 19  | `read-through-cache-failure` | Medium   | Medium     | 3 hours          |
 | 20  | `write-behind-cache-lag`     | Low      | Medium     | 3 hours          |
 
-**Total**: 15 hours
+**Total**: 13 hours
 
 **Description**:
 
-- `stale-read`: Serve stale cache data due to TTL expiry or cache bypass
 - `cache-warming-failure`: Cache preload failures on application startup
 - `cache-invalidation-race`: Race conditions in cache invalidation logic
 - `read-through-cache-failure`: Read-through pattern where cache lookup and DB fallback fail

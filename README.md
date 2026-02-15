@@ -28,7 +28,7 @@ This project provides a **disciplined, maintainable baseline application** with 
 
 📋 **Full Roadmap**: [ROADMAP.md](docs/ROADMAP.md) - Complete vision including:
 
-- Phase 4: Complete 50 Core Scenarios (15/50 done)
+- Phase 4: Complete 50 Core Scenarios (16/50 done)
 - Phase 5: Guided Tutorials (24+ tutorials across 6 series)
 - Phase 6: CQRS/Event Sourcing Module
 - Phase 7: Production Readiness (Redis, Multi-tenancy, K8s)
@@ -323,7 +323,7 @@ See [BRANCH_NAMING_STANDARDS.md](docs/BRANCH_NAMING_STANDARDS.md) for mandatory 
 
 ## Project Status & Next Steps
 
-**Current Phase**: Core Scenario Expansion (Phase 4 - 30% complete)
+**Current Phase**: Core Scenario Expansion (Phase 4 - 32% complete)
 
 ### ✅ Complete
 
@@ -331,9 +331,9 @@ See [BRANCH_NAMING_STANDARDS.md](docs/BRANCH_NAMING_STANDARDS.md) for mandatory 
 - Frontend (Vite + React + TypeScript + Simulator Control Panel)
 - Observability Stack (Prometheus + Grafana + Loki + Tempo)
 - CI/CD enforcement (GitHub Actions + pre-commit hooks)
-- 15 simulator scenarios implemented
-- 41 backend unit tests (92%+ coverage)
-- 14 frontend tests + 3 E2E Playwright tests
+- 16 simulator scenarios implemented
+- 41+ backend unit tests (88%+ coverage)
+- 14+ frontend tests + 3 E2E Playwright tests
 
 ### 🔄 In Progress (Q2 2026)
 
@@ -341,7 +341,7 @@ See [BRANCH_NAMING_STANDARDS.md](docs/BRANCH_NAMING_STANDARDS.md) for mandatory 
   - Add domain-specific metrics to all scenarios (e.g., `cache_miss_total`, `db_queries_per_request`, `db_lock_wait_seconds`)
   - Dynamic Grafana panels showing metric impact per active scenario
   - Makes failure modes directly observable and measurable
-- Complete 50 core scenarios (35 remaining)
+- Complete 50 core scenarios (34 remaining)
   - Caching & Data Consistency (5)
   - Database Patterns (5)
   - API & Network (5)

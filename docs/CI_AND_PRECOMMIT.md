@@ -2,11 +2,24 @@
 
 ## CI (GitHub Actions)
 
-- On every push or PR, CI runs:
-  - `make guardrails` (format, lint, typecheck, tests, arch-check, contracts-check)
-  - `make be-coverage` (backend test coverage)
-- If either fails, the build fails.
-- See `.github/workflows/ci.yml`.
+The CI pipeline runs in two sequential jobs:
+
+### Job 1: Guardrails and Coverage (Fast, ~2-3 minutes)
+
+- `make guardrails` (format, lint, typecheck, tests, arch-check, contracts-check)
+- `make be-coverage` (backend test coverage)
+- `make be-test-integration` (integration tests using FastAPI TestClient)
+- If any check fails, the build fails immediately without running E2E tests
+
+### Job 2: E2E Tests (Slower, ~3-5 minutes)
+
+- Only runs if Job 1 passes
+- Starts Docker services (backend + PostgreSQL)
+- Runs Playwright browser-based tests (`make fe-test-e2e`)
+
+**Key Optimization:** Integration tests now use FastAPI `TestClient` instead of running a real server, so they run in Job 1 without Docker (~30-60s faster). Only actual E2E browser tests need Docker.
+
+See `.github/workflows/ci.yml` for full pipeline definition.
 
 ## Pre-commit Hook
 

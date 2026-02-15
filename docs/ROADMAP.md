@@ -4,7 +4,7 @@
 
 **Target Audience**: Software engineers (junior to senior), bootcamp students, university courses, platform/SRE teams
 
-**Last Updated**: February 14, 2026
+**Last Updated**: February 15, 2026
 
 ---
 
@@ -26,9 +26,9 @@
 | **Phase 1**: Foundation & Backend | ✅ Complete    | 100%        | Done (Feb 2026) |
 | **Phase 2**: Frontend & E2E       | ✅ Complete    | 100%        | Done (Feb 2026) |
 | **Phase 3**: Observability Stack  | ✅ Complete    | 100%        | Done (Feb 2026) |
-| **Phase 4**: Core Scenarios (50)  | 🔄 In Progress | 30% (15/50) | Q2 2026         |
+| **Phase 4**: Core Scenarios (50)  | 🔄 In Progress | 32% (16/50) | Q2 2026         |
 | **Phase 4C**: Type Safety Audit   | ✅ Complete    | 100%        | Done (Feb 2026) |
-| **Phase 4D**: CI Optimization     | ⏳ Next        | 0%          | Feb 2026        |
+| **Phase 4D**: CI Optimization     | ✅ Complete    | 100%        | Done (Feb 2026) |
 | **Phase 5**: Guided Tutorials     | ⏳ Planned     | 0%          | Q2 2026         |
 | **Phase 6**: CQRS/Event Sourcing  | ⏳ Planned     | 0%          | Q3 2026         |
 | **Phase 7**: Production Readiness | ⏳ Planned     | 0%          | Q3 2026         |
@@ -39,26 +39,26 @@
 
 ## 📋 Phase 4: Complete 50 Core Scenarios
 
-**Goal**: Implement 35 additional scenarios to reach 50 total, covering fundamental distributed systems failure modes. **Enhance all scenarios with domain-specific observability metrics.**
+**Goal**: Implement 34 additional scenarios to reach 50 total, covering fundamental distributed systems failure modes. **Enhance all scenarios with domain-specific observability metrics.**
 
-**Status**: 15/50 complete (30%)
+**Status**: 16/50 complete (32%)
 
 **Sub-Phases**:
 
 - **Phase 4A**: Metrics Framework (3-4 days) - Add `MetricSpec` and dynamic metric registration
 - **Phase 4B**: Retrofit Existing Scenarios (5-7 days) - Add metrics to all 15 current scenarios
 - **Phase 4C**: Type Safety Audit (3-4 days) - ✅ Complete - Eliminate all `Any` types, enforce strict typing
-- **Phase 4D**: CI Optimization (<1 hour) - ⏳ Next - Move integration tests to run without Docker
-- **Phase 4E**: New Scenarios (ongoing) - All 35 new scenarios include metrics from day one
+- **Phase 4D**: CI Optimization (<1 hour) - ✅ Complete - Integration tests run in first job without Docker
+- **Phase 4E**: New Scenarios (ongoing) - All 34 new scenarios include metrics from day one
 - **Phase 4F**: Dynamic Grafana Panels (2-3 days) - Auto-show/hide panels based on active scenarios
 
-### ✅ Currently Implemented (15)
+### \u2705 Currently Implemented (16)
 
 1. `fixed-latency` - HTTP latency injection
 2. `error-burst` - Probabilistic 5xx errors
 3. `slow-db-query` - Database operation delays
 4. `lock-contention` - Concurrent update conflicts
-5. `algorithmic-degradation` - O(n) vs O(n²) performance
+5. `algorithmic-degradation` - O(n) vs O(n\u00b2) performance
 6. `circuit-breaker` - Circuit breaker pattern simulation
 7. `retry-storm` - Retry amplification failures
 8. `connection-pool-exhaustion` - Connection pool depletion
@@ -69,8 +69,9 @@
 13. `network-partition` - Network split-brain scenarios
 14. `clock-skew` - Time synchronization issues
 15. `resource-starvation` - Resource contention simulation
+16. `stale-read` - Serve stale cache data
 
-### 🔄 To Implement (35)
+### \ud83d\udd04 To Implement (34)
 
 #### Codebase Type Safety & Best Practices
 
@@ -90,9 +91,9 @@
 
 #### CI Optimization & Test Infrastructure Improvement
 
-- [ ] **CI Optimization**: Move integration tests to run without Docker services in the `guardrails-and-coverage` job, since they now use FastAPI `TestClient` for in-process testing.
+- [x] **CI Optimization**: Move integration tests to run without Docker services in the `guardrails-and-coverage` job, since they now use FastAPI `TestClient` for in-process testing.
 
-**Status**: ⏳ Next (planned after test fixes merged)
+**Status**: \u2705 Complete (Feb 2026)
 
 **Learning Value**: Teaches CI/CD optimization, test architecture patterns, efficient build pipelines
 
@@ -122,9 +123,8 @@
 
 **Estimated Time**: 30 minutes - 1 hour
 
-#### Caching & Data Consistency (5 scenarios)
+#### Caching & Data Consistency (4 scenarios)
 
-- [ ] `stale-read` - Serve stale cache data (TTL expiry, cache bypass)
 - [ ] `cache-warming-failure` - Cache preload failures on startup
 - [ ] `cache-invalidation-race` - Cache invalidation race conditions
 - [ ] `read-through-cache-failure` - Read-through pattern failures
@@ -286,7 +286,7 @@ class MetricSpec:
 - [ ] Maintain Clean Architecture: metrics declared in scenario, registered via port interface
 - [ ] Add unit tests for metric registration and emission
 
-**Phase 4B: Retrofit Existing 15 Scenarios (5-7 days)**
+**Phase 4B: Retrofit Existing 16 Scenarios (5-7 days)**
 
 - [ ] `fixed-latency`: Add `http_injected_latency_seconds` histogram
 - [ ] `error-burst`: Add `http_injected_errors_total` counter, `http_error_burst_active` gauge
@@ -306,7 +306,7 @@ class MetricSpec:
 
 **Phase 4C: New Scenarios (ongoing)**
 
-- [ ] All 35 new scenarios MUST define domain-specific metrics
+- [ ] All 34 new scenarios MUST define domain-specific metrics
 - [ ] Update `TEMPLATE.py` with metrics example
 - [ ] Acceptance criteria includes observable metrics validation
 - [ ] Grafana dashboard must show scenario-specific impact
@@ -365,8 +365,8 @@ class MetricSpec:
 
 #### Success Criteria
 
-- [ ] All 15 existing scenarios have domain-specific metrics
-- [ ] All 35 new scenarios include metrics from day one
+- [ ] All 16 existing scenarios have domain-specific metrics
+- [ ] All 34 new scenarios include metrics from day one
 - [ ] Grafana dynamically shows scenario-specific panels
 - [ ] Metrics visible within 5 seconds of scenario activation
 - [ ] Tutorials reference scenario metrics in documentation
@@ -835,6 +835,6 @@ This roadmap is a living document that will evolve as the project progresses.
 
 ---
 
-**Last Updated**: February 14, 2026
+**Last Updated**: February 15, 2026
 **Next Review**: Monthly
 **Maintainers**: [Add maintainer names/GitHub handles]

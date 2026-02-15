@@ -1,6 +1,6 @@
 # Project Status
 
-**Last Updated:** February 14, 2026
+**Last Updated:** February 15, 2026
 
 ## 🎯 Project Goal
 
@@ -25,7 +25,7 @@ Production-grade local systems design lab for simulating 100+ real-world system 
 
 - ✅ Effect-based scenario pattern (scenarios return dicts, middleware applies)
 - ✅ Registry pattern for dynamic scenario management
-- ✅ 15 scenarios implemented:
+- ✅ 16 scenarios implemented:
   - `fixed-latency` - Add HTTP latency
   - `error-burst` - Probabilistic 5xx errors
   - `slow-db-query` - Slow DB operations
@@ -41,6 +41,7 @@ Production-grade local systems design lab for simulating 100+ real-world system 
   - `network-partition` - Network split-brain scenarios
   - `clock-skew` - Time synchronization issues
   - `resource-starvation` - Resource contention simulation
+  - `stale-read` - Serve stale cache data
 
 ### Infrastructure
 
@@ -108,16 +109,18 @@ Production-grade local systems design lab for simulating 100+ real-world system 
 
 ## ⏳ Next Phases - See [ROADMAP.md](ROADMAP.md)
 
-### Phase 4: Complete 50 Core Scenarios (In Progress - 30%)
+### Phase 4: Complete 50 Core Scenarios (In Progress - 32%)
 
-**Status**: 15/50 scenarios implemented
+**Status**: 16/50 scenarios implemented
 
 **Current Focus**: Scenario-Specific Observability Enhancement
 
 - **Phase 4A**: Metrics Framework - Add `MetricSpec` and dynamic metric registration
 - **Phase 4B**: Retrofit Existing Scenarios - Add domain-specific metrics to all 15 current scenarios
-- **Phase 4C**: New Scenarios - All 35 new scenarios include metrics from day one
-- **Phase 4D**: Dynamic Grafana Panels - Auto-show/hide panels based on active scenarios
+- **Phase 4C**: Type Safety Audit - ✅ Complete - Eliminated `Any` types, strict typing enforced
+- **Phase 4D**: CI Optimization - ✅ Complete - Integration tests run without Docker (~30-60s faster)
+- **Phase 4E**: New Scenarios - All 34 new scenarios include metrics from day one (in progress)
+- **Phase 4F**: Dynamic Grafana Panels - Auto-show/hide panels based on active scenarios
 
 **Priority Scenario Areas:**
 
@@ -208,7 +211,7 @@ See [ROADMAP.md - Phase 9](ROADMAP.md#-phase-9-advanced-scenarios-100-total) for
 | Backend Architecture | 5/5       | ✅ Complete |
 | Frontend             | 1/1       | ✅ Complete |
 | Observability        | 4/4       | ✅ Complete |
-| **Core Scenarios**   | **15/50** | **🔄 30%**  |
+| **Core Scenarios**   | **16/50** | **🔄 32%**  |
 | Tutorials            | 0/24      | ⏳ Planned  |
 | CQRS Module          | 0/1       | ⏳ Planned  |
 | Production Ready     | 0/4       | ⏳ Planned  |
@@ -283,7 +286,7 @@ See [ROADMAP.md - Phase 9](ROADMAP.md#-phase-9-advanced-scenarios-100-total) for
 
 ### Immediate (Q2 2026)
 
-1. **Complete 50 Core Scenarios** - Add 35 more scenarios
+1. **Complete 50 Core Scenarios** - Add 34 more scenarios
    - Caching & Data Consistency (5)
    - Database Patterns (5)
    - API & Network (5)
@@ -315,7 +318,7 @@ See [ROADMAP.md - Phase 9](ROADMAP.md#-phase-9-advanced-scenarios-100-total) for
 
 ## 🔧 Known Technical Debt
 
-1. **Scenario Coverage**: Only 15/50 core scenarios implemented (30%)
+1. **Scenario Coverage**: Only 16/50 core scenarios implemented (32%)
 2. **Scenario-Specific Metrics**: Generic HTTP metrics only, need domain-specific metrics per scenario
 3. **Redis Adapter**: Using `InMemorySimulatorStore` (fine for local, not for multi-instance production)
 4. **Integration Tests**: No testcontainers or real DB integration tests yet
@@ -358,4 +361,4 @@ This lab enables hands-on practice with:
 - Frontend validates entire stack works end-to-end
 - Observability stack respects Clean Architecture (MetricsPort interface)
 - Grafana dashboards auto-reload on file change
-d
+  d

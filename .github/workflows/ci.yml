@@ -41,8 +41,10 @@ jobs:
         run: make guardrails
       - name: Run backend coverage
         run: make be-coverage
+      - name: Run backend integration tests
+        run: make be-test-integration
 
-  integration-tests:
+  e2e-tests:
     runs-on: ubuntu-latest
     needs: guardrails-and-coverage
     steps:
@@ -89,8 +91,6 @@ jobs:
           echo "Backend failed to start"
           docker compose logs
           exit 1
-      - name: Run backend integration tests
-        run: make be-test-integration
       - name: Start frontend for E2E tests
         run: |
           cd frontend && npm run build && npm run preview &

@@ -86,7 +86,7 @@ Create a production-grade frontend for the Systems Design Lab simulator with:
 
 #### E2E Tests (Playwright)
 
-- [ ] Test: Load control panel, see 15 scenarios listed
+- [ ] Test: Load control panel, see 16 scenarios listed
 - [ ] Test: Enable fixed-latency (100ms), verify delay on subsequent requests
 - [ ] Test: Enable error-burst (50% error rate), verify UI handles failures
 - [ ] Test: Enable scenario, see it in active indicator
@@ -319,7 +319,7 @@ docker-compose up --build
 Before merging this branch, ensure:
 
 1. **Functionality**
-   - All 15 scenarios can be enabled/disabled via UI
+   - All 16 scenarios can be enabled/disabled via UI
    - Parameters are validated before submission
    - Active scenarios shown in banner
    - Reset all functionality works
