@@ -5,7 +5,7 @@ from __future__ import annotations
 import random
 from dataclasses import dataclass
 
-from app.application.simulator.models import ScenarioMeta
+from app.application.simulator.models import MetricSpec, ScenarioMeta
 
 
 @dataclass(frozen=True)
@@ -39,6 +39,20 @@ class NetworkPartition:
             "required": ["partition_probability"],
         },
         safety_limits={"max_delay_ms": 10000},
+        metrics=[
+            MetricSpec(
+                name="network_partition_active",
+                type="gauge",
+                description="Network partition active (1=active, 0=inactive)",
+                labels=["scenario"],
+            ),
+            MetricSpec(
+                name="network_requests_dropped_total",
+                type="counter",
+                description="Total number of requests dropped by network partition",
+                labels=["scenario"],
+            ),
+        ],
     )
 
     def is_applicable(self, *, target: dict[str, str]) -> bool:

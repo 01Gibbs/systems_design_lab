@@ -5,7 +5,7 @@ from __future__ import annotations
 import random
 from dataclasses import dataclass
 
-from app.application.simulator.models import ScenarioMeta
+from app.application.simulator.models import MetricSpec, ScenarioMeta
 
 
 @dataclass(frozen=True)
@@ -26,6 +26,20 @@ class ErrorBurst:
             "required": ["probability"],
         },
         safety_limits={"max_probability": 1.0},
+        metrics=[
+            MetricSpec(
+                name="http_injected_errors_total",
+                type="counter",
+                description="Total number of HTTP 5xx errors injected by scenario and endpoint",
+                labels=["scenario", "endpoint"],
+            ),
+            MetricSpec(
+                name="http_error_burst_active",
+                type="gauge",
+                description="Indicates if error burst scenario is active (1=active, 0=inactive)",
+                labels=["scenario"],
+            ),
+        ],
     )
 
     def is_applicable(self, *, target: dict[str, str]) -> bool:

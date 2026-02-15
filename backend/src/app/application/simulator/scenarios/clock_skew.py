@@ -5,7 +5,7 @@ from __future__ import annotations
 import random
 from dataclasses import dataclass
 
-from app.application.simulator.models import ScenarioMeta
+from app.application.simulator.models import MetricSpec, ScenarioMeta
 
 
 @dataclass(frozen=True)
@@ -35,6 +35,20 @@ class ClockSkew:
             "required": ["skew_probability"],
         },
         safety_limits={"max_skew_ms": 60000},
+        metrics=[
+            MetricSpec(
+                name="clock_skew_seconds",
+                type="gauge",
+                description="System clock skew (seconds) by scenario",
+                labels=["scenario"],
+            ),
+            MetricSpec(
+                name="time_sync_failures_total",
+                type="counter",
+                description="Total time sync failures by scenario",
+                labels=["scenario"],
+            ),
+        ],
     )
 
     def is_applicable(self, *, target: dict[str, str]) -> bool:

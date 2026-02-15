@@ -5,7 +5,7 @@ from __future__ import annotations
 import random
 from dataclasses import dataclass
 
-from app.application.simulator.models import ScenarioMeta
+from app.application.simulator.models import MetricSpec, ScenarioMeta
 
 
 @dataclass(frozen=True)
@@ -35,6 +35,20 @@ class MemoryLeak:
             "required": ["leak_probability"],
         },
         safety_limits={"max_leak_size_kb": 10240},
+        metrics=[
+            MetricSpec(
+                name="memory_leaked_bytes",
+                type="gauge",
+                description="Total memory leaked (bytes) by scenario",
+                labels=["scenario"],
+            ),
+            MetricSpec(
+                name="memory_leak_rate_bytes_per_sec",
+                type="gauge",
+                description="Memory leak rate (bytes/sec) by scenario",
+                labels=["scenario"],
+            ),
+        ],
     )
 
     def is_applicable(self, *, target: dict[str, str]) -> bool:

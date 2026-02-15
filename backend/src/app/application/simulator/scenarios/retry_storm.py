@@ -5,7 +5,7 @@ from __future__ import annotations
 import random
 from dataclasses import dataclass
 
-from app.application.simulator.models import ScenarioMeta
+from app.application.simulator.models import MetricSpec, ScenarioMeta
 
 
 @dataclass(frozen=True)
@@ -42,6 +42,21 @@ class RetryStorm:
             "required": ["failure_rate"],
         },
         safety_limits={"max_retry_multiplier": 10.0},
+        metrics=[
+            MetricSpec(
+                name="retry_attempts_total",
+                type="counter",
+                description="Total number of retry attempts by scenario",
+                labels=["scenario"],
+            ),
+            MetricSpec(
+                name="retry_depth",
+                type="histogram",
+                description="Retry depth/count per request",
+                labels=["scenario"],
+                buckets=[1, 2, 3, 5, 10, 20],
+            ),
+        ],
     )
 
     def is_applicable(self, *, target: dict[str, str]) -> bool:

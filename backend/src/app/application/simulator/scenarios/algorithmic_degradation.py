@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from app.application.simulator.models import ScenarioMeta
+from app.application.simulator.models import MetricSpec, ScenarioMeta
 
 
 @dataclass(frozen=True)
@@ -24,6 +24,20 @@ class AlgorithmicDegradation:
             "required": ["use_slow_path"],
         },
         safety_limits={"max_input_size": 10_000},
+        metrics=[
+            MetricSpec(
+                name="algorithm_operations_total",
+                type="counter",
+                description="Total number of algorithm operations by scenario and complexity",
+                labels=["scenario", "complexity"],
+            ),
+            MetricSpec(
+                name="algorithm_complexity",
+                type="gauge",
+                description="Current algorithmic complexity (1=O(n), 2=O(n^2))",
+                labels=["scenario"],
+            ),
+        ],
     )
 
     def is_applicable(self, *, target: dict[str, str]) -> bool:
