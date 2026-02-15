@@ -22,17 +22,19 @@ This is a **production-grade local systems design lab** — NOT a demo app or on
 
 ## Project Roadmap & Current Phase
 
-**Current Phase**: Phase 4 - Core Scenario Expansion (32% complete - 16/50 scenarios)
+**Current Phase**: Phase 4E - New Scenario Implementation (32% complete - 16/50 scenarios)
 
 ### Completed Phases
 
 - ✅ **Phase 1**: Foundation & Backend
 - ✅ **Phase 2**: Frontend & E2E
 - ✅ **Phase 3**: Observability Stack (Prometheus + Grafana + Loki + Tempo)
+- ✅ **Phase 4A**: Metrics Framework - MetricSpec and dynamic registration
+- ✅ **Phase 4B**: Retrofit Existing Scenarios - All 16 scenarios have domain-specific metrics
 
 ### Active Phase
 
-- \ud83d\udd04 **Phase 4**: Complete 50 Core Scenarios (16 implemented, 34 remaining)
+- 🔄 **Phase 4E**: New Scenarios (16 implemented, 34 remaining)
   - Priority: Caching & Data Consistency, Database Patterns, API & Network, Concurrency
 
 ### Upcoming Phases

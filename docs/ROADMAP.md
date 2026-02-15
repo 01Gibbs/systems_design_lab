@@ -27,8 +27,13 @@
 | **Phase 2**: Frontend & E2E       | ✅ Complete    | 100%        | Done (Feb 2026) |
 | **Phase 3**: Observability Stack  | ✅ Complete    | 100%        | Done (Feb 2026) |
 | **Phase 4**: Core Scenarios (50)  | 🔄 In Progress | 32% (16/50) | Q2 2026         |
+| **Phase 4A**: Metrics Framework   | ✅ Complete    | 100%        | Done (Feb 2026) |
+| **Phase 4B**: Retrofit Scenarios  | ✅ Complete    | 100%        | Done (Feb 2026) |
 | **Phase 4C**: Type Safety Audit   | ✅ Complete    | 100%        | Done (Feb 2026) |
 | **Phase 4D**: CI Optimization     | ✅ Complete    | 100%        | Done (Feb 2026) |
+| **Phase 4E**: New Scenarios       | 🔄 In Progress | 32% (16/50) | Q2 2026         |
+| **Phase 4F**: Dynamic Grafana     | ⏳ Planned     | 0%          | Q2 2026         |
+| **Phase 4G**: Load Testing        | ⏳ Planned     | 0%          | Q2 2026         |
 | **Phase 5**: Guided Tutorials     | ⏳ Planned     | 0%          | Q2 2026         |
 | **Phase 6**: CQRS/Event Sourcing  | ⏳ Planned     | 0%          | Q3 2026         |
 | **Phase 7**: Production Readiness | ⏳ Planned     | 0%          | Q3 2026         |
@@ -46,11 +51,12 @@
 **Sub-Phases**:
 
 - **Phase 4A**: Metrics Framework (3-4 days) - ✅ Complete - `MetricSpec` and dynamic metric registration implemented
-- **Phase 4B**: Retrofit Existing Scenarios (5-7 days) - Add metrics to all 15 current scenarios
+- **Phase 4B**: Retrofit Existing Scenarios (5-7 days) - ✅ Complete - All 16 scenarios now have domain-specific metrics
 - **Phase 4C**: Type Safety Audit (3-4 days) - ✅ Complete - Eliminate all `Any` types, enforce strict typing
 - **Phase 4D**: CI Optimization (<1 hour) - ✅ Complete - Integration tests run in first job without Docker
 - **Phase 4E**: New Scenarios (ongoing) - All 34 new scenarios include metrics from day one
 - **Phase 4F**: Dynamic Grafana Panels (2-3 days) - Auto-show/hide panels based on active scenarios
+- **Phase 4G**: Load Testing with Artillery (3-4 days) - Validate scenarios under realistic load with Playwright engine
 
 ### \u2705 Currently Implemented (16)
 
@@ -353,6 +359,85 @@ metrics=[
 - [ ] Test coverage includes metric emission validation
 
 **Estimated Total Effort**: 10-14 days across Phase 4A-D
+
+### Phase 4G: Load Testing with Artillery + Playwright
+
+**Goal**: Validate scenario behavior under realistic concurrent load using Artillery with Playwright engine.
+
+**Status**: Not started
+
+**Learning Value**: Teaches performance testing, capacity planning, load testing patterns, and observability-driven debugging under load.
+
+#### Why Artillery + Playwright?
+
+- **Production-Grade Load Testing**: Artillery with Playwright engine enables realistic browser-driven load testing
+- **Scenario Validation**: Verify scenarios behave correctly under concurrent load (e.g., cache-stampede creates thundering herd)
+- **Observability Integration**: Artillery metrics + scenario-specific Prometheus metrics = complete performance picture
+- **Tutorial Material**: "Enable scenario → run load test → analyze Grafana → diagnose bottleneck"
+
+#### Implementation Plan
+
+**Infrastructure** (1 day):
+
+- [ ] Add Artillery + Playwright engine to project dependencies
+- [ ] Create `tests/load/` directory structure
+- [ ] Base Artillery configuration (`artillery.yml`)
+- [ ] Playwright setup scripts for scenario enablement
+
+**Scenario Load Tests** (2 days):
+
+- [ ] `cache-stampede.yml` - Validate thundering herd under load
+- [ ] `circuit-breaker.yml` - Verify circuit opens at failure threshold
+- [ ] `retry-storm.yml` - Confirm retry amplification behavior
+- [ ] `connection-pool-exhaustion.yml` - Test pool saturation
+- [ ] `fixed-latency.yml` - Baseline latency injection under load
+- [ ] `error-burst.yml` - Probabilistic errors at scale
+
+**Integration & Documentation** (1 day):
+
+- [ ] Makefile commands: `make load-test`, `make load-test-scenario SCENARIO=cache-stampede`
+- [ ] CI integration (optional load tests on PR)
+- [ ] Documentation in `docs/LOAD_TESTING.md`
+- [ ] Tutorial: "Load Testing Your System" in Phase 5
+
+#### Project Structure
+
+```
+tests/
+  load/
+    artillery.yml              # Base configuration
+    scenarios/
+      cache-stampede.yml       # Load test cache-stampede
+      circuit-breaker.yml      # Load test circuit-breaker
+      retry-storm.yml          # Load test retry-storm
+      connection-pool.yml      # Load test connection pool
+    scripts/
+      setup-scenario.js        # Playwright: enable scenario via UI
+      teardown-scenario.js     # Playwright: disable scenario
+      validate-metrics.js      # Playwright: scrape Prometheus metrics
+```
+
+#### Example Load Test Workflow
+
+1. **Setup**: Playwright script enables `cache-stampede` scenario via frontend UI
+2. **Load Generation**: Artillery sends 1000 concurrent requests to API endpoint
+3. **Validation**:
+   - Verify `cache_miss_total` metric spikes in Prometheus
+   - Verify `cache_concurrent_requests` reaches expected threshold
+   - Verify backend query count increases (thundering herd)
+4. **Teardown**: Playwright script disables scenario
+5. **Report**: Artillery generates HTML report with latency percentiles, error rates
+
+#### Success Criteria
+
+- [ ] Load tests validate scenario behavior under concurrent load
+- [ ] Artillery metrics correlate with scenario-specific Prometheus metrics
+- [ ] Load tests can be run locally and in CI
+- [ ] Documentation explains load testing workflow
+- [ ] At least 6 core scenarios have load tests
+- [ ] Load test results used in tutorial material
+
+**Estimated Total Effort**: 3-4 days
 
 ### Acceptance Criteria
 

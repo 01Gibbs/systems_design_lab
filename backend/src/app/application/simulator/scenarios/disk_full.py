@@ -5,7 +5,7 @@ from __future__ import annotations
 import random
 from dataclasses import dataclass
 
-from app.application.simulator.models import ScenarioMeta
+from app.application.simulator.models import MetricSpec, ScenarioMeta
 
 
 @dataclass(frozen=True)
@@ -30,6 +30,20 @@ class DiskFull:
             "required": ["failure_probability"],
         },
         safety_limits={},
+        metrics=[
+            MetricSpec(
+                name="disk_available_bytes",
+                type="gauge",
+                description="Available disk space (bytes) by scenario",
+                labels=["scenario"],
+            ),
+            MetricSpec(
+                name="disk_write_failures_total",
+                type="counter",
+                description="Total disk write failures by scenario",
+                labels=["scenario"],
+            ),
+        ],
     )
 
     def is_applicable(self, *, target: dict[str, str]) -> bool:

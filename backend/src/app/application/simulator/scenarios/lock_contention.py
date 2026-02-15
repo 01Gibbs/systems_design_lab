@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from app.application.simulator.models import ScenarioMeta
+from app.application.simulator.models import MetricSpec, ScenarioMeta
 
 
 @dataclass(frozen=True)
@@ -24,6 +24,20 @@ class LockContention:
             "required": ["row_id", "update_count"],
         },
         safety_limits={"max_update_count": 100},
+        metrics=[
+            MetricSpec(
+                name="db_lock_attempts_total",
+                type="counter",
+                description="Total number of DB lock attempts by scenario",
+                labels=["scenario"],
+            ),
+            MetricSpec(
+                name="db_lock_conflicts_total",
+                type="counter",
+                description="Total number of DB lock conflicts by scenario",
+                labels=["scenario"],
+            ),
+        ],
     )
 
     def is_applicable(self, *, target: dict[str, str]) -> bool:

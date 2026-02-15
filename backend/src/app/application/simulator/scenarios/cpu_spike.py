@@ -5,7 +5,7 @@ from __future__ import annotations
 import random
 from dataclasses import dataclass
 
-from app.application.simulator.models import ScenarioMeta
+from app.application.simulator.models import MetricSpec, ScenarioMeta
 
 
 @dataclass(frozen=True)
@@ -35,6 +35,14 @@ class CpuSpike:
             "required": ["spike_probability"],
         },
         safety_limits={"max_duration_ms": 10000},
+        metrics=[
+            MetricSpec(
+                name="cpu_usage_percent",
+                type="gauge",
+                description="CPU usage percentage by scenario and injection status",
+                labels=["scenario", "injected"],
+            ),
+        ],
     )
 
     def is_applicable(self, *, target: dict[str, str]) -> bool:

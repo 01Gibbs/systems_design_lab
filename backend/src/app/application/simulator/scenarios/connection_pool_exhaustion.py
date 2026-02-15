@@ -5,7 +5,7 @@ from __future__ import annotations
 import random
 from dataclasses import dataclass
 
-from app.application.simulator.models import ScenarioMeta
+from app.application.simulator.models import MetricSpec, ScenarioMeta
 
 
 @dataclass(frozen=True)
@@ -41,6 +41,21 @@ class ConnectionPoolExhaustion:
             "required": ["exhaustion_probability"],
         },
         safety_limits={"max_hang_duration_ms": 30000},
+        metrics=[
+            MetricSpec(
+                name="connection_pool_size",
+                type="gauge",
+                description="Current connection pool size by scenario",
+                labels=["scenario"],
+            ),
+            MetricSpec(
+                name="connection_pool_wait_seconds",
+                type="histogram",
+                description="Connection pool wait time (seconds)",
+                labels=["scenario"],
+                buckets=[0.1, 0.5, 1, 2, 5, 10, 30],
+            ),
+        ],
     )
 
     def is_applicable(self, *, target: dict[str, str]) -> bool:

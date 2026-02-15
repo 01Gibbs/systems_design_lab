@@ -5,7 +5,7 @@ from __future__ import annotations
 import random
 from dataclasses import dataclass
 
-from app.application.simulator.models import ScenarioMeta
+from app.application.simulator.models import MetricSpec, ScenarioMeta
 
 
 @dataclass(frozen=True)
@@ -45,6 +45,20 @@ class CircuitBreaker:
             "required": ["failure_threshold"],
         },
         safety_limits={"max_timeout_ms": 60000},
+        metrics=[
+            MetricSpec(
+                name="circuit_breaker_state",
+                type="gauge",
+                description="Circuit breaker state (0=closed, 1=open, 2=half-open)",
+                labels=["scenario"],
+            ),
+            MetricSpec(
+                name="circuit_breaker_trips_total",
+                type="counter",
+                description="Total number of circuit breaker trips by scenario",
+                labels=["scenario"],
+            ),
+        ],
     )
 
     def is_applicable(self, *, target: dict[str, str]) -> bool:

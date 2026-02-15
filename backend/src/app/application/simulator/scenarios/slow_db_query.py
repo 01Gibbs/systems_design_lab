@@ -5,7 +5,7 @@ from __future__ import annotations
 import random
 from dataclasses import dataclass
 
-from app.application.simulator.models import ScenarioMeta
+from app.application.simulator.models import MetricSpec, ScenarioMeta
 
 
 @dataclass(frozen=True)
@@ -25,6 +25,21 @@ class SlowDbQuery:
             "required": ["seconds"],
         },
         safety_limits={"max_seconds": 5.0},
+        metrics=[
+            MetricSpec(
+                name="db_query_duration_seconds",
+                type="histogram",
+                description="Injected DB query duration (seconds) by scenario",
+                labels=["scenario"],
+                buckets=[0.01, 0.05, 0.1, 0.25, 0.5, 1, 2, 5],
+            ),
+            MetricSpec(
+                name="db_slow_query_injections_total",
+                type="counter",
+                description="Total number of slow DB query injections by scenario",
+                labels=["scenario"],
+            ),
+        ],
     )
 
     def is_applicable(self, *, target: dict[str, str]) -> bool:

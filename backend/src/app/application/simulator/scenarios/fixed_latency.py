@@ -5,7 +5,7 @@ from __future__ import annotations
 import random
 from dataclasses import dataclass
 
-from app.application.simulator.models import ScenarioMeta
+from app.application.simulator.models import MetricSpec, ScenarioMeta
 
 
 @dataclass(frozen=True)
@@ -27,6 +27,21 @@ class FixedLatency:
             "required": ["ms"],
         },
         safety_limits={"max_ms": 10_000},
+        metrics=[
+            MetricSpec(
+                name="http_injected_latency_seconds",
+                type="histogram",
+                description="Injected HTTP latency (seconds) by scenario and endpoint",
+                labels=["scenario", "endpoint"],
+                buckets=[0.01, 0.05, 0.1, 0.25, 0.5, 1, 2, 5],
+            ),
+            MetricSpec(
+                name="http_latency_injections_total",
+                type="counter",
+                description="Total number of HTTP latency injections by scenario and endpoint",
+                labels=["scenario", "endpoint"],
+            ),
+        ],
     )
 
     def is_applicable(self, *, target: dict[str, str]) -> bool:

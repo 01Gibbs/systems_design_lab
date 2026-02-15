@@ -5,7 +5,7 @@ from __future__ import annotations
 import random
 from dataclasses import dataclass
 
-from app.application.simulator.models import ScenarioMeta
+from app.application.simulator.models import MetricSpec, ScenarioMeta
 
 
 @dataclass(frozen=True)
@@ -35,6 +35,21 @@ class ResourceStarvation:
             "required": ["starvation_probability"],
         },
         safety_limits={"max_workers": 100},
+        metrics=[
+            MetricSpec(
+                name="resource_queue_depth",
+                type="gauge",
+                description="Resource queue depth by scenario",
+                labels=["scenario"],
+            ),
+            MetricSpec(
+                name="resource_wait_seconds",
+                type="histogram",
+                description="Resource wait time (seconds)",
+                labels=["scenario"],
+                buckets=[0.01, 0.05, 0.1, 0.5, 1, 5, 10],
+            ),
+        ],
     )
 
     def is_applicable(self, *, target: dict[str, str]) -> bool:
