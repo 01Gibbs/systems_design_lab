@@ -54,6 +54,11 @@ def create_app() -> FastAPI:
     registry = build_registry()
     metrics = PrometheusMetrics()
 
+    # Register all scenario metrics at startup
+    for scenario in registry.scenarios.values():
+        if hasattr(scenario.meta, "metrics") and scenario.meta.metrics:
+            metrics.register_scenario_metrics(scenario.meta.name, scenario.meta.metrics)
+
     # Store metrics in app state for routers and middleware to access
     app.state.metrics = metrics
 
