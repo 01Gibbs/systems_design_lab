@@ -22,7 +22,7 @@ This is a **production-grade local systems design lab** — NOT a demo app or on
 
 ## Project Roadmap & Current Phase
 
-**Current Phase**: Phase 4 - Core Scenario Expansion (30% complete - 15/50 scenarios)
+**Current Phase**: Phase 4 - Core Scenario Expansion (32% complete - 16/50 scenarios)
 
 ### Completed Phases
 
@@ -32,7 +32,7 @@ This is a **production-grade local systems design lab** — NOT a demo app or on
 
 ### Active Phase
 
-- 🔄 **Phase 4**: Complete 50 Core Scenarios (15 implemented, 35 remaining)
+- \ud83d\udd04 **Phase 4**: Complete 50 Core Scenarios (16 implemented, 34 remaining)
   - Priority: Caching & Data Consistency, Database Patterns, API & Network, Concurrency
 
 ### Upcoming Phases
@@ -141,7 +141,7 @@ The simulator is a first-class, extensible subsystem for injecting 50+ real-worl
 - Adapter wrapping for DB/cache behaviours
 - NO simulator logic in domain layer
 
-**Implemented scenarios (15/50 core, see [SCENARIO_TRACKER.md](../docs/SCENARIO_TRACKER.md)):**
+**Implemented scenarios (16/50 core, see [SCENARIO_TRACKER.md](../docs/SCENARIO_TRACKER.md)):**
 
 1. Fixed latency injection (per route)
 2. Error burst (probabilistic 5xx)
@@ -158,12 +158,13 @@ The simulator is a first-class, extensible subsystem for injecting 50+ real-worl
 13. Network partition (split-brain)
 14. Clock skew (time sync issues)
 15. Resource starvation
+16. Stale read (serve stale cache data)
 
 **Target:** 50 core scenarios + 50+ advanced scenarios (100+ total)
 
 **Priority categories for Phase 4:**
 
-- Caching & Data Consistency (5 scenarios) - `stale-read`, `cache-warming-failure`, etc.
+- Caching & Data Consistency (4 scenarios) - `cache-warming-failure`, `cache-invalidation-race`, etc.
 - Database Patterns (5 scenarios) - `n-plus-one-query`, `missing-index`, `deadlock`, etc.
 - API & Network (5 scenarios) - `rate-limit`, `timeout-cascade`, etc.
 - Concurrency & Race Conditions (5 scenarios) - `double-write`, `optimistic-locking-collision`, etc.

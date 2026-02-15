@@ -212,7 +212,7 @@ Before merging `feature/frontend-simulator-ui`:
 - [ ] Frontend Vite project initialized
 - [ ] Typed API client generated from OpenAPI
 - [ ] SimulatorControlPanel component complete
-  - [ ] Lists all 15 scenarios with descriptions
+  - [ ] Lists all 16 scenarios with descriptions
   - [ ] Can enable scenarios with parameters
   - [ ] Shows active scenarios with expiry times
   - [ ] Can disable individual scenarios

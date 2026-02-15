@@ -2,7 +2,7 @@
 
 **Vision**: The most comprehensive, production-grade systems design learning platform with 100+ observable failure scenarios.
 
-**Status**: Phase 4 (Core Scenarios) - 30% Complete | [Full Roadmap](ROADMAP.md)
+**Status**: Phase 4 (Core Scenarios) - 32% Complete | [Full Roadmap](ROADMAP.md)
 
 ---
 
@@ -25,19 +25,19 @@ A hands-on learning platform where developers can:
 
 | Phase       | Description          | Deliverables                                                                       |
 | ----------- | -------------------- | ---------------------------------------------------------------------------------- |
-| **Phase 1** | Foundation & Backend | Clean Architecture, FastAPI, Contract-first API, Simulator framework, 15 scenarios |
+| **Phase 1** | Foundation & Backend | Clean Architecture, FastAPI, Contract-first API, Simulator framework, 16 scenarios |
 | **Phase 2** | Frontend & E2E       | React UI, Simulator Control Panel, Playwright tests, 14+ unit tests                |
 | **Phase 3** | Observability Stack  | Prometheus, Grafana, Loki, Tempo, 2 dashboards, OpenTelemetry tracing              |
 
-### 🔄 Active Phase (30%)
+### 🔄 Active Phase (32%)
 
 | Phase       | Description                                      | Progress | Target  |
 | ----------- | ------------------------------------------------ | -------- | ------- |
-| **Phase 4** | Core Scenarios + Scenario-Specific Observability | 15/50    | Q2 2026 |
+| **Phase 4** | Core Scenarios + Scenario-Specific Observability | 16/50    | Q2 2026 |
 
 **Current Focus**:
 
-- Implementing 35 additional scenarios (Caching, Database, API, Concurrency patterns)
+- Implementing 34 additional scenarios (Caching, Database, API, Concurrency patterns)
 - **NEW**: Adding domain-specific metrics to all scenarios for enhanced observability
   - Phase 4A: Metrics Framework (MetricSpec, dynamic registration)
   - Phase 4B: Retrofit 15 existing scenarios with metrics
@@ -58,11 +58,11 @@ A hands-on learning platform where developers can:
 
 ## 🎓 Scenario Coverage
 
-### Core Scenarios (50 total, 15 implemented)
+### Core Scenarios (50 total, 16 implemented)
 
 | Category                       | Count | Status | Examples                                                                   |
 | ------------------------------ | ----- | ------ | -------------------------------------------------------------------------- |
-| **Caching & Data Consistency** | 5     | ⏳     | `stale-read`, `cache-invalidation-race`, `cache-warming-failure`           |
+| **Caching & Data Consistency** | 5     | 🔄     | `stale-read` ✅, `cache-invalidation-race`, `cache-warming-failure`        |
 | **Database Patterns**          | 5     | ⏳     | `n-plus-one-query`, `missing-index`, `deadlock`, `connection-leak`         |
 | **API & Network**              | 5     | ⏳     | `rate-limit`, `timeout-cascade`, `partial-response`                        |
 | **Concurrency**                | 5     | ⏳     | `double-write`, `phantom-read`, `optimistic-locking-collision`             |
@@ -203,7 +203,7 @@ A hands-on learning platform where developers can:
   - [ ] Phase 4A: Metrics framework (MetricSpec, dynamic registration)
   - [ ] Phase 4B: Retrofit 15 existing scenarios with domain metrics
   - [ ] Phase 4C: Dynamic Grafana panels for active scenarios
-- [ ] Complete 50 core scenarios (35 remaining, all with metrics)
+- [ ] Complete 50 core scenarios (34 remaining, all with metrics)
 - [ ] Launch 6 tutorial series (24+ tutorials)
 - [ ] Public beta announcement
 
@@ -229,15 +229,15 @@ A hands-on learning platform where developers can:
 
 ## 📚 Documentation
 
-| Document                                     | Purpose                                   |
-| -------------------------------------------- | ----------------------------------------- |
-| [README.md](../README.md)                    | Quick start and overview                  |
-| [ROADMAP.md](ROADMAP.md)                     | **Full product vision and phases**        |
-| [PROJECT_STATUS.md](PROJECT_STATUS.md)       | Current progress and completed work       |
-| [SCENARIO_TRACKER.md](SCENARIO_TRACKER.md)   | Detailed scenario implementation status   |
-| [SCENARIO_TRACKER.md](SCENARIO_TRACKER.md)   | Detailed scenario implementation status   |
-| [OBSERVABILITY.md](OBSERVABILITY.md)         | Metrics, logs, traces guide               |
-| [DEVELOPMENT_SETUP.md](DEVELOPMENT_SETUP.md) | Development environment setup             |
+| Document                                     | Purpose                                 |
+| -------------------------------------------- | --------------------------------------- |
+| [README.md](../README.md)                    | Quick start and overview                |
+| [ROADMAP.md](ROADMAP.md)                     | **Full product vision and phases**      |
+| [PROJECT_STATUS.md](PROJECT_STATUS.md)       | Current progress and completed work     |
+| [SCENARIO_TRACKER.md](SCENARIO_TRACKER.md)   | Detailed scenario implementation status |
+| [SCENARIO_TRACKER.md](SCENARIO_TRACKER.md)   | Detailed scenario implementation status |
+| [OBSERVABILITY.md](OBSERVABILITY.md)         | Metrics, logs, traces guide             |
+| [DEVELOPMENT_SETUP.md](DEVELOPMENT_SETUP.md) | Development environment setup           |
 
 ---
 
@@ -271,6 +271,6 @@ A hands-on learning platform where developers can:
 
 ---
 
-**Last Updated**: February 14, 2026
+**Last Updated**: February 15, 2026
 **Maintainers**: [Add GitHub handles]
 **License**: MIT
