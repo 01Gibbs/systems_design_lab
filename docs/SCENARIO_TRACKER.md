@@ -6,7 +6,14 @@
 
 ---
 
+
 ## 📊 Core Scenarios Progress: 16/50 (32%)
+
+**Metrics Framework (Phase 4A):** ✅ Complete (Feb 2026)
+
+- All scenario-specific metrics are now declared in `ScenarioMeta` and registered with Prometheus at startup.
+- Metrics for all implemented scenarios are visible in Prometheus and Grafana.
+- See [ROADMAP.md](ROADMAP.md#-phase-4a-metrics-framework-complete) for details.
 
 ### ✅ Implemented (16)
 

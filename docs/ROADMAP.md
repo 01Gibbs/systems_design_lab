@@ -45,7 +45,7 @@
 
 **Sub-Phases**:
 
-- **Phase 4A**: Metrics Framework (3-4 days) - Add `MetricSpec` and dynamic metric registration
+- **Phase 4A**: Metrics Framework (3-4 days) - ✅ Complete - `MetricSpec` and dynamic metric registration implemented
 - **Phase 4B**: Retrofit Existing Scenarios (5-7 days) - Add metrics to all 15 current scenarios
 - **Phase 4C**: Type Safety Audit (3-4 days) - ✅ Complete - Eliminate all `Any` types, enforce strict typing
 - **Phase 4D**: CI Optimization (<1 hour) - ✅ Complete - Integration tests run in first job without Docker
@@ -198,21 +198,13 @@
 
 **Priority**: HIGH - Critical for learning value and Phase 5 (Tutorials)
 
-**Status**: Not started
+**Status**: ✅ Complete (Feb 2026)
 
-#### Current Limitation
+#### Solution: Scenario-Declared Metrics (Implemented)
 
-Existing observability shows:
-
-- ✅ Generic HTTP metrics (request rate, latency, error rate)
-- ✅ Simulator injection events (`simulator_injections_total`)
-- ❌ **Domain-specific impact** (e.g., cache miss rate, query count, lock wait time)
-
-**Problem**: Users can see a scenario is active but not **what impact** it's having on the system.
-
-#### Solution: Scenario-Declared Metrics
-
-Each scenario declares domain-specific metrics that expose the failure mode:
+Each scenario now declares domain-specific metrics in `ScenarioMeta` using `MetricSpec`.
+All scenario metrics are dynamically registered with Prometheus at startup and are visible in Prometheus and Grafana.
+Metric emission is handled via the metrics port and infrastructure adapter, maintaining Clean Architecture.
 
 **Example 1: `n-plus-one-query`**
 
@@ -264,27 +256,14 @@ metrics=[
 
 **Observable in Grafana**: Lock wait time increases, deadlock counter increments
 
-#### Implementation Plan
+#### Implementation Summary (Phase 4A: Complete)
 
-**Phase 4A: Metrics Framework (3-4 days)**
-
-- [ ] Create `MetricSpec` dataclass in `application/simulator/models.py`
-
-```python
-@dataclass(frozen=True)
-class MetricSpec:
-    name: str
-    type: Literal["counter", "gauge", "histogram", "summary"]
-    description: str
-    labels: list[str] = field(default_factory=list)
-    buckets: list[float] | None = None  # For histograms
-```
-
-- [ ] Add `metrics: list[MetricSpec]` field to `ScenarioMeta`
-- [ ] Extend `PrometheusMetrics` adapter to dynamically register scenario metrics
-- [ ] Update `SimulatorInjectionMiddleware` to emit scenario metrics when effects applied
-- [ ] Maintain Clean Architecture: metrics declared in scenario, registered via port interface
-- [ ] Add unit tests for metric registration and emission
+- `MetricSpec` dataclass created in `application/simulator/models.py`
+- `metrics: list[MetricSpec]` field added to `ScenarioMeta`
+- `PrometheusMetrics` adapter dynamically registers all scenario metrics at startup
+- `SimulatorInjectionMiddleware` and scenarios emit metrics via the metrics port
+- Clean Architecture maintained: metrics declared in scenario, registered via port interface
+- Unit tests for metric registration and emission are present and passing
 
 **Phase 4B: Retrofit Existing 16 Scenarios (5-7 days)**
 
