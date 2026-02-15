@@ -1,8 +1,8 @@
 """OpenTelemetry tracing configuration"""
 
 import os
-from typing import Any
 
+from fastapi import FastAPI
 from opentelemetry import trace
 from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import (
     OTLPSpanExporter,
@@ -16,6 +16,7 @@ from opentelemetry.instrumentation.sqlalchemy import (
 from opentelemetry.sdk.resources import SERVICE_NAME, Resource
 from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import BatchSpanProcessor
+from sqlalchemy.engine import Engine
 
 
 def setup_tracing(app_name: str = "systems-design-lab-backend") -> None:
@@ -59,7 +60,7 @@ def setup_tracing(app_name: str = "systems-design-lab-backend") -> None:
         logging.warning(f"Failed to setup OpenTelemetry: {e}")
 
 
-def instrument_fastapi(app: Any) -> None:
+def instrument_fastapi(app: FastAPI) -> None:
     """Instrument FastAPI with OpenTelemetry"""
     try:
         FastAPIInstrumentor.instrument_app(app)
@@ -69,7 +70,7 @@ def instrument_fastapi(app: Any) -> None:
         logging.warning(f"Failed to instrument FastAPI: {e}")
 
 
-def instrument_sqlalchemy(engine: Any) -> None:
+def instrument_sqlalchemy(engine: Engine) -> None:
     """Instrument SQLAlchemy for DB query tracing"""
     try:
         SQLAlchemyInstrumentor().instrument(engine=engine)

@@ -3,13 +3,14 @@
 from __future__ import annotations
 
 import asyncio
-from collections.abc import Awaitable, Callable, Mapping
-from typing import Any
+from collections.abc import Awaitable, Callable
 
 from fastapi import Request, Response
 from starlette.middleware.base import BaseHTTPMiddleware
+from starlette.types import ASGIApp
 
 from app.application.ports.metrics import MetricsPort
+from app.application.simulator.app_models import ActiveScenarioApp
 from app.application.simulator.service import SimulatorService
 
 
@@ -20,7 +21,7 @@ class SimulatorInjectionMiddleware(BaseHTTPMiddleware):
     This is where effect dicts from scenarios get executed.
     """
 
-    def __init__(self, app: Any, metrics: MetricsPort | None = None) -> None:
+    def __init__(self, app: ASGIApp, metrics: MetricsPort | None = None) -> None:
         super().__init__(app)
         self.metrics = metrics
 
@@ -54,7 +55,9 @@ class SimulatorInjectionMiddleware(BaseHTTPMiddleware):
 
         return response
 
-    def _collect_effects(self, request: Request, active_scenarios: list[Any]) -> dict[str, object]:
+    def _collect_effects(
+        self, request: Request, active_scenarios: list[ActiveScenarioApp]
+    ) -> dict[str, object]:
         """Collect all effects from active scenarios"""
         sim_service: SimulatorService = request.app.state.simulator_service
         registry = sim_service._registry
@@ -70,7 +73,7 @@ class SimulatorInjectionMiddleware(BaseHTTPMiddleware):
             try:
                 scenario = registry.get(active.name)
                 if scenario.is_applicable(target=target):
-                    ctx: Mapping[str, Any] = {"request": request, "target": target}
+                    ctx: dict[str, object] = {"request": request, "target": target}
                     effects = scenario.apply(ctx=ctx, parameters=active.parameters)  # type: ignore
                     combined_effects.update(effects)
             except Exception:

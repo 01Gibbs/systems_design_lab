@@ -3,11 +3,11 @@
 import logging
 import time
 from collections.abc import Awaitable, Callable
-from typing import Any
 
 from fastapi import Request, Response
 from opentelemetry import trace
 from starlette.middleware.base import BaseHTTPMiddleware
+from starlette.types import ASGIApp
 
 from app.application.ports.metrics import MetricsPort
 
@@ -23,7 +23,7 @@ class ObservabilityMiddleware(BaseHTTPMiddleware):
     - Correlates with request_id
     """
 
-    def __init__(self, app: Any, metrics: MetricsPort) -> None:
+    def __init__(self, app: ASGIApp, metrics: MetricsPort) -> None:
         super().__init__(app)
         self.metrics = metrics
 
