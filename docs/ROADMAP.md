@@ -27,7 +27,8 @@
 | **Phase 2**: Frontend & E2E       | ✅ Complete    | 100%        | Done (Feb 2026) |
 | **Phase 3**: Observability Stack  | ✅ Complete    | 100%        | Done (Feb 2026) |
 | **Phase 4**: Core Scenarios (50)  | 🔄 In Progress | 30% (15/50) | Q2 2026         |
-| **Phase 4C**: Type Safety Audit   | ⏳ Planned     | 0%          | Q2 2026         |
+| **Phase 4C**: Type Safety Audit   | ✅ Complete    | 100%        | Done (Feb 2026) |
+| **Phase 4D**: CI Optimization     | ⏳ Next        | 0%          | Feb 2026        |
 | **Phase 5**: Guided Tutorials     | ⏳ Planned     | 0%          | Q2 2026         |
 | **Phase 6**: CQRS/Event Sourcing  | ⏳ Planned     | 0%          | Q3 2026         |
 | **Phase 7**: Production Readiness | ⏳ Planned     | 0%          | Q3 2026         |
@@ -46,8 +47,10 @@
 
 - **Phase 4A**: Metrics Framework (3-4 days) - Add `MetricSpec` and dynamic metric registration
 - **Phase 4B**: Retrofit Existing Scenarios (5-7 days) - Add metrics to all 15 current scenarios
-- **Phase 4C**: New Scenarios (ongoing) - All 35 new scenarios include metrics from day one
-- **Phase 4D**: Dynamic Grafana Panels (2-3 days) - Auto-show/hide panels based on active scenarios
+- **Phase 4C**: Type Safety Audit (3-4 days) - ✅ Complete - Eliminate all `Any` types, enforce strict typing
+- **Phase 4D**: CI Optimization (<1 hour) - ⏳ Next - Move integration tests to run without Docker
+- **Phase 4E**: New Scenarios (ongoing) - All 35 new scenarios include metrics from day one
+- **Phase 4F**: Dynamic Grafana Panels (2-3 days) - Auto-show/hide panels based on active scenarios
 
 ### ✅ Currently Implemented (15)
 
@@ -71,9 +74,53 @@
 
 #### Codebase Type Safety & Best Practices
 
-- [ ] **Type Safety Audit**: Eliminate all usage of `Any` in codebase; replace with custom types, Protocols, or explicit casting as per best practice. Enforce via guardrails and arch-check.
+- [x] **Type Safety Audit**: Eliminate all usage of `Any` in codebase; replace with custom types, Protocols, or explicit casting as per best practice. Enforce via guardrails and arch-check. ✅
 
 **Learning Value**: Teaches strict typing discipline, maintainability, and architectural clarity.
+
+**Implementation Summary**:
+
+- Created `app.domain.types` module with explicit type aliases: `JsonSchema`, `Parameters`, `ParameterValue`, `JsonPrimitive`
+- Replaced all 14+ usages of `dict[str, Any]` with proper domain types
+- Updated middleware signatures to use `ASGIApp` instead of `Any`
+- Fixed database session types to use `AsyncEngine` and `async_sessionmaker`
+- Updated tracing to use explicit `FastAPI` and `Engine` types
+- All architecture boundaries and contract checks pass
+- 88% test coverage maintained
+
+#### CI Optimization & Test Infrastructure Improvement
+
+- [ ] **CI Optimization**: Move integration tests to run without Docker services in the `guardrails-and-coverage` job, since they now use FastAPI `TestClient` for in-process testing.
+
+**Status**: ⏳ Next (planned after test fixes merged)
+
+**Learning Value**: Teaches CI/CD optimization, test architecture patterns, efficient build pipelines
+
+**Rationale**:
+
+- Integration tests were refactored to use `TestClient` (in-process) instead of `requests` (requires running server)
+- Currently CI starts Docker services unnecessarily before running integration tests
+- Can move integration tests to first job, making CI ~30-60s faster and simpler
+- Docker services still needed for E2E tests later in pipeline
+
+**Implementation Plan**:
+
+1. Update `.github/workflows/ci.yml`:
+   - Move `be-test-integration` to `guardrails-and-coverage` job (after `be-coverage`)
+   - Remove `be-test-integration` from `integration-tests` job
+   - Rename `integration-tests` job to `e2e-tests` for clarity
+
+2. Benefits:
+   - Faster feedback loop (integration tests run earlier)
+   - Simpler CI setup (fewer moving parts in first job)
+   - Docker only needed for actual E2E browser tests
+   - More accurate job naming
+
+3. Documentation:
+   - Update `docs/CI_AND_PRECOMMIT.md` to reflect new test execution flow
+   - Document that integration tests use `TestClient` (no server needed)
+
+**Estimated Time**: 30 minutes - 1 hour
 
 #### Caching & Data Consistency (5 scenarios)
 

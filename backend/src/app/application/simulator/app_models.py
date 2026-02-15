@@ -4,7 +4,8 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from datetime import datetime
-from typing import Any
+
+from app.domain.types import JsonSchema, Parameters
 
 
 @dataclass(frozen=True)
@@ -12,8 +13,8 @@ class ScenarioDescriptorApp:
     name: str
     description: str
     targets: list[str]
-    parameter_schema: dict[str, Any]
-    safety_limits: dict[str, Any]
+    parameter_schema: JsonSchema
+    safety_limits: JsonSchema
 
 
 @dataclass(frozen=True)
@@ -24,7 +25,7 @@ class ScenariosResponseApp:
 @dataclass(frozen=True)
 class ActiveScenarioApp:
     name: str
-    parameters: dict[str, Any]
+    parameters: Parameters
     enabled_at: datetime
     expires_at: datetime | None = None
 
@@ -37,7 +38,7 @@ class StatusResponseApp:
 @dataclass(frozen=True)
 class EnableScenarioRequestApp:
     name: str
-    parameters: dict[str, Any]
+    parameters: Parameters
     duration_seconds: int | None = None
 
 

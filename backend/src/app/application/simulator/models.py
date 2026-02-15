@@ -4,7 +4,9 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import Any, Literal
+from typing import Literal
+
+from app.domain.types import JsonSchema, Parameters
 
 # Valid target categories for scenarios (must match contract layer)
 TargetCategory = Literal["http", "db", "cpu", "algorithm"]
@@ -31,7 +33,7 @@ class ActiveScenarioState:
     """Active scenario state - application layer model"""
 
     name: str
-    parameters: dict[str, Any]
+    parameters: Parameters
     enabled_at: datetime
     expires_at: datetime | None
 
@@ -43,6 +45,6 @@ class ScenarioMeta:
     name: str
     description: str
     targets: list[TargetCategory]  # e.g., ["http", "db", "cpu", "algorithm"]
-    parameter_schema: dict[str, Any]  # JSON schema for parameters
-    safety_limits: dict[str, Any]  # max values for safety
+    parameter_schema: JsonSchema  # JSON schema for parameters
+    safety_limits: JsonSchema  # max values for safety
     metrics: list[MetricSpec] = field(default_factory=list)  # Scenario-specific metrics

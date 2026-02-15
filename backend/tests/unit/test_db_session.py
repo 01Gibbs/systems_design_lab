@@ -19,11 +19,11 @@ def test_init_db_sets_globals(monkeypatch):
     def fake_create_engine(url, echo):
         called['url'] = url
         return 'engine'
-    def fake_sessionmaker(engine, class_, expire_on_commit):
+    def fake_async_sessionmaker(engine, class_, expire_on_commit):
         called['engine'] = engine
         return 'maker'
     monkeypatch.setattr(db_session, 'create_async_engine', fake_create_engine)
-    monkeypatch.setattr(db_session, 'sessionmaker', fake_sessionmaker)
+    monkeypatch.setattr(db_session, 'async_sessionmaker', fake_async_sessionmaker)
     db_session.init_db('sqlite+aiosqlite:///:memory:')
     assert db_session.engine == 'engine'
     assert db_session.async_session_maker == 'maker'
